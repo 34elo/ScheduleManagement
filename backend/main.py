@@ -18,3 +18,8 @@ def read_root():
 @app.get("/profile")
 def get_profile(user: dict = Depends(get_current_user)):
     return {"user": user}
+
+
+@app.get("/endpoint")
+def get_protected_data(user: dict = Depends(get_current_user)):
+    return {}

@@ -1,11 +1,9 @@
-import {useState} from "react";
-import {Avatar, Button, Modal} from "@mui/material";
-import ModalEditAccount from "./ModalEditAccount.jsx";
+import {Avatar} from "@mui/material";
 import {Box} from "@mui/system";
 import NameField from "./NameField.jsx";
 import MoreInfoField from "./MoreInfoField.jsx";
 
-export default function AccountInfo({ children, name}) {
+export default function AccountInfo({ children, name, label}) {
     function getInfo() {
         return {
             name: name,
@@ -19,7 +17,7 @@ export default function AccountInfo({ children, name}) {
     }
 
     return (<>
-        <h2 style={{marginTop: 0}}>Личный кабинет</h2>
+        <h2 style={{marginTop: 0}}>{label}</h2>
         <Box sx={{
             margin: "0 auto",
             maxWidth: '900px',

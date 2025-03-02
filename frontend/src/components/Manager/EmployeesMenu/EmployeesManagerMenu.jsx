@@ -1,11 +1,8 @@
-import {Box, Modal} from "@mui/material";
+import {Box, Button, Modal} from "@mui/material";
 import CardsEmployees from "./CardsEmployees.jsx";
 import NotificationEmployee from "./NotificationEmployee.jsx";
 import {useMemo, useState} from "react";
-import ModalEditSchedule from "../ScheduleMenu/ModalEditSchedule.jsx";
-import ModalAddEmployeeModal from "./ModalAddEmployee.jsx";
 import ModalAddEmployee from "./ModalAddEmployee.jsx";
-import AccountInfo from "../../General/AccountInfo/AccountInfo.jsx";
 import ModalAccountInfo from "../../General/AccountInfo/ModalAccountInfo.jsx";
 
 const cards = [
@@ -28,12 +25,23 @@ export default function EmployeesManagerMenu() {
         setOpen(true); // Открываем модальное окно при выборе пользователя
     };
 
+    function handleDeleteEmployee() {
+        console.log("handleDeleteEmployee", selectedCard, cards.find(card => card.id === selectedCard)?.title || "Неизвестный");
+        setOpen(false);
+    }
+
     return (
         <>
             <Modal open={open} onClose={() => setOpen(false)}>
                 {addEmployeeCards ? <ModalAddEmployee setOpen={setOpen}/>
-                    : selectedCard !== null ?
-                        <ModalAccountInfo name={cards.find(card => card.id === selectedCard)?.title || "Неизвестный"}/>
+                    : selectedCard !== null ? (
+                            <ModalAccountInfo name={cards.find(card => card.id === selectedCard)?.title || "Неизвестный"}
+                                              label='Подробная ифнормация'>
+                                <Button variant="contained" onClick={handleDeleteEmployee}
+                                        sx={{backgroundColor: '#c1c1c1', marginTop: '10px'}}>
+                                    Удалить сотрудника
+                                </Button>
+                            </ModalAccountInfo>)
                         : <div></div>}
             </Modal>
             <Box sx={{display: "flex", height: "100%", padding: 2, minHeight: "550px"}}>

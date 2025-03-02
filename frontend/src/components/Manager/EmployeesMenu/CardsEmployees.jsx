@@ -15,7 +15,7 @@ export default function CardsEmployees({cards, selectedCard, setSelectedCard, se
     }
 
     return (<>
-            <h2 style={{paddingBottom: "10px", margin: 0}}>Информация о сотруднике</h2>
+            <h2 style={{paddingBottom: "10px", margin: 0}}>Сотрудники</h2>
             <Box
                 sx={{
                     width: "100%",

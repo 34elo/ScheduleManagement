@@ -33,7 +33,7 @@ export default function AdminsMenu() {
     return (<Box sx={{display: "flex", height: "100%", padding: 2, minHeight: "550px"}}>
         <Modal open={open} onClose={() => setOpen(false)}>
             {selectedCard !== null ?
-                    <ModalAccountInfo name={cards.find(card => card.id === selectedCard)?.title || "Неизвестный"}/>
+                    <ModalAccountInfo name={cards.find(card => card.id === selectedCard)?.title || "Неизвестный"} label='Подробная информация'/>
                     : <div></div>}
         </Modal>
         <Box
