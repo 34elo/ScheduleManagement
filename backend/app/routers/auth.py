@@ -26,5 +26,4 @@ def auth(token: str):
     name, role, valid = check_code(user['code'])
     if not valid:
         raise HTTPException(status_code=404, detail="Invalid code")
-    return {'name': name,'role': role, 'code': user['code'], "message": "Authenticated successfully"}
-
+    return {'name': name, 'role': role, 'code': user['code'], "message": "Authenticated successfully"}

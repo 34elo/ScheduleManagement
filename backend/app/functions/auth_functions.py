@@ -1,17 +1,17 @@
 from datetime import timedelta, datetime
 from jose import jwt
+
 from config import SECRET_KEY, ALGORITHM
 
 
 def check_code(code) -> (str, str, bool):
-
     '''
     НАПИСАТЬ ЭТУ ФУНКЦИЮ
     '''
 
-    name: str = ''
-    role: str = ''
-    valid: bool = True
+    name: str = ''  # ФИО пользователя
+    role: str = ''  # Роль пользователя - Администратор или Сотрудник
+    valid: bool = True  # Есть ли пользователь с таким кодом в бд
     return name, role, valid
 
 

@@ -9,6 +9,7 @@ app = FastAPI()
 app.include_router(auth_router)
 app.include_router(employee_router)
 
+
 @app.get("/")
 def read_root():
     return {"Ай": "тигр, лев"}
