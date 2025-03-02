@@ -22,8 +22,7 @@ def login(input_code: str):
 @auth_router.get("/auth")
 def auth(token: str):
     user = get_current_user(token)
-    print(user)
-    name, role, valid = check_code(user['code'])
+    id_user, name, role, valid = check_code(user['code'])
     if not valid:
         raise HTTPException(status_code=404, detail="Invalid code")
-    return {'name': name, 'role': role, 'code': user['code'], "message": "Authenticated successfully"}
+    return {'id': id_user, 'name': name, 'role': role, 'code': user['code'], "message": "Authenticated successfully"}

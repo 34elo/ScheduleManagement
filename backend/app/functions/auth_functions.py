@@ -8,11 +8,11 @@ def check_code(code) -> (str, str, bool):
     '''
     НАПИСАТЬ ЭТУ ФУНКЦИЮ
     '''
-
+    id_user: int = 1
     name: str = ''  # ФИО пользователя
     role: str = ''  # Роль пользователя - Администратор или Сотрудник
     valid: bool = True  # Есть ли пользователь с таким кодом в бд
-    return name, role, valid
+    return id_user, name, role, valid
 
 
 def create_access_token(data: dict, expires_delta: timedelta = timedelta(days=7)):
