@@ -1,3 +1,0 @@
-# Schedule Forge
-
-Frontend - React
