@@ -1,13 +1,15 @@
 import {useState} from "react";
-import {Tab} from "@mui/material";
+import {Button, Modal, Tab} from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import Box from "@mui/material/Box";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import PerosnalAccountMenu from "../../components/General/PerosnalAccountMenu/PerosnalAccountMenu.jsx";
 import ScheduleMenuEmployee from "../../components/Employee/ScheduleMenu/ScheduleMenu.jsx";
 import MyWorkMenu from "../../components/Employee/MyWorkMenu/MyWorkMenu.jsx";
 import AdminsMenu from "../../components/Employee/AdminsMenu/AdminsMenu.jsx";
+import AccountInfo from "../../components/General/AccountInfo/AccountInfo.jsx";
+import ModalEditAccount from "../../components/General/AccountInfo/ModalEditAccount.jsx";
+import LogoutButton from "../../components/General/LogoutButton/LogoutButton.jsx";
 
 const stylesTabList = {
     display: 'flex',
@@ -44,6 +46,7 @@ export default function Employee() {
     function handleChange(e, newValue) {
         setValue(newValue);
     }
+    const [open , setOpen] = useState(false);
 
     return (
         <Box sx={{display: 'flex', justifyContent: 'center', height: '100vh'}}>
@@ -90,7 +93,22 @@ export default function Employee() {
                         </TabPanel>
 
                         <TabPanel value="4" style={{padding: 0}}>
-                            <PerosnalAccountMenu name='name'></PerosnalAccountMenu>
+                            <AccountInfo name='name'>
+                                <Modal
+                                    open={open}
+                                    onClose={() => setOpen(false)}
+                                    aria-labelledby="modal-modal-title"
+                                    aria-describedby="modal-modal-description"
+                                >
+                                    <ModalEditAccount setOpen={setOpen}></ModalEditAccount>
+                                </Modal>
+                                <Button variant='contained'
+                                        style={{marginTop: '10px', backgroundColor: 'black', color: 'white', borderRadius: '10px'}}
+                                        onClick={() => setOpen(true)}>
+                                    Редактировать
+                                </Button>
+                                <LogoutButton></LogoutButton>
+                            </AccountInfo>
                         </TabPanel>
                     </TabContext>
                 </Box>

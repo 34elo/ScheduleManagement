@@ -6,6 +6,7 @@ function useAuth() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
     const [role, setRole] = useState(null);
+    const [error, setError] = useState(null);
 
     // 4. Функция для выхода из системы (мемоизированная)
     const logout = useCallback(() => {
@@ -99,6 +100,9 @@ function useAuth() {
                 setUser(response.userData);
                 setIsLoggedIn(true);
                 setRole(response.userData.role);
+            } else {
+                console.log('login response:', code);
+                setError('Неверный код')
             }
         } catch (error) {
             console.error('Login failed:', error);
@@ -108,6 +112,8 @@ function useAuth() {
 
     // 5. Возвращаем значения и функции
     return {
+        setError,
+        error,
         user,
         isLoggedIn,
         loading,

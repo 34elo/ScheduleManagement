@@ -1,13 +1,15 @@
 import {useState} from "react";
-import {Tab} from "@mui/material";
+import {Button, Modal, Tab} from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import Box from "@mui/material/Box";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import ScheduleMenu from "../../components/Manager/ScheduleMenu/ScheduleMenu.jsx";
 import EmployeesManagerMenu from "../../components/Manager/EmployeesMenu/EmployeesManagerMenu.jsx";
-import PerosnalAccountMenu from "../../components/General/PerosnalAccountMenu/PerosnalAccountMenu.jsx";
 import ReportsMenu from "../../components/Manager/ReportsMenu/ReportsMenu.jsx";
+import AccountInfo from "../../components/General/AccountInfo/AccountInfo.jsx";
+import LogoutButton from "../../components/General/LogoutButton/LogoutButton.jsx";
+import ModalEditAccount from "../../components/General/AccountInfo/ModalEditAccount.jsx";
 
 const stylesTabList = {
     display: 'flex',
@@ -40,9 +42,15 @@ const stylesTabList = {
 
 export default function ManagerPage() {
     const [value, setValue] = useState("1");
+    const [isEditing, setIsEditing] = useState(false);
+    const [open, setOpen] = useState(false);
 
     function handleChange(e, newValue) {
         setValue(newValue);
+    }
+
+    function handleEdit() {
+        setIsEditing(prev => !prev);
     }
 
     return (
@@ -90,44 +98,23 @@ export default function ManagerPage() {
                         </TabPanel>
 
                         <TabPanel value="4" style={{padding: 0}}>
-                            <PerosnalAccountMenu name='name'/>
+                            <AccountInfo name='name'>
+                                <Modal
+                                    open={open}
+                                    onClose={() => setOpen(false)}
+                                    aria-labelledby="modal-modal-title"
+                                    aria-describedby="modal-modal-description"
+                                >
+                                    <ModalEditAccount setOpen={setOpen}></ModalEditAccount>
+                                </Modal>
+                                <Button variant='contained'
+                                        style={{marginTop: '10px', backgroundColor: 'black', color: 'white', borderRadius: '10px'}}
+                                        onClick={() => setOpen(true)}>
+                                    Редактировать
+                                </Button>
+                                <LogoutButton></LogoutButton>
+                            </AccountInfo>
                         </TabPanel>
-                    </TabContext>
-                </Box>
-                {/* Нижняя навигация для мобильных устройств */}
-                <Box sx={{
-                    position: 'fixed',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    backgroundColor: '#f1f1f1',
-                    padding: '10px 0',
-                    boxShadow: '0px -2px 5px rgba(0,0,0,0.1)',
-                    display: 'none',
-                    '@media (max-width: 768px)': {
-                        display: 'flex',
-                        justifyContent: 'center'
-                    }
-                }}>
-                    <TabContext value={value}>
-                        <TabList
-                            onChange={handleChange}
-                            textColor="primary"
-                            indicatorColor="transparent"
-                            centered
-                            sx={{
-                                ...stylesTabList,
-                                '& .MuiTab-root': {
-                                    fontSize: '12px', // уменьшенный текст
-                                    minWidth: '70px', // компактные кнопки
-                                }
-                            }}
-                        >
-                            <Tab label="📅" value="1" title="Расписание"/>
-                            <Tab label="📊" value="2" title="Отчеты"/>
-                            <Tab label="👥" value="3" title="Сотрудники"/>
-                            <Tab label="👤" value="4" title="Личный кабинет"/>
-                        </TabList>
                     </TabContext>
                 </Box>
             </Box>

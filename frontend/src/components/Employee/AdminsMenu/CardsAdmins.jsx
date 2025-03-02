@@ -8,7 +8,7 @@ export default function CardsAdmins({cards, selectedCard, setSelectedCard}) {
     }
 
     return (<>
-            <h2 style={{paddingBottom: "10px", margin: 0}}>Информация о сотруднике</h2>
+            <h2 style={{paddingBottom: "10px", margin: 0}}>Администраторы</h2>
             <Box
                 sx={{
                     width: "100%",

@@ -3,10 +3,15 @@ import {Box} from "@mui/system";
 import {Card, CardActionArea, CardContent, Typography} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-export default function CardsEmployees({cards, selectedCard, setSelectedCard, setAddEmployeeCards}) {
-    function handleAddEmployeeCard(id) {
+export default function CardsEmployees({cards, selectedCard, setSelectedCard, setAddEmployeeCards, setOpen}) {
+    function handleInfoCard(id) {
         setSelectedCard(id);
         setAddEmployeeCards(false);
+        setOpen(true);
+    }
+    function handleAddEmployee() {
+        setAddEmployeeCards(true)
+        setOpen(true)
     }
 
     return (<>
@@ -21,7 +26,7 @@ export default function CardsEmployees({cards, selectedCard, setSelectedCard, se
             >
                 {cards.map((card) => (<Card key={card.id} sx={{borderRadius: "20px", boxShadow: "none",}}>
                         <CardActionArea
-                            onClick={() => handleAddEmployeeCard(card.id)}
+                            onClick={() => handleInfoCard(card.id)}
                             data-active={selectedCard === card.id ? "" : undefined}
                             sx={{
                                 height: "100%", "&[data-active]": {
@@ -49,7 +54,7 @@ export default function CardsEmployees({cards, selectedCard, setSelectedCard, se
                     }}
                 >
                     <CardActionArea
-                        onClick={() => setAddEmployeeCards(true)}
+                        onClick={handleAddEmployee}
                         data-active={selectedCard === -1 ? "" : undefined}
                         sx={{
                             display: "flex",

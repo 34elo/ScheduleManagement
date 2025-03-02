@@ -1,8 +1,10 @@
 import React, {useMemo, useState} from "react";
-import {Box} from "@mui/material";
+import {Box, Modal} from "@mui/material";
 
 import DetailsAdmin from "./DetailsAdmin.jsx";
 import CardsAdmins from "./CardsAdmins.jsx";
+import ModalAddEmployee from "../../Manager/EmployeesMenu/ModalAddEmployee.jsx";
+import ModalAccountInfo from "../../General/AccountInfo/ModalAccountInfo.jsx";
 
 const cards = [{id: 0, title: "Вася Пупкин", description: "Plants are essential for all life."}, {
     id: 1,
@@ -19,18 +21,25 @@ const cards = [{id: 0, title: "Вася Пупкин", description: "Plants are 
 }, {id: 6, title: "Астафьев Павел", description: "Animals are a part of nature."},];
 
 export default function AdminsMenu() {
-    const [selectedCard, setSelectedCard] = useState(cards[0]?.id || null);
+    const [selectedCard, setSelectedCard] = useState(null);
 
-    const selectedName = useMemo(() => {
-        return cards.find((card) => card.id === selectedCard)?.title || "Описание отсутствует";
-    }, [selectedCard]);
+    const [open, setOpen] = useState(false);
+
+    const handleCardClick = (id) => {
+        setSelectedCard(id);
+        setOpen(true); // Открываем модальное окно при выборе пользователя
+    };
 
     return (<Box sx={{display: "flex", height: "100%", padding: 2, minHeight: "550px"}}>
-        {/* Левая колонка с карточками */}
+        <Modal open={open} onClose={() => setOpen(false)}>
+            {selectedCard !== null ?
+                    <ModalAccountInfo name={cards.find(card => card.id === selectedCard)?.title || "Неизвестный"}/>
+                    : <div></div>}
+        </Modal>
         <Box
             sx={{
                 minWidth: "150px",
-                width: "66.66%",
+                width: "100%",
                 bgcolor: "#f1f1f1",
                 padding: 2,
                 marginRight: 2,
@@ -40,18 +49,10 @@ export default function AdminsMenu() {
         >
             <CardsAdmins
                 selectedCard={selectedCard}
-                setSelectedCard={setSelectedCard}
+                setSelectedCard={handleCardClick}
                 cards={cards}
             />
         </Box>
 
-        {/* Правая колонка */}
-        <Box sx={{width: "33.33%", minWidth: "200px", display: "flex", flexDirection: "column", gap: "20px"}}>
-            <>
-                <Box sx={{flex: 1, backgroundColor: "#f1f1f1", borderRadius: "20px", height: "100%"}}>
-                    <DetailsAdmin name={selectedName}/>
-                </Box>
-            </>
-        </Box>
     </Box>);
 }

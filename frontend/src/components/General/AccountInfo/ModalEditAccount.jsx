@@ -20,11 +20,6 @@ const styleModal = {
 
 export default function ModalEditAccount({setOpen}) {
 
-    function handleEdit() {
-        setOpen(false);
-        console.log();
-    }
-
     return (
         <Box sx={styleModal}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{marginBottom: '10px'}}>
@@ -37,7 +32,7 @@ export default function ModalEditAccount({setOpen}) {
             <TextField label='3' sx={{marginBottom: '10px'}}>
             </TextField>
 
-            <Button variant="contained" onClick={handleEdit} sx={{backgroundColor: '#c1c1c1', marginTop: '10px'}}>
+            <Button variant="contained" onClick={() => setOpen(false)} sx={{backgroundColor: '#c1c1c1', marginTop: '10px'}}>
                 Изменить
             </Button>
         </Box>

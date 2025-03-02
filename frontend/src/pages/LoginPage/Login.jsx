@@ -7,14 +7,14 @@ import {useNavigate} from "react-router-dom";
 export default function LoginPage() {
 
     const [code, setCode] = useState("");
-    const [error, setError] = useState(null); // Храним текст ошибки
-    const {login, isLoggedIn, role} = useAuth(); // Получаем функцию login из хука useAuth
+    const {setError, error, login, isLoggedIn, role} = useAuth(); // Получаем функцию login из хука useAuth
     const navigate = useNavigate(); // Получаем функцию navigate
 
     const handleChange = (event) => {
         setCode(event.target.value);
-        setError(null);
     };
+
+    console.log(error);
 
     useEffect(() => {
         console.log(isLoggedIn, role);
@@ -32,13 +32,10 @@ export default function LoginPage() {
         try {
             await login(code);
 
-
         } catch (err) {
-            console.error("Ошибка при авторизации:", err);
             setError("Произошла ошибка при авторизации"); // Обрабатываем ошибки авторизации
         }
     };
-    console.log(error)
 
     return (
         <>
