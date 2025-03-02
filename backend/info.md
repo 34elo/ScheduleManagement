@@ -14,3 +14,13 @@
 │── info.md               # Инфа
 ```
 
+Запуск API
+
+````
+(PowerShell)
+
+<путь> - <команда>
+
+\ScheduleManagement\backend\app - ./.venv/Scripts/activate
+\ScheduleManagement\backend\app -  uvicorn main:app --reload 
+

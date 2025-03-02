@@ -13,7 +13,7 @@ build/
 
 # Игнорируем виртуальное окружение Python
 venv/
-.env/
+backend/.env/
 
 # React (Frontend)
 frontend/node_modules/
