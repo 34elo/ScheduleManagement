@@ -1,0 +1,32 @@
+# Общие игнорируемые файлы
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*.env
+.DS_Store
+.vscode/
+.idea/
+node_modules/
+dist/
+build/
+
+# Игнорируем виртуальное окружение Python
+venv/
+.env/
+
+# React (Frontend)
+frontend/node_modules/
+frontend/.next/
+frontend/.parcel-cache/
+frontend/build/
+
+# Python Backend
+backend/__pycache__/
+backend/.env
+backend/.venv
+
+# Telegram Bot
+bot/__pycache__/
+bot/.env
+bot/.venv
