@@ -61,3 +61,9 @@ def making_schedule() -> None:
     Создает расписание
     """
     return
+
+def delete_employee() -> None:
+    """
+    Удаляет сотрудника
+    """
+    return

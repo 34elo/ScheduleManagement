@@ -13,7 +13,7 @@ admin_router = APIRouter(
 )
 
 
-class NewEmployee(BaseModel):
+class Employee(BaseModel):
     name: str
 
 
@@ -100,10 +100,18 @@ def get_chats_ids(
     return {'chats': get_all_chats_ids()}
 
 
-@admin_router.post('create-employee', summary='Создает сотрудника')
+@admin_router.post('employee', summary='Создает сотрудника')
 def create_new_employee(
-        person: NewEmployee,
+        person: Employee,
         user: dict = Depends(get_current_admin),
 ):
     code = create_employee(person.name)
     return {'code': code, 'message': 'success'}
+
+@admin_router.delete('employee')
+def delete_employee_by_name(
+        person: Employee,
+        user: dict = Depends(get_current_admin),
+):
+    delete_employee()
+    return {'message': 'success'}

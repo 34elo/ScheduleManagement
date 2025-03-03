@@ -25,3 +25,9 @@ def get_schedule(point, period) -> list[tuple]:
                                            AND "{(datetime.today() + timedelta(days=29)).strftime('%Y-%m-%d')}"'''
                                        ).fetchall()
     return schedule
+
+def edit_info(info: dict) -> None:
+    """
+    Получает JSON с данными, которые надо будет изменить
+    """
+    return

@@ -1,3 +1,4 @@
+from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
@@ -8,6 +9,16 @@ from app.routers.utils import get_current_user
 
 general_router = APIRouter()
 
+class Description(BaseModel):
+    age: Optional[int] = None
+    post: Optional[str] = None
+    contact: Optional[str] = None
+    username: Optional[str] = None
+
+class Info(BaseModel):
+    name: str
+    role: str
+    description: Description
 
 class Schedule(BaseModel):
     name_point: str
@@ -24,6 +35,15 @@ def schedule_point(
 
 @general_router.get("/schedule/", summary='Возвращает список всех точек')
 def schedule(
-        user_id: int = Depends(get_current_user),
+        user: int = Depends(get_current_user),
 ):
     return {"points": POINTS}
+
+@general_router.put('info')
+def edit_info(
+        info: Info,
+        user: dict = Depends(get_current_user)
+):
+    # Будет определять
+
+    return {'message': 'success'}
