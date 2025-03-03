@@ -4,9 +4,11 @@ from datetime import datetime, timedelta
 from backend.app.constants import POINTS, DAYS
 
 
-def get_my_schedule(full_name, period) -> dict:
+def get_my_schedule(full_name, period, date1=None, date2=None) -> dict:
     """Возвращает свой график работы для сотрудника.
        out = {01-03-2025: Рыленкова},
+       period = week, month или custom
+       Для custom вызвать вместе с датой начала периода и датой конца
     """
     if __name__ == '__main__':
         connection = sqlite3.connect('../data/data.sqlite')
@@ -23,14 +25,23 @@ def get_my_schedule(full_name, period) -> dict:
                                            WHERE "Дата" BETWEEN "{datetime.today().strftime('%Y-%m-%d')}"
                                            AND "{(datetime.today() + timedelta(days=6)).strftime('%Y-%m-%d')}"'''
                                        ).fetchall()
-    else:
-        schedule = data_cursor.execute(f'''SELECT "Дата", '25_Сентября_35а', '25_Сентября_35а/2', 'Багратиона_16', 
-                                           'Дзержинского_9', 'Коммунистическая_6', 'Лавочкина_54/6', 'Николаева_50', 
-                                           'Ново-московская_2/8_ст4', 'Проспект_Гагарина_1/1', 'Рыленкова_18',
-                                           'Энергетический_проезд_3/4', 'Крупской_42'
-                                           FROM schedule
-                                           WHERE "Дата" BETWEEN "{datetime.today().strftime('%Y-%m-%d')}"
-                                           AND "{(datetime.today() + timedelta(days=29)).strftime('%Y-%m-%d')}"'''
+    elif period == 'month':
+        schedule = data_cursor.execute(f'''SELECT "Дата", "25_Сентября_35а", "25_Сентября_35а/2", "Багратиона_16", 
+                                                   "Дзержинского_9", "Коммунистическая_6", "Лавочкина_54/6", "Николаева_50", 
+                                                   "Ново-московская_2/8_ст4", "Проспект_Гагарина_1/1", "Рыленкова_18",
+                                                   "Энергетический_проезд_3/4", "Крупской_42"
+                                                   FROM schedule
+                                                   WHERE "Дата" BETWEEN "{datetime.today().strftime('%Y-%m-%d')}"
+                                                   AND "{(datetime.today() + timedelta(days=29)).strftime('%Y-%m-%d')}"'''
+                                       ).fetchall()
+    elif period == 'custom':
+        schedule = data_cursor.execute(f'''SELECT "Дата", "25_Сентября_35а", "25_Сентября_35а/2", "Багратиона_16", 
+                                                   "Дзержинского_9", "Коммунистическая_6", "Лавочкина_54/6", "Николаева_50", 
+                                                   "Ново-московская_2/8_ст4", "Проспект_Гагарина_1/1", "Рыленкова_18",
+                                                   "Энергетический_проезд_3/4", "Крупской_42"
+                                                   FROM schedule
+                                                   WHERE "Дата" BETWEEN "{date1}"
+                                                   AND "{date2}"'''
                                        ).fetchall()
     for date in schedule:
         for point, employee in zip(POINTS, date[1:]):
