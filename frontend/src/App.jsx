@@ -10,7 +10,7 @@ export default function App() {
     const {loading} = useAuth();
 
     if (loading) {
-        return <div>Loading...</div>;  // Отображаем лоадер
+        return <div>Loading...</div>;
     }
 
     return (
@@ -26,13 +26,13 @@ export default function App() {
             />
             <Route
                 path="/employee"
-                element={<PrivateRoute allowedRoles={['employee']}>
+                element={<PrivateRoute allowedRoles={['Сотрудник']}>
                     <EmployeePage/>
                 </PrivateRoute>}
             />
             <Route
                 path="/manager"
-                element={<PrivateRoute allowedRoles={['manager']}>
+                element={<PrivateRoute allowedRoles={['Администратор']}>
                     <ManagerPage/>
                 </PrivateRoute>}
             />

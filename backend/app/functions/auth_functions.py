@@ -8,10 +8,37 @@ def check_code(code) -> (str, str, bool):
     '''
     НАПИСАТЬ ЭТУ ФУНКЦИЮ
     '''
-    id_user: int = 1
-    name: str = ''  # ФИО пользователя
-    role: str = ''  # Роль пользователя - Администратор или Сотрудник
-    valid: bool = True  # Есть ли пользователь с таким кодом в бд
+
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
+
+    data_cursor = connection.cursor()
+    data = data_cursor.execute(f'''
+    SELECT id, full_name
+    FROM "employees_passwords"
+    WHERE password = "{code}"
+    ''').fetchone()
+    if data is None:
+        data = data_cursor.execute(f'''
+        SELECT id, full_name
+        FROM "admin_passwords"
+        WHERE password = "{code}"''').fetchone()
+        if data is not None:
+            role = 'Администратор'
+            valid = True
+            id_user, name = data
+        else:
+            valid = False
+            id_user = None
+            name = None
+            role = None
+    else:
+        role = 'Сотрудник'
+        valid = True
+        id_user, name = data
+
     return id_user, name, role, valid
 
 

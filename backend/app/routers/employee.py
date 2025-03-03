@@ -50,7 +50,7 @@ def change_my_wishes_points(
     if not WishesUpdate.days:
         change_point_wishes(user['name'], DAYS, 'remove')
     else:
-        res_days = [DAYS_MAPPING[day.lower()] for day in WishesUpdate.days]
+        res_days = [DAYS_MAPPING[str(day).lower()] for day in WishesUpdate.days]
         change_point_wishes(user['name'], res_days, 'set')
     return {'message': 'Points changed successfully'}
 

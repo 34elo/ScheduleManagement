@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 
+from app.constants import oauth2_scheme
 from app.functions.auth_functions import check_code, create_access_token
 from app.routers.utils import get_current_user
 
 auth_router = APIRouter()
 
 
-@auth_router.put("/login", summary='Возвращает токен по коду, если он правильный')
+@auth_router.get("/login", summary='Возвращает токен по коду, если он правильный')
 def login(input_code: str):
     id_user, name, role, valid = check_code(input_code)
 
@@ -19,10 +20,12 @@ def login(input_code: str):
     return {"token": token, "token_type": "bearer"}
 
 
-@auth_router.get("/auth", summary='Возвращает информацию о пользователе при успешном входе')
-def auth(token: str):
+@auth_router.get("/auth", summary="Возвращает информацию о пользователе при успешном входе")
+def auth(token: str = Depends(oauth2_scheme)):
     user = get_current_user(token)
-    id_user, name, role, valid = check_code(user['code'])
+    if not user or "code" not in user:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    id_user, name, role, valid = check_code(user["code"])
     if not valid:
         raise HTTPException(status_code=404, detail="Invalid code")
-    return {'id': id_user, 'name': name, 'role': role, 'code': user['code'], "message": "Authenticated successfully"}
+    return {"id": id_user, "name": name, "role": role, "code": user["code"], "message": "Authenticated successfully"}
