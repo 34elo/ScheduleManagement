@@ -40,3 +40,7 @@ def get_employees(
         username: str = Depends(get_current_admin),
 ):
     return {'employees': get_employees_names()}
+
+'''
+ВСЁ ЧТО ДАЛЬШЕ ПРОСТО ЭНДПОИНТЫ С ЗАГЛУШКАМИ
+'''
