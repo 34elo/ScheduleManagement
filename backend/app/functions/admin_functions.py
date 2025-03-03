@@ -166,6 +166,53 @@ def create_employee_report(full_name, date1, date2) -> None:
         days_off=days_off
     )
     source_file = "employee_report.docx"
-    destination_dir = "../reports/"
+    destination_dir = "../reports/employee_report.docx"
+
+    shutil.move(source_file, destination_dir)
+
+
+def create_point_report(point, date1, date2) -> None:
+    """Создаёт отчёт по точке
+       date в формате YYYY-MM-DD
+    """
+    import shutil
+    from backend.app.functions.reports_functions import create_point_report_func
+
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
+
+    data_cursor = connection.cursor()
+
+    point_wishes = data_cursor.execute(f'''SELECT full_name, point_wishes
+                                           FROM "employees_passwords"''').fetchall()
+    people_who_wish = [full_name for full_name, wishes in point_wishes if point in wishes.split(';')]
+
+    schedule = data_cursor.execute(f'''SELECT "{point}"
+                                       FROM schedule
+                                       WHERE "Дата" BETWEEN "{date1}"
+                                       AND "{date2}"''').fetchall()
+    people_who_work = list(set([elem[0] for elem in schedule if elem[0] is not None]))
+
+    working_days = len([day for day in schedule if day[0] is not None])
+
+    date1 = datetime.strptime(date1, "%Y-%m-%d")
+    date2 = datetime.strptime(date2, "%Y-%m-%d")
+
+    delta = date2 - date1
+    days_difference = delta.days
+    days_off = days_difference - working_days + 1
+    create_point_report_func(
+        filename="point_report.docx",
+        point=point,
+        people_who_wish=people_who_wish,
+        people_who_work=people_who_work,
+        period=f'{date1.strftime('%Y-%m-%d')} - {date2.strftime('%Y-%m-%d')}',
+        working_days=working_days,
+        days_off=days_off
+    )
+    source_file = "point_report.docx"
+    destination_dir = "../reports/point_report.docx"
 
     shutil.move(source_file, destination_dir)
