@@ -3,14 +3,15 @@ from datetime import datetime, timedelta
 
 from backend.app.constants import POINTS, DAYS
 
-connection = sqlite3.connect('../data/data.sqlite')
-
 
 def get_my_schedule(full_name, period) -> dict:
     """Возвращает свой график работы для сотрудника.
        out = {01-03-2025: Рыленкова},
     """
-
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
     out = {}
     data_cursor = connection.cursor()
     if period == 'week':
@@ -43,7 +44,10 @@ def get_my_schedule(full_name, period) -> dict:
 
 def get_admin_names() -> list:
     """Возвращает список имён всех администраторов"""
-
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
     data_cursor = connection.cursor()
     admin_names = data_cursor.execute('''SELECT full_name
                                          FROM admin_passwords''').fetchall()
@@ -53,7 +57,10 @@ def get_admin_names() -> list:
 
 def get_admin_contact(admin_name) -> str:
     """Возвращает username администратора по его фио"""
-
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
     data_cursor = connection.cursor()
     admin_contact = data_cursor.execute(f'''SELECT mobile_number, username
                                         FROM admin_passwords
@@ -65,7 +72,10 @@ def change_point_wishes(employee, point, mode) -> None:
     """Устанавливает или удаляет желаемую точку для сотрудника
        В зависимости от mode
        mode='set' или mode='remove'"""
-
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
     if point in POINTS:
 
         data_cursor = connection.cursor()
@@ -95,7 +105,10 @@ def change_day_wishes(employee, day, mode) -> None:
     """Устанавливает или удаляет желаемую смену для сотрудника
        В зависимости от mode
        mode='set' или mode='remove'"""
-
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
     if day in DAYS:
 
         data_cursor = connection.cursor()

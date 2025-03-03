@@ -6,20 +6,20 @@ from app.routers.utils import get_current_user
 auth_router = APIRouter()
 
 
-@auth_router.put("/login")
+@auth_router.put("/login", summary='Возвращает токен по коду, если он правильный')
 def login(input_code: str):
-    name, role, valid = check_code(input_code)
+    id_user, name, role, valid = check_code(input_code)
 
     if not valid:
         raise HTTPException(status_code=404, detail="Invalid code")
 
-    token_data = {"name": name, "role": role, 'code': input_code}
+    token_data = {'id_user': id_user, "name": name, "role": role, 'code': input_code}
     token = create_access_token(token_data)
 
     return {"token": token, "token_type": "bearer"}
 
 
-@auth_router.get("/auth")
+@auth_router.get("/auth", summary='Возвращает информацию о пользователе при успешном входе')
 def auth(token: str):
     user = get_current_user(token)
     id_user, name, role, valid = check_code(user['code'])

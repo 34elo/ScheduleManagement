@@ -15,5 +15,22 @@ DAYS_DICT = {
     5: 'Суббота',
     6: 'Воскресенье'
 }
+# Словарь соответствий дней недели
+DAYS_MAPPING = {
+    "понедельник": "Monday",
+    "вторник": "Tuesday",
+    "среда": "Wednesday",
+    "четверг": "Thursday",
+    "пятница": "Friday",
+    "суббота": "Saturday",
+    "воскресенье": "Sunday",
+    "пн": "Monday",
+    "вт": "Tuesday",
+    "ср": "Wednesday",
+    "чт": "Thursday",
+    "пт": "Friday",
+    "сб": "Saturday",
+    "вс": "Sunday"
+}
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")

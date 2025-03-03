@@ -1,11 +1,11 @@
 import sqlite3
 
-connection = sqlite3.connect('../data/data.sqlite')
-
-
 def get_employees_names() -> list:
     """Возвращает список имён всех сотрудников"""
-
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
     data_cursor = connection.cursor()
     employees_names = data_cursor.execute('''SELECT full_name
                                              FROM employees_passwords''').fetchall()
@@ -14,10 +14,15 @@ def get_employees_names() -> list:
 
 
 def get_employee_contact(emlpoyee_name) -> list:
-    """Возвращает возраст, должность, телефон и username сотрудника по его фио"""
-
+    """Возвращает возраст, должность, телефон и username сотрудника по его фио
+    (21, 'кассир', '8952461285', None)"""
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
     data_cursor = connection.cursor()
     employee_contact = data_cursor.execute(f'''SELECT age, post, mobile_number, username
                                                FROM employees_passwords
                                                WHERE full_name = "{emlpoyee_name}"''').fetchone()
     return employee_contact
+
