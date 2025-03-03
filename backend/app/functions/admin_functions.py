@@ -29,19 +29,68 @@ def get_employee_contact(emlpoyee_name) -> list:
     return employee_contact
 
 
+import random
+
+
+def generate_password(length=8):
+    '''генерация пароля'''
+    lowercase_letters = 'abcdefghijklmnopqrstuvwxyz'  # буквы в нижнем регистре
+    uppercase_letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'  # буквы в верхнем регистре
+    digits = '0123456789'  # цифры
+
+    characters = lowercase_letters + uppercase_letters + digits
+    password = ''.join(random.choice(characters) for _ in range(length))
+
+    return password
+
+
+def format_data(lst: list):
+    """
+    функция, которая преобразует данные получаемые из БД
+    Из [(element,), (element,), (element,)]
+    В [element, element, elment]
+    """
+    data_lst = list(map(lambda x: x[0], lst))
+    return data_lst
+
+
 def create_employee(name: str) -> str:
     """
     Берет имя сотрудника и создает его в базе данных, а возвращает его код/пароль
     """
+    password = generate_password()
 
-    return ''
+    connection = sqlite3.connect('../data/data.sqlite')
+    data_cursor = connection.cursor()
+
+    admin_passwords = format_data(data_cursor.execute('SELECT password FROM admin_passwords').fetchall())
+    employees_passwords = format_data(data_cursor.execute('SELECT password FROM employees_passwords').fetchall())
+
+    while password in admin_passwords or password in employees_passwords:
+        password = generate_password()
+
+    data_cursor.execute(f'''
+    INSERT INTO employees_passwords(full_name, password)
+    VALUES ("{name}", "{password}")
+    ''')
+
+    connection.commit()
+    connection.close()
+    return password
 
 
 def get_all_chats_ids() -> list:
     """
     Возвращает все id для отправки уведомлений
     """
-    return []
+    connection = sqlite3.connect('../data/data.sqlite')
+    data_cursor = connection.cursor()
+    data = format_data(data_cursor.execute('''
+    SELECT chat_id FROM employees_passwords
+    ''').fetchall())
+    data = list(filter(lambda x: x, data))  # убирает id людей которые его не указали(НЕТ В БД)
+
+    return data
 
 
 def send_notification_by_names(persons: list[str], message: str) -> None:
@@ -65,10 +114,19 @@ def making_schedule() -> None:
     return
 
 
-def delete_employee() -> None:
+def delete_employee(name: str) -> None:
     """
     Удаляет сотрудника
     """
+    connection = sqlite3.connect('../data/data.sqlite')
+    data_cursor = connection.cursor()
+
+    data_cursor.execute(f'''
+    DELETE FROM employees_passwords
+    WHERE full_name == "{name}"''')
+
+    connection.commit()
+    connection.close()
     return
 
 
