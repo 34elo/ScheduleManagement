@@ -1,4 +1,6 @@
 import sqlite3
+from datetime import datetime
+
 
 def get_employees_names() -> list:
     """Возвращает список имён всех сотрудников"""
@@ -26,3 +28,36 @@ def get_employee_contact(emlpoyee_name) -> list:
                                                WHERE full_name = "{emlpoyee_name}"''').fetchone()
     return employee_contact
 
+
+def create_employee(name: str) -> str:
+    """
+    Берет имя сотрудника и создает его в базе данных, а возвращает его код/пароль
+    """
+
+    return ''
+
+
+def get_all_chats_ids() -> list:
+    """
+    Возвращает все id для отправки уведомлений
+    """
+    return []
+
+
+def send_notification_by_names(persons: list[str], message: str) -> None:
+    """
+    Берет список имен и текст сообщение и отправляет его
+    """
+    return
+
+def editing_schedule(person: str, date: datetime) -> None:
+    """
+    Изменяет расписание по имени и дате
+    """
+    return
+
+def making_schedule() -> None:
+    """
+    Создает расписание
+    """
+    return
