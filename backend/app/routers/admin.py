@@ -4,7 +4,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
-from app.functions.admin_functions import get_employee_contact, get_employees_names, create_employee, get_all_chats_ids, \
+from backend.app.functions.admin_functions import get_employee_contact, get_employees_names, create_employee, get_all_chats_ids, \
     making_schedule, editing_schedule, send_notification_by_names
 
 admin_router = APIRouter(

@@ -4,9 +4,9 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Body
 from pydantic import BaseModel
 
-from app.constants import POINTS, DAYS, DAYS_MAPPING
-from app.functions.employee_functions import change_point_wishes, get_my_schedule, get_admin_contact, get_admin_names
-from app.routers.utils import get_current_user
+from backend.app.constants import POINTS, DAYS, DAYS_MAPPING
+from backend.app.functions.employee_functions import change_point_wishes, get_my_schedule, get_admin_contact, get_admin_names
+from backend.app.routers.utils import get_current_user
 
 employee_router = APIRouter(
     prefix="/employee",
