@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const api = axios.create({
@@ -14,28 +14,71 @@ function useAuth() {
     const [role, setRole] = useState(null);
     const [error, setError] = useState(null);
 
-    const logout = useCallback(() => {
+    // Устанавливаем заголовок авторизации
+    useEffect(() => {
+        if (token) {
+            api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        } else {
+            delete api.defaults.headers.common["Authorization"];
+        }
+    }, [token]);
+
+    const auth = async () => {
+        if (!token) {
+            setLoading(false);
+            return;
+        }
+        try {
+            const response = await api.get("/auth", { params: { token } }); // Если сервер не поддерживает `Authorization`
+            setUser(response.data.user);
+            setRole(response.data.role);
+            setIsLoggedIn(true);
+        } catch (err) {
+            setToken(null);
+            localStorage.removeItem("token");
+            setIsLoggedIn(false);
+            setUser(null);
+            setRole(null);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Проверяем авторизацию при загрузке
+    useEffect(() => {
+        auth();
+    }, [token]);
+
+    // Логин через код
+    const login = async (code) => {
+        try {
+            const response = await api.get("/login", { params: { input_code: code } });
+            const newToken = response.data.token;
+            localStorage.setItem("token", newToken);
+            setToken(newToken);
+            await auth();
+        } catch (err) {
+            setError(err.response?.data?.detail || "Ошибка входа");
+        }
+    };
+
+    // Выход
+    const logout = () => {
         localStorage.removeItem("token");
         setToken(null);
         setUser(null);
         setIsLoggedIn(false);
         setRole(null);
-        setError(null);
-    }, []);
-
-    function login() {
-
-    }
+    };
 
     return {
-        setError,
-        error,
         user,
         isLoggedIn,
         loading,
         role,
         login,
         logout,
+        error,
     };
 }
 

@@ -14,15 +14,14 @@ export default function LoginPage() {
         setCode(event.target.value);
     };
 
-    console.log(error);
 
     useEffect(() => {
         console.log(isLoggedIn, role);
         if (isLoggedIn) {
             console.log("logged in");
-            if (role === "manager") {
+            if (role === "Администратор") {
                 navigate("/manager");
-            } else if (role === 'employee') {
+            } else if (role === 'Сотрудник') {
                 navigate('/employee');
             }
         }
