@@ -17,8 +17,10 @@ const data = [
 ]
 
 // eslint-disable-next-line react/prop-types
-export default function TableSchedule({name, period}) {
-    console.log(name, period)
+export default function TableSchedule({data}) {
+    
+
+
     return (
         <>
             <TableContainer component={Paper}

@@ -21,19 +21,19 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Security(securi
         "message": "Authenticated successfully"
     }
     """
-    token = credentials.credentials  # Получаем сам токен из заголовка Authorization
+    token = credentials.credentials
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user = {
-            "id": payload.get("id_user"),  # Используем get(), чтобы избежать KeyError
+            "id": payload.get("id_user"),
             "name": payload.get("name"),
             "role": payload.get("role"),
             "code": payload.get("code"),
             "message": "Authenticated successfully"
         }
 
-        if not all(user.values()):  # Проверяем, что все поля не пустые
+        if not all(user.values()):
             raise HTTPException(status_code=401, detail="Invalid token structure")
 
         return user

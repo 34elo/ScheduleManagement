@@ -15,7 +15,7 @@ def get_employees_names() -> list:
     return employees_names
 
 
-def get_employee_contact(emlpoyee_name) -> list:
+def get_employee_contact(employee_name) -> list:
     """Возвращает возраст, должность, телефон и username сотрудника по его фио
     (21, 'кассир', '8952461285', None)"""
     if __name__ == '__main__':
@@ -25,7 +25,7 @@ def get_employee_contact(emlpoyee_name) -> list:
     data_cursor = connection.cursor()
     employee_contact = data_cursor.execute(f'''SELECT age, post, mobile_number, username
                                                FROM employees_passwords
-                                               WHERE full_name = "{emlpoyee_name}"''').fetchone()
+                                               WHERE full_name = "{employee_name}"''').fetchone()
     return employee_contact
 
 

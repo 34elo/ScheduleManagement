@@ -4,12 +4,12 @@ import TabContext from "@mui/lab/TabContext";
 import Box from "@mui/material/Box";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import ScheduleMenuEmployee from "../../components/Employee/ScheduleMenu/ScheduleMenu.jsx";
 import MyWorkMenu from "../../components/Employee/MyWorkMenu/MyWorkMenu.jsx";
 import AdminsMenu from "../../components/Employee/AdminsMenu/AdminsMenu.jsx";
 import AccountInfo from "../../components/General/AccountInfo/AccountInfo.jsx";
 import ModalEditAccount from "../../components/General/AccountInfo/ModalEditAccount.jsx";
 import LogoutButton from "../../components/General/LogoutButton/LogoutButton.jsx";
+import ScheduleMenu from "../../components/General/ScheduleMenu/ScheduleMenu.jsx";
 
 const stylesTabList = {
     display: 'flex',
@@ -81,7 +81,7 @@ export default function Employee() {
                     <TabContext value={value}>
 
                         <TabPanel value="1" style={{padding: 0}}>
-                            <ScheduleMenuEmployee></ScheduleMenuEmployee>
+                            <ScheduleMenu admin={false}></ScheduleMenu>
                         </TabPanel>
 
                         <TabPanel value="2" style={{padding: 0}}>

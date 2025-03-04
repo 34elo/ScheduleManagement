@@ -1,12 +1,13 @@
 import {FormControlLabel, IconButton, Modal, Switch, Tab} from "@mui/material";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import TabPanel from "@mui/lab/TabPanel";
 import {Box} from "@mui/system";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import EditIcon from '@mui/icons-material/Edit';
-import ModalEditSchedule from "./ModalEditSchedule.jsx";
-import TableSchedule from "../../General/ScheduleMenu/TableSchedule.jsx";
+import ModalEditSchedule from "../../Manager/ScheduleMenu/ModalEditSchedule.jsx";
+import TableSchedule from "./TableSchedule.jsx";
+import axios from "axios";
 
 const tabsData = [
     {
@@ -21,11 +22,7 @@ const tabsData = [
     {
         id: '2',
         name: 'Point 2',
-        info: {
-            address: 'Address 2',
-            city: 'City 2',
-            state: 'State 2',
-        }
+        info: []
     },
     {
         id: '3',
@@ -60,7 +57,8 @@ const styleBox = {
     },
 }
 
-export default function ScheduleMenuManager() {
+export default function ScheduleMenu({admin}) {
+
 
     const getTabInfo = () => {
         const selectedTab = tabsData.find(tab => tab.id === value);
@@ -75,6 +73,28 @@ export default function ScheduleMenuManager() {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const [data, setData] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/schedule/?period=${period ? 'month' : 'week'}`);
+                setData(response.data);  // Обновляем данные
+                console.log(response.data);
+            } catch (err) {
+                setError('Ошибка загрузки данных');  // Обрабатываем ошибки
+                console.log(err);
+            } finally {
+                setLoading(false);  // Заканчиваем загрузку
+            }
+        };
+
+        fetchData();  // Запускаем запрос
+    }, []);
+    console.log(data)
+
 
     function handleChange(e, newValue) {
         setValue(newValue);
@@ -90,9 +110,9 @@ export default function ScheduleMenuManager() {
             <Box sx={{justifyContent: 'space-between', flexGrow: 1, display: 'flex'}}>
                 <h1 style={{paddingBottom: '20px', margin: 0}}>{name}
                     Расписание
-                    <IconButton aria-label="edit" onClick={handleOpen} sx={{margin: '20px'}}>
-                        <EditIcon />
-                    </IconButton>
+                    {admin && <IconButton aria-label="edit" onClick={handleOpen} sx={{margin: '20px'}}>
+                        <EditIcon/>
+                    </IconButton>}
                 </h1>
 
                 <FormControlLabel
@@ -127,7 +147,7 @@ export default function ScheduleMenuManager() {
                     </Box>
                     <TabPanel value={value} key={value} sx={{width: '100%', paddingTop: '0px'}}>
                         <Box style={{backgroundColor: '#f0f0f0', minHeight: '500px', borderRadius: '20px', width: '100%', minWidth: '500px'}}>
-                            <TableSchedule name={getTabInfo()} period={String(period)}></TableSchedule>
+                            <TableSchedule data={data}></TableSchedule>
                         </Box>
                     </TabPanel>
                 </TabContext>

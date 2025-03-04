@@ -30,8 +30,8 @@ class EditingSchedule(BaseModel):
 
 def get_current_admin(user: dict = Depends(get_current_user)):
     """Проверяет, что пользователь - админ"""
-    if user["role"] != "Администратор":
-        raise HTTPException(status_code=403, detail="Invalid role")
+    if user.get('role') != "Администратор":
+        raise HTTPException(status_code=403, detail="Access denied. Only for admins")
     return user
 
 

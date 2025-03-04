@@ -4,7 +4,7 @@ import TabContext from "@mui/lab/TabContext";
 import Box from "@mui/material/Box";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import ScheduleMenu from "../../components/Manager/ScheduleMenu/ScheduleMenu.jsx";
+import ScheduleMenu from "../../components/General/ScheduleMenu/ScheduleMenu.jsx";
 import EmployeesManagerMenu from "../../components/Manager/EmployeesMenu/EmployeesManagerMenu.jsx";
 import ReportsMenu from "../../components/Manager/ReportsMenu/ReportsMenu.jsx";
 import AccountInfo from "../../components/General/AccountInfo/AccountInfo.jsx";
@@ -86,7 +86,7 @@ export default function ManagerPage() {
                     <TabContext value={value}>
 
                         <TabPanel value="1" style={{padding: 0}}>
-                            <ScheduleMenu/>
+                            <ScheduleMenu admin={true}/>
                         </TabPanel>
 
                         <TabPanel value="2" style={{padding: 0}}>
