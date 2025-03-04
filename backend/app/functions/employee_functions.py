@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime, timedelta
 
-from app.constants import POINTS, DAYS
+from backend.app.constants import POINTS, DAYS
 
 
 def get_my_schedule(full_name, period, date1=None, date2=None) -> dict:
@@ -10,6 +10,9 @@ def get_my_schedule(full_name, period, date1=None, date2=None) -> dict:
        period = week, month или custom
        Для custom вызвать вместе с датой начала периода и датой конца
     """
+
+    from backend.app.constants import POINTS
+
     if __name__ == '__main__':
         connection = sqlite3.connect('../data/data.sqlite')
     else:
@@ -83,6 +86,9 @@ def change_point_wishes(employee, point, mode) -> None:
     """Устанавливает или удаляет желаемую точку для сотрудника
        В зависимости от mode
        mode='set' или mode='remove'"""
+
+    from backend.app.constants import POINTS
+
     if __name__ == '__main__':
         connection = sqlite3.connect('../data/data.sqlite')
     else:
@@ -116,6 +122,9 @@ def change_day_wishes(employee, day, mode) -> None:
     """Устанавливает или удаляет желаемую смену для сотрудника
        В зависимости от mode
        mode='set' или mode='remove'"""
+
+    from backend.app.constants import DAYS
+
     if __name__ == '__main__':
         connection = sqlite3.connect('../data/data.sqlite')
     else:

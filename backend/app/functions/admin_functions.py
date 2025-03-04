@@ -1,4 +1,5 @@
 import sqlite3
+import random
 from datetime import datetime
 
 
@@ -29,11 +30,8 @@ def get_employee_contact(employee_name) -> list:
     return employee_contact
 
 
-import random
-
-
 def generate_password(length=8):
-    '''генерация пароля'''
+    """Генерация пароля"""
     lowercase_letters = 'abcdefghijklmnopqrstuvwxyz'  # буквы в нижнем регистре
     uppercase_letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'  # буквы в верхнем регистре
     digits = '0123456789'  # цифры
@@ -144,8 +142,8 @@ def create_employee_report(full_name, date1, date2) -> None:
        date в формате YYYY-MM-DD
     """
     import shutil
-    from app.functions.reports_functions import create_employee_report_func
-    from app.functions.employee_functions import get_my_schedule
+    from backend.app.functions.reports_functions import create_employee_report_func
+    from backend.app.functions.employee_functions import get_my_schedule
 
     if __name__ == '__main__':
         connection = sqlite3.connect('../data/data.sqlite')
@@ -185,7 +183,7 @@ def create_point_report(point, date1, date2) -> None:
        date в формате YYYY-MM-DD
     """
     import shutil
-    from app.functions.reports_functions import create_point_report_func
+    from backend.app.functions.reports_functions import create_point_report_func
 
     if __name__ == '__main__':
         connection = sqlite3.connect('../data/data.sqlite')
@@ -223,5 +221,61 @@ def create_point_report(point, date1, date2) -> None:
     )
     source_file = "point_report.docx"
     destination_dir = "../reports/point_report.docx"
+
+    shutil.move(source_file, destination_dir)
+
+
+def create_general_report(date1, date2) -> None:
+    """Создаёт отчёт по точке
+       date в формате YYYY-MM-DD
+    """
+    import shutil
+    from backend.app.functions.reports_functions import create_general_report_func
+    from backend.app.functions.employee_functions import get_my_schedule
+    from backend.app.constants import POINTS
+
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
+
+    data_cursor = connection.cursor()
+
+    employees_work_days = []
+    for full_name in get_employees_names():
+        working_days = len(get_my_schedule(full_name, 'custom', date1, date2))
+        employees_work_days.append((full_name, working_days))
+    most_hardworking_employee = sorted(employees_work_days, key=lambda x: x[1], reverse=True)[0]
+    least_hardworking_employee = sorted(employees_work_days, key=lambda x: x[1])[0]
+
+    date1 = datetime.strptime(date1, "%Y-%m-%d")
+    date2 = datetime.strptime(date2, "%Y-%m-%d")
+
+    delta = date2 - date1
+    days_difference = delta.days
+
+    points_working_time = []
+    for point in POINTS:
+        schedule = data_cursor.execute(f'''SELECT "{point}"
+                                               FROM schedule
+                                               WHERE "Дата" BETWEEN "{date1}"
+                                               AND "{date2}"''').fetchall()
+        working_days = len([day for day in schedule if day[0] is not None])
+        working_time = round(working_days / days_difference * 100, 1)
+        points_working_time.append((point, working_time))
+    top_points = sorted(points_working_time, key=lambda x: x[1], reverse=True)[:3]
+    worst_points = sorted(points_working_time, key=lambda x: x[1])[:3]
+
+
+    create_general_report_func(
+        filename="general_report.docx",
+        most_hardworking_employee=most_hardworking_employee,
+        least_hardworking_employee=least_hardworking_employee,
+        top_points=top_points,
+        worst_points=worst_points,
+        period=f'{date1.strftime('%Y-%m-%d')} - {date2.strftime('%Y-%m-%d')}'
+    )
+    source_file = "general_report.docx"
+    destination_dir = "../reports/general_report.docx"
 
     shutil.move(source_file, destination_dir)
