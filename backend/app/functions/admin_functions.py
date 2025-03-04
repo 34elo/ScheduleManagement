@@ -142,8 +142,8 @@ def create_employee_report(full_name, date1, date2) -> None:
        date в формате YYYY-MM-DD
     """
     import shutil
-    from backend.app.functions.reports_functions import create_employee_report_func
-    from backend.app.functions.employee_functions import get_my_schedule
+    from app.functions.reports_functions import create_employee_report_func
+    from app.functions.employee_functions import get_my_schedule
 
     if __name__ == '__main__':
         connection = sqlite3.connect('../data/data.sqlite')
@@ -183,7 +183,7 @@ def create_point_report(point, date1, date2) -> None:
        date в формате YYYY-MM-DD
     """
     import shutil
-    from backend.app.functions.reports_functions import create_point_report_func
+    from app.functions.reports_functions import create_point_report_func
 
     if __name__ == '__main__':
         connection = sqlite3.connect('../data/data.sqlite')
@@ -230,9 +230,9 @@ def create_general_report(date1, date2) -> None:
        date в формате YYYY-MM-DD
     """
     import shutil
-    from backend.app.functions.reports_functions import create_general_report_func
-    from backend.app.functions.employee_functions import get_my_schedule
-    from backend.app.constants import POINTS
+    from app.functions.reports_functions import create_general_report_func
+    from app.functions.employee_functions import get_my_schedule
+    from app.constants import POINTS
 
     if __name__ == '__main__':
         connection = sqlite3.connect('../data/data.sqlite')

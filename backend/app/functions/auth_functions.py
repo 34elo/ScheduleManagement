@@ -1,6 +1,7 @@
 from datetime import timedelta, datetime
 from jose import jwt
 import sqlite3
+from config import SECRET_KEY, ALGORITHM
 
 
 def check_code(code) -> (str, str, bool):
@@ -42,7 +43,6 @@ def check_code(code) -> (str, str, bool):
 
 
 def create_access_token(data: dict, expires_delta: timedelta = timedelta(days=7)):
-    from config import SECRET_KEY, ALGORITHM
     to_encode = data.copy()
     expire = datetime.utcnow() + expires_delta
     to_encode.update({"exp": expire})
