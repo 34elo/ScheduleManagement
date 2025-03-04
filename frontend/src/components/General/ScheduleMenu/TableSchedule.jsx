@@ -10,12 +10,7 @@ import {useState} from "react";
 
 // eslint-disable-next-line react/prop-types
 export default function TableSchedule(data) {
-
-    const [myData, setMyData] = useState([{date: 'Данные отсутсвуют', employees: ['Данные отсутсвуют']},]);
-    if (!data === null || !data === undefined) {
-        setMyData(data);
-    }
-    console.log(data)
+    data = data.data
     return (
         <>
             <TableContainer component={Paper}
@@ -29,7 +24,7 @@ export default function TableSchedule(data) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {myData.map((row, index) => (
+                        {data.map((row, index) => (
                             <TableRow key={index}>
                                 <TableCell sx={{textAlign: 'center', maxWidth: '1px'}}>{row.date}</TableCell>
                                 <TableCell sx={{textAlign: 'center'}}>{row.employees.join(', ')}</TableCell>

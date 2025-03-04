@@ -31,6 +31,7 @@ export default function ScheduleMenu({admin}) {
     const [data, setData] = useState([]);  // Инициализируем как пустой массив
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [selected, setSelected] = useState([{date: 'Данные отсутсвуют', employees: ['Данные отсутсвуют']},]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,7 +44,6 @@ export default function ScheduleMenu({admin}) {
                     }
                 });
                 setData(response.data.data);  // Устанавливаем полученные данные
-                console.log(response.data);
             } catch (err) {
                 setError('Ошибка загрузки данных');
                 console.log(err);
@@ -55,7 +55,7 @@ export default function ScheduleMenu({admin}) {
     }, [period]);
 
 
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState(0); // Начальное значение пустая строка
 
     useEffect(() => {
         if (data.length > 0) {
@@ -63,23 +63,17 @@ export default function ScheduleMenu({admin}) {
         }
     }, [data]);
 
-    function getSchedule() {
-        if (data) {
-            console.log(data, 'check');
-            data.forEach((item) => {
-                console.log(item);
-                if (item.id === value) {
-                    return item;
-                }
-            })
-        } else {
-            return false
+    useEffect(() => {
+        if (data.length > 0) {
+        const selectedData = data.find(item => item.id === value);
+        setSelected(selectedData ? selectedData.schedule : [{date: 'Данные отсутсвуют', employees: ['Данные отсутсвуют'] }]);
         }
-    }
+    }, [value, data, period]);
 
     function handleChange(e, newValue) {
         setValue(newValue);
     }
+
 
     function changePeriod(e, newValue) {
         setPeriod(newValue);
@@ -135,7 +129,7 @@ export default function ScheduleMenu({admin}) {
                             width: '100%',
                             minWidth: '500px'
                         }}>
-                            <TableSchedule data={getSchedule()}/>
+                            <TableSchedule data={selected}/>
                         </Box>
                     </TabPanel>
                 </TabContext>
