@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime
 from jose import jwt
 import sqlite3
-from backend.config import SECRET_KEY, ALGORITHM
+from config import SECRET_KEY, ALGORITHM
 
 
 def check_code(code) -> (str, str, bool):
