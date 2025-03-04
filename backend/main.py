@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException, status, FastAPI
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers.admin import admin_router
@@ -6,7 +6,9 @@ from app.routers.auth import auth_router
 from app.routers.employee import employee_router
 from app.routers.general import general_router
 
-app = FastAPI()
+app = FastAPI(
+    root_path='/api'
+)
 
 app.include_router(auth_router)
 app.include_router(employee_router)

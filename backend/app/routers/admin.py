@@ -1,11 +1,12 @@
 from datetime import datetime
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from backend.app.functions.admin_functions import get_employee_contact, get_employees_names, create_employee, get_all_chats_ids, \
+from app.functions.admin_functions import get_employee_contact, get_employees_names, create_employee, get_all_chats_ids, \
     making_schedule, editing_schedule, send_notification_by_names, delete_employee
+from app.routers.utils import get_current_user
 
 admin_router = APIRouter(
     prefix="/admin",
@@ -27,23 +28,11 @@ class EditingSchedule(BaseModel):
     date: datetime
 
 
-'''
-def get_current_employee(user: dict = Depends(get_current_user)):
+def get_current_admin(user: dict = Depends(get_current_user)):
     """Проверяет, что пользователь - админ"""
     if user["role"] != "Администратор":
         raise HTTPException(status_code=403, detail="Invalid role")
     return user
-'''
-
-
-def get_current_admin(token: str):
-    return {
-        'id': 1,
-        "name": "name",
-        "role": "role",
-        "code": "123123123123",
-        "message": "Authenticated successfully"
-    }
 
 
 @admin_router.patch("/employees/{name}", summary='Возвращает информацию о сотруднике по его имени')
@@ -67,7 +56,7 @@ def get_employees(
 '''
 
 
-@admin_router.post('make-schedule', summary='Создание расписание')
+@admin_router.post('/make-schedule', summary='Создание расписание')
 def make_schedule(
         user: dict = Depends(get_current_admin),
 ):
@@ -84,7 +73,7 @@ def edit_schedule(
     return {'message': 'success'}
 
 
-@admin_router.post('telegram/send_notification/', summary="Отправить уведомление")
+@admin_router.post('/telegram/send_notification/', summary="Отправить уведомление")
 def send_notification(
         notification: Notification,
         user: dict = Depends(get_current_admin),
@@ -93,14 +82,14 @@ def send_notification(
     return {'message': 'success'}
 
 
-@admin_router.get('telegram/chats-id', summary='Возвращает все id для отправки уведомлений')
+@admin_router.get('/telegram/chats-id', summary='Возвращает все id для отправки уведомлений')
 def get_chats_ids(
         user: dict = Depends(get_current_admin),
 ):
     return {'chats': get_all_chats_ids()}
 
 
-@admin_router.post('employee', summary='Создает сотрудника')
+@admin_router.post('/employee', summary='Создает сотрудника')
 def create_new_employee(
         person: Employee,
         user: dict = Depends(get_current_admin),
@@ -108,10 +97,11 @@ def create_new_employee(
     code = create_employee(person.name)
     return {'code': code, 'message': 'success'}
 
-@admin_router.delete('employee')
+
+@admin_router.delete('/employee')
 def delete_employee_by_name(
         person: Employee,
         user: dict = Depends(get_current_admin),
 ):
-    delete_employee()
+    delete_employee(person.name)
     return {'message': 'success'}

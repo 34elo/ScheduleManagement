@@ -39,7 +39,7 @@ def schedule(
 ):
     return {"points": POINTS}
 
-@general_router.put('info')
+@general_router.put('/info')
 def edit_info(
         info: Info,
         user: dict = Depends(get_current_user)

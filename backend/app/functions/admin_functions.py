@@ -60,7 +60,10 @@ def create_employee(name: str) -> str:
     """
     password = generate_password()
 
-    connection = sqlite3.connect('../data/data.sqlite')
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
     data_cursor = connection.cursor()
 
     admin_passwords = format_data(data_cursor.execute('SELECT password FROM admin_passwords').fetchall())
@@ -83,7 +86,10 @@ def get_all_chats_ids() -> list:
     """
     Возвращает все id для отправки уведомлений
     """
-    connection = sqlite3.connect('../data/data.sqlite')
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
     data_cursor = connection.cursor()
     data = format_data(data_cursor.execute('''
     SELECT chat_id FROM employees_passwords
@@ -118,7 +124,10 @@ def delete_employee(name: str) -> None:
     """
     Удаляет сотрудника
     """
-    connection = sqlite3.connect('../data/data.sqlite')
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
     data_cursor = connection.cursor()
 
     data_cursor.execute(f'''
@@ -135,8 +144,8 @@ def create_employee_report(full_name, date1, date2) -> None:
        date в формате YYYY-MM-DD
     """
     import shutil
-    from backend.app.functions.reports_functions import create_employee_report_func
-    from backend.app.functions.employee_functions import get_my_schedule
+    from app.functions.reports_functions import create_employee_report_func
+    from app.functions.employee_functions import get_my_schedule
 
     if __name__ == '__main__':
         connection = sqlite3.connect('../data/data.sqlite')
@@ -176,7 +185,7 @@ def create_point_report(point, date1, date2) -> None:
        date в формате YYYY-MM-DD
     """
     import shutil
-    from backend.app.functions.reports_functions import create_point_report_func
+    from app.functions.reports_functions import create_point_report_func
 
     if __name__ == '__main__':
         connection = sqlite3.connect('../data/data.sqlite')

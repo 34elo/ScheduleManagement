@@ -21,6 +21,6 @@
 
 <путь> - <команда>
 
-\ScheduleManagement\backend\ - .\.venv\Scripts\activate 
+\ScheduleManagement\backend\ - .venv\Scripts\activate 
 \ScheduleManagement\backend\ -  uvicorn main:app --reload 
 
