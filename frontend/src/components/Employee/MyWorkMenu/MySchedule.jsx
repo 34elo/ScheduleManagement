@@ -7,6 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {API_URL} from "../../../API_URL.js";
 
 export default function MySchedule({ name }) {
     const [data, setData] = useState({});
@@ -18,7 +19,7 @@ export default function MySchedule({ name }) {
             try {
                 const token = localStorage.getItem('token'); // Получаем токен из localStorage
 
-                const response = await axios.get(`http://127.0.0.1:8000/api/employee/schedule/`, {
+                const response = await axios.get(`${API_URL}/employee/schedule/`, {
                     headers: {
                         Authorization: `Bearer ${token}` // Добавляем токен в заголовок запроса
                     }

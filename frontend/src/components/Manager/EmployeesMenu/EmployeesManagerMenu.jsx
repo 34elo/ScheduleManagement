@@ -5,6 +5,7 @@ import {useEffect, useMemo, useState} from "react";
 import ModalAddEmployee from "./ModalAddEmployee.jsx";
 import ModalAccountInfo from "../../General/AccountInfo/ModalAccountInfo.jsx";
 import axios from "axios";
+import {API_URL} from "../../../API_URL.js";
 
 export default function EmployeesManagerMenu() {
     const [selectedCard, setSelectedCard] = useState(null);
@@ -19,7 +20,7 @@ export default function EmployeesManagerMenu() {
             try {
                 const token = localStorage.getItem('token'); // Получаем токен из localStorage
 
-                const response = await axios.get(`http://127.0.0.1:8000/api/admin/employees/`, {
+                const response = await axios.get(`${API_URL}/admin/employees/`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

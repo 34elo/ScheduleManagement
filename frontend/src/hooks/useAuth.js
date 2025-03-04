@@ -1,75 +1,68 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState, useCallback} from "react";
 import axios from "axios";
-
-const api = axios.create({
-    baseURL: "http://127.0.0.1:8000/api",
-    headers: { "Content-Type": "application/json" },
-});
+import {API_URL} from "../API_URL.js";
 
 function useAuth() {
     const [user, setUser] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [token, setToken] = useState(localStorage.getItem("token"));
     const [role, setRole] = useState(null);
     const [error, setError] = useState(null);
 
-    // Устанавливаем заголовок авторизации
-    useEffect(() => {
-        if (token) {
-            api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        } else {
-            delete api.defaults.headers.common["Authorization"];
-        }
-    }, [token]);
+    // Получаем токен из localStorage
+    const [token, setToken] = useState(() => localStorage.getItem("token") || "");
 
-    const auth = async () => {
+    const auth = useCallback(async () => {
         if (!token) {
             setLoading(false);
             return;
         }
         try {
-            const response = await api.get("/auth", { params: { token } }); // Если сервер не поддерживает `Authorization`
+            const response = await axios.get(`${API_URL}/auth`, {
+                headers: {
+                    authorization: `Bearer ${token}`
+                }
+            });
+            console.log(response.data);
             setUser(response.data.user);
             setRole(response.data.role);
             setIsLoggedIn(true);
         } catch (err) {
-            setToken(null);
-            localStorage.removeItem("token");
-            setIsLoggedIn(false);
-            setUser(null);
-            setRole(null);
+            logout(); // Если ошибка — очищаем данные
         } finally {
             setLoading(false);
         }
-    };
-
-    // Проверяем авторизацию при загрузке
-    useEffect(() => {
-        auth();
     }, [token]);
 
-    // Логин через код
-    const login = async (code) => {
+    // Проверяем авторизацию при изменении токена
+    useEffect(() => {
+        auth();
+    }, [auth]);
+
+    // Функция входа по коду
+    const login = useCallback(async (code) => {
         try {
-            const response = await api.get("/login", { params: { input_code: code } });
+            const response = await axios.get(`${API_URL}/login?input_code=${code}`, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
             const newToken = response.data.token;
             localStorage.setItem("token", newToken);
             setToken(newToken);
-            await auth();
         } catch (err) {
             setError(err.response?.data?.detail || "Ошибка входа");
         }
-    };
+    }, []);
 
-    // Выход
-    const logout = () => {
+    // Функция выхода
+    const logout = useCallback(() => {
         localStorage.removeItem("token");
-        setToken(null);
+        setToken("");
         setUser(null);
         setIsLoggedIn(false);
         setRole(null);
-    };
+    }, []);
 
     return {
         user,

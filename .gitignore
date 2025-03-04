@@ -20,6 +20,7 @@ frontend/node_modules/
 frontend/.next/
 frontend/.parcel-cache/
 frontend/build/
+frontend/.env
 
 # Python Backend
 backend/__pycache__/

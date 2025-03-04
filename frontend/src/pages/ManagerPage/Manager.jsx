@@ -98,7 +98,7 @@ export default function ManagerPage() {
                         </TabPanel>
 
                         <TabPanel value="4" style={{padding: 0}}>
-                            <AccountInfo name='name' label='Личный кабинет'>
+                            <AccountInfo name='name' label='Личный кабинет' role='Администратор'>
                                 <Modal
                                     open={open}
                                     onClose={() => setOpen(false)}

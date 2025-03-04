@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import SelectAny from "./SelectAny.jsx";
 import Paragraph from "../../Manager/UtilsComponents/Paragraph.jsx";
 import axios from "axios";
+import {API_URL} from "../../../API_URL.js";
 
 
 export default function MyWishes(props) {
@@ -19,7 +20,7 @@ export default function MyWishes(props) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/points/', {headers: {
+                const response = await axios.get(`${API_URL}/api/points/`, {headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}` // Добавляем токен в заголовок запроса
                 }})
                 setAddresses(response.data);
@@ -34,7 +35,7 @@ export default function MyWishes(props) {
     function handleChange() {
         setSelectedAddress([]);
         setSelectedDays([]);
-        axios.patch('http://127.0.0.1:8000/api/employee/wishes/', {
+        axios.patch(`${API_URL}/employee/wishes/`, {
             days: selectedDays,
             points: selectedAddress,
         }, {

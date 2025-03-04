@@ -8,6 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ModalEditSchedule from "../../Manager/ScheduleMenu/ModalEditSchedule.jsx";
 import TableSchedule from "./TableSchedule.jsx";
 import axios from "axios";
+import {API_URL} from "../../../API_URL.js";
 
 const styleBox = {
     minHeight: '500px', backgroundColor: '#f0f0f0', borderRadius: '20px',
@@ -38,7 +39,7 @@ export default function ScheduleMenu({admin}) {
             try {
                 const token = localStorage.getItem('token'); // Получаем токен из localStorage
 
-                const response = await axios.get(`http://127.0.0.1:8000/api/schedule/?period=${period ? 'month' : 'week'}`, {
+                const response = await axios.get(`${API_URL}/schedule/?period=${period ? 'month' : 'week'}`, {
                     headers: {
                         Authorization: `Bearer ${token}` // Добавляем токен в заголовок запроса
                     }

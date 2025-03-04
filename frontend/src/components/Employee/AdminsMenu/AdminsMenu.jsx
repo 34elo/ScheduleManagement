@@ -1,40 +1,60 @@
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Box, Modal} from "@mui/material";
-
-import DetailsAdmin from "./DetailsAdmin.jsx";
 import CardsAdmins from "./CardsAdmins.jsx";
-import ModalAddEmployee from "../../Manager/EmployeesMenu/ModalAddEmployee.jsx";
 import ModalAccountInfo from "../../General/AccountInfo/ModalAccountInfo.jsx";
-
-const cards = [{id: 0, title: "Вася Пупкин", description: "Plants are essential for all life."}, {
-    id: 1,
-    title: "Астафьев Павел",
-    description: "Animals are a part of nature."
-}, {id: 2, title: "Цветков Владимир", description: "Humans depend on plants and animals for survival."}, {
-    id: 3,
-    title: "Астафьев Павел",
-    description: "Animals are a part of nature."
-}, {id: 4, title: "Астафьев Павел", description: "Animals are a part of nature."}, {
-    id: 5,
-    title: "Астафьев Павел",
-    description: "Animals are a part of nature."
-}, {id: 6, title: "Астафьев Павел", description: "Animals are a part of nature."},];
+import axios from "axios";
+import {API_URL} from "../../../API_URL.js";
 
 export default function AdminsMenu() {
     const [selectedCard, setSelectedCard] = useState(null);
 
     const [open, setOpen] = useState(false);
+    const [admins, setAdmins] = useState([]);
+    const [cards, setCards] = useState([]);
 
     const handleCardClick = (id) => {
         setSelectedCard(id);
         setOpen(true); // Открываем модальное окно при выборе пользователя
     };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem('token'); // Получаем токен из localStorage
+
+                const response = await axios.get(`${API_URL}/employee/admin/`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                setAdmins(response.data.admins);  // Устанавливаем полученные данные
+            } catch (err) {
+                console.log(err);
+                console.log(err);
+            }
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        let arr = [];
+
+        if (admins) {
+            admins.forEach((employee, index) => {
+                arr.push({id: index, title: employee});
+            })
+            setCards(arr);
+
+        }
+    }, [admins]);
+
 
     return (<Box sx={{display: "flex", height: "100%", padding: 2, minHeight: "550px"}}>
         <Modal open={open} onClose={() => setOpen(false)}>
             {selectedCard !== null ?
-                    <ModalAccountInfo name={cards.find(card => card.id === selectedCard)?.title || "Неизвестный"} label='Подробная информация'/>
-                    : <div></div>}
+                <ModalAccountInfo role='employee' name={cards.find(card => card.id === selectedCard)?.title || "Неизвестный"}
+                                  label='Подробная информация'/>
+                : <div></div>}
         </Modal>
         <Box
             sx={{

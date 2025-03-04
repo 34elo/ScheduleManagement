@@ -4,16 +4,16 @@ import NameField from "./NameField.jsx";
 import MoreInfoField from "./MoreInfoField.jsx";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {API_URL} from "../../../API_URL.js";
 
 export default function AccountInfo({children, name, label, role}) {
 
     const [info, setInfo] = useState({})
 
     useEffect(() => {
-        console.log(name)
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/${role}/employees/${name}`, {
+                const response = await axios.get(`${API_URL}/${role}/${(role === 'employee' ? 'admin' : 'employees')}/${name}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
@@ -44,8 +44,9 @@ export default function AccountInfo({children, name, label, role}) {
         }}>
             <Avatar sx={{width: 180, height: 180, margin: '50px'}}/>
             <Box>
-                <NameField name={info.name} role={info.post ? '' + info.post : 'Данные отсутсвуют'}></NameField>
-                <MoreInfoField username={info.username ? '@' + info.username : 'Данные отсутсвуют'} contact={info.contact ? '' + info.contact : 'Данные отсутсвуют'}
+                <NameField name={name} role={role}></NameField>
+                <MoreInfoField username={info.username ? '@' + info.username : 'Данные отсутсвуют'}
+                               contact={info.contact ? '' + info.contact : 'Данные отсутсвуют'}
                                age={info.age ? '' + info.age : 'Данные отсутсвуют'}></MoreInfoField>
             </Box>
             {children}

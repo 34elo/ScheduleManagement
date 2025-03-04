@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {Box} from "@mui/system";
 import useAuth from "../../hooks/useAuth.js";
 import {useNavigate} from "react-router-dom";
+import {API_URL} from "../../API_URL.js";
 
 export default function LoginPage() {
 
@@ -35,7 +36,6 @@ export default function LoginPage() {
             setError("Произошла ошибка при авторизации"); // Обрабатываем ошибки авторизации
         }
     };
-
     return (
         <>
             <Box // Оборачиваем весь контент в Box
