@@ -1,8 +1,6 @@
 import sqlite3
 from datetime import datetime, timedelta
 
-from backend.app.constants import POINTS, DAYS
-
 
 def get_my_schedule(full_name, period, date1=None, date2=None) -> dict:
     """Возвращает свой график работы для сотрудника.
