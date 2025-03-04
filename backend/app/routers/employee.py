@@ -55,7 +55,7 @@ def get_my_schedule_by_token(
 @employee_router.get("/admin/{name}", summary='Возвращает информацию об админе по его имени')
 def get_admin_by_name(
         name: str,
-        user: dict = Depends(get_current_employee)
+        user: dict = Depends(get_current_user)
 ):
     username, contact = get_admin_contact(name)
     return {'contact': contact, 'username': username}

@@ -19,13 +19,11 @@ const styleModal = {
     alignItems: 'center'
 };
 
-export default function ModalAccountInfo({children, name, label}) {
-
-    return (
-        <Box sx={styleModal}>
-            <AccountInfo name={name} label={label}>
+export default function ModalAccountInfo({children, name, label, role}) {
+    console.log("ModalAccountInfo");
+    return (<Box sx={styleModal}>
+            <AccountInfo name={name} label={label} role={role}>
                 {children}
             </AccountInfo>
-        </Box>
-    )
+        </Box>)
 }

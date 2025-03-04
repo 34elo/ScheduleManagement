@@ -1,23 +1,52 @@
 import {Box, Button, Modal} from "@mui/material";
 import CardsEmployees from "./CardsEmployees.jsx";
 import NotificationEmployee from "./NotificationEmployee.jsx";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import ModalAddEmployee from "./ModalAddEmployee.jsx";
 import ModalAccountInfo from "../../General/AccountInfo/ModalAccountInfo.jsx";
-
-const cards = [
-    {id: 0, title: "Вася Пупкин", description: "Plants are essential for all life."},
-    {id: 1, title: "Астафьев Павел", description: "Animals are a part of nature."},
-    {id: 2, title: "Цветков Владимир", description: "Humans depend on plants and animals for survival."},
-    {id: 3, title: "Астафьев Павел", description: "Animals are a part of nature."},
-    {id: 4, title: "Астафьев Павел", description: "Animals are a part of nature."},
-    {id: 5, title: "Астафьев Павел", description: "Animals are a part of nature."},
-    {id: 6, title: "Астафьев Павел", description: "Animals are a part of nature."},
-];
+import axios from "axios";
 
 export default function EmployeesManagerMenu() {
     const [selectedCard, setSelectedCard] = useState(null);
     const [addEmployeeCards, setAddEmployeeCards] = useState(false);
+    const [employees, setEmployees] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [cards, setCards] = useState([{id: 0, title: 'Данные отсутсвуют'}]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem('token'); // Получаем токен из localStorage
+
+                const response = await axios.get(`http://127.0.0.1:8000/api/admin/employees/`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                setEmployees(response.data.employees);  // Устанавливаем полученные данные
+            } catch (err) {
+                setError('Ошибка загрузки данных');
+                console.log(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        let arr = [];
+
+        if (employees) {
+            employees.forEach((employee, index) => {
+                arr.push({id: index, title: employee});
+            })
+            setCards(arr);
+
+        }
+    }, [employees]);
 
     const [open, setOpen] = useState(false);
     const handleCardClick = (id) => {
@@ -26,9 +55,9 @@ export default function EmployeesManagerMenu() {
     };
 
     function handleDeleteEmployee() {
-        console.log("handleDeleteEmployee", selectedCard, cards.find(card => card.id === selectedCard)?.title || "Неизвестный");
         setOpen(false);
     }
+
 
     return (
         <>
@@ -36,7 +65,8 @@ export default function EmployeesManagerMenu() {
                 {addEmployeeCards ? <ModalAddEmployee setOpen={setOpen}/>
                     : selectedCard !== null ? (
                             <ModalAccountInfo name={cards.find(card => card.id === selectedCard)?.title || "Неизвестный"}
-                                              label='Подробная ифнормация'>
+                                              label='Подробная ифнормация'
+                                              role='admin'>
                                 <Button variant="contained" onClick={handleDeleteEmployee}
                                         sx={{backgroundColor: '#c1c1c1', marginTop: '10px'}}>
                                     Удалить сотрудника

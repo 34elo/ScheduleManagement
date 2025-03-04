@@ -4,6 +4,10 @@ import {Card, CardActionArea, CardContent, Typography} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 export default function CardsEmployees({cards, selectedCard, setSelectedCard, setAddEmployeeCards, setOpen}) {
+    if (!cards.length > 0) {
+        cards = [{id: 0, name: 'Данные отсутствуют'}];
+    }
+    console.log(cards);
     function handleInfoCard(id) {
         setSelectedCard(id);
         setAddEmployeeCards(false);

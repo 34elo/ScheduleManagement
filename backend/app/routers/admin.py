@@ -35,10 +35,10 @@ def get_current_admin(user: dict = Depends(get_current_user)):
     return user
 
 
-@admin_router.patch("/employees/{name}", summary='Возвращает информацию о сотруднике по его имени')
+@admin_router.get("/employees/{name}", summary='Возвращает информацию о сотруднике по его имени')
 def get_employee_by_name(
         name: str,
-        user: dict = Depends(get_current_admin)
+        user: dict = Depends(get_current_user)
 ):
     age, post, contact, username = get_employee_contact(name)
     return {'name': name, 'age': age, 'post': post, 'contact': contact, 'username': username}
@@ -46,7 +46,7 @@ def get_employee_by_name(
 
 @admin_router.get("/employees/", summary='Возвращает список всех сотрудников')
 def get_employees(
-        user: str = Depends(get_current_admin),
+        user: str = Depends(get_current_user),
 ):
     return {'employees': get_employees_names()}
 

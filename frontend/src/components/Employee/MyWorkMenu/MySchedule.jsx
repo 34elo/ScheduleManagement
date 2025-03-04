@@ -5,41 +5,66 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import {useEffect, useState} from "react";
+import axios from "axios";
 
-const data = [{date: '20.03.2025', point: 'Гагарина 3'}, {date: '21.03.2025', point: 'Гагарина 3'}, {
-    date: '21.03.2025', point: 'Гагарина 3'
-}, {date: '21.03.2025', point: 'Гагарина 3'}, {date: '21.03.2025', point: 'Гагарина 3'}, {
-    date: '21.03.2025', point: 'Гагарина 3'
-}, {date: '21.03.2025', point: 'Гагарина 3'},]
+export default function MySchedule({ name }) {
+    const [data, setData] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-// eslint-disable-next-line react/prop-types
-export default function MySchedule({name}) {
-    console.log(name)
-    return (<>
-        <TableContainer component={Paper}
-                        sx={{
-                            boxShadow: 'none',
-                            minWidth: 500,
-                            backgroundColor: '#f0f0f0',
-                            borderRadius: '20px',
-                            maxHeight: '450px'
-                        }}>
-            <Table
-                aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell sx={{textAlign: 'center', maxWidth: '1px'}}>Дата</TableCell>
-                        <TableCell sx={{textAlign: 'center'}}>Адрес</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {data.map((row, index) => (<TableRow key={index}>
-                        <TableCell sx={{textAlign: 'center', maxWidth: '1px'}}>{row.date}</TableCell>
-                        <TableCell sx={{textAlign: 'center'}}>{row.point}</TableCell>
-                    </TableRow>))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-        <h1>{name}</h1>
-    </>)
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem('token'); // Получаем токен из localStorage
+
+                const response = await axios.get(`http://127.0.0.1:8000/api/employee/schedule/`, {
+                    headers: {
+                        Authorization: `Bearer ${token}` // Добавляем токен в заголовок запроса
+                    }
+                });
+                setData(response.data);  // Устанавливаем полученные данные
+            } catch (err) {
+                setError('Ошибка загрузки данных');
+                console.log(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
+
+    return (
+        <>
+            <TableContainer component={Paper}
+                            sx={{
+                                boxShadow: 'none',
+                                minWidth: 500,
+                                backgroundColor: '#f0f0f0',
+                                borderRadius: '20px',
+                                maxHeight: '450px'
+                            }}>
+                <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell sx={{ textAlign: 'center', maxWidth: '1px' }}>Дата</TableCell>
+                            <TableCell sx={{ textAlign: 'center' }}>Адрес</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {Object.entries(data).map(([date, point], index) => (
+                            <TableRow key={index}>
+                                <TableCell sx={{ textAlign: 'center', maxWidth: '1px' }}>{date}</TableCell>
+                                <TableCell sx={{ textAlign: 'center' }}>{point}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <h1>{name}</h1>
+        </>
+    );
 }
