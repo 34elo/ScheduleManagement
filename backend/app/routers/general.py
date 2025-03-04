@@ -23,7 +23,7 @@ class Info(BaseModel):
     description: Description
 
 
-@general_router.get("/schedule/", summary='Возвращает список всех точек')
+@general_router.get("/schedule/", summary='Возвращает расписание всех точек')
 def schedule(
         period: str,
         user: int = Depends(get_current_user),
@@ -38,6 +38,13 @@ def schedule(
         schedule_data.append({'id': i, 'point': point, 'schedule': result})
 
     return {'data': schedule_data}
+
+
+@general_router.get("/points/", summary='Возвращает список всех точек')
+def points(
+        user: int = Depends(get_current_user),
+):
+    return POINTS
 
 
 @general_router.put('/info')

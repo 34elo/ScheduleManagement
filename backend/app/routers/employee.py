@@ -1,13 +1,12 @@
-from datetime import datetime
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, Body
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from app.routers.utils import get_current_user
 from app.constants import POINTS, DAYS, DAYS_MAPPING
-from app.functions.employee_functions import change_point_wishes, get_my_schedule, get_admin_contact, get_admin_names
-
+from app.functions.employee_functions import change_point_wishes, get_my_schedule, get_admin_contact, get_admin_names, \
+    change_day_wishes
+from app.routers.utils import get_current_user
 
 employee_router = APIRouter(
     prefix="/employee",
@@ -16,7 +15,7 @@ employee_router = APIRouter(
 
 
 class WishesUpdate(BaseModel):
-    days: List[datetime]
+    days: List[str]
     points: List[str]
 
 
@@ -27,21 +26,22 @@ def get_current_employee(user: dict = Depends(get_current_user)):
     return user
 
 
-
 @employee_router.patch("/wishes/", summary='Изменяет "любимые точки и дни" сотрудника(определяет по токену)')
 def change_my_wishes_points(
         wishes: WishesUpdate,
         user: dict = Depends(get_current_employee)
 ):
-    if not wishes.points:
-        change_point_wishes(user['name'], POINTS, 'remove')
-    else:
-        change_point_wishes(user['name'], WishesUpdate.points, 'set')
-    if not wishes.days:
-        change_point_wishes(user['name'], DAYS, 'remove')
-    else:
-        res_days = [DAYS_MAPPING[str(day).lower()] for day in WishesUpdate.days]
-        change_point_wishes(user['name'], res_days, 'set')
+    for point in POINTS:
+        change_point_wishes(user['name'], point, 'remove')
+    for point in wishes.points:
+        change_point_wishes(user['name'], point, 'set')
+    for DAY in DAYS:
+        change_day_wishes(user['name'], DAY, 'remove')
+
+    res_days = [DAYS_MAPPING[str(day).lower()] for day in wishes.days]
+    for day in res_days:
+        change_day_wishes(user['name'], day, 'set')
+
     return {'message': 'Points changed successfully'}
 
 

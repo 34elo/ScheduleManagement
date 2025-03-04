@@ -1,10 +1,9 @@
 import {Box} from "@mui/system";
 import {Button} from "@mui/material";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import SelectAny from "./SelectAny.jsx";
 import Paragraph from "../../Manager/UtilsComponents/Paragraph.jsx";
-
-const addresssss = ['Popova', 'Gagarina', 'Lenin street']
+import axios from "axios";
 
 
 export default function MyWishes(props) {
@@ -12,13 +11,38 @@ export default function MyWishes(props) {
     const [selectedAddress, setSelectedAddress] = useState([]);
     const [selectedDays, setSelectedDays] = useState([]);
 
-    const [address, setAddress] = useState(["Гагарина"]);
-    const [days, setDay] = useState(['ВТ']);
+    const [address, setAddress] = useState();
+    const [days, setDay] = useState();
 
-    function handleChange(event) {
-        console.log(selectedDays, selectedAddress);
+    const [addresses, setAddresses] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/points/', {headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}` // Добавляем токен в заголовок запроса
+                }})
+                setAddresses(response.data);
+                console.log(response.data);
+            }catch(err) {
+                    console.log(err);
+                }
+                }
+        fetchData();
+    }, [])
+
+    function handleChange() {
         setSelectedAddress([]);
         setSelectedDays([]);
+        axios.patch('http://127.0.0.1:8000/api/employee/wishes/', {
+            days: selectedDays,
+            points: selectedAddress,
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                "Content-Type": "application/json"
+            }
+        }).then(r => console.log(r))
     }
 
     return (<>
@@ -34,7 +58,7 @@ export default function MyWishes(props) {
             <Paragraph>Мои желаемые дни: {days}</Paragraph>
             <h2 style={{margin: 0, marginTop: '10px'}}>Хотите изменить?</h2>
 
-            <SelectAny setSelected={setSelectedAddress} MyArray={addresssss} label='Адрес'
+            <SelectAny setSelected={setSelectedAddress} MyArray={addresses} label='Адрес'
                        selectAnything={selectedAddress}></SelectAny>
             <SelectAny setSelected={setSelectedDays} MyArray={['ПН', 'ВТ', "СР", "ЧТ", "ПТ", "СБ", "ВС"]}
                        selectAnything={selectedDays} label='День'></SelectAny>
