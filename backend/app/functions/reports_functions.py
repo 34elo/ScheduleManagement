@@ -206,3 +206,92 @@ def create_point_report_func(filename, point, people_who_wish, people_who_work, 
     plt.close(fig)  # Закрываем фигуру, чтобы освободить память
 
     doc.save(filename)
+
+
+def create_general_report_func(filename, most_hardworking_employee, least_hardworking_employee, top_points, worst_points, period):
+    doc = Document()
+
+    title = doc.add_heading('Общий отчёт', level=1)
+    title.paragraph_format.line_spacing = 1.5  # Полуторный интервал
+    title.paragraph_format.space_before = Pt(12)  # Отступ перед абзацем
+    title.paragraph_format.space_after = Pt(12)
+    title.alignment = 1
+
+    for run in title.runs:
+        run.font.name = 'Times New Roman'
+        run.font.size = Pt(24)
+        run.font.color.rgb = RGBColor(0, 0, 0)
+
+    title2 = doc.add_heading('Период отчёта', level=2)
+
+    for run in title2.runs:
+        run.font.name = 'Times New Roman'
+        run.font.size = Pt(16)
+        run.font.color.rgb = RGBColor(0, 0, 0)
+
+    p = doc.add_paragraph()
+    p.paragraph_format.line_spacing = 1.5  # Полуторный интервал
+    p.paragraph_format.space_before = Pt(12)  # Отступ перед абзацем
+    p.paragraph_format.space_after = Pt(12)
+    p.add_run("Период: ").bold = True
+    p.add_run(period).font.color.rgb = RGBColor(0, 0, 0)  # Чёрный цвет
+
+    title1 = doc.add_heading('Сотрудники', level=2)
+
+    for run in title1.runs:
+        run.font.name = 'Times New Roman'
+        run.font.size = Pt(16)
+        run.font.color.rgb = RGBColor(0, 0, 0)
+
+    p = doc.add_paragraph()
+    p.paragraph_format.line_spacing = 1.5  # Полуторный интервал
+    p.paragraph_format.space_before = Pt(12)  # Отступ перед абзацем
+    p.paragraph_format.space_after = Pt(12)
+    p.add_run(
+        f"Наиболее трудолюбивый сотрудник - {most_hardworking_employee[0]} "
+        f"(Количество отработанных смен: {most_hardworking_employee[1]})").bold = True
+
+    p = doc.add_paragraph()
+    p.paragraph_format.line_spacing = 1.5  # Полуторный интервал
+    p.paragraph_format.space_before = Pt(12)  # Отступ перед абзацем
+    p.paragraph_format.space_after = Pt(12)
+    p.add_run(
+        f"Наименее трудолюбивый сотрудник - {least_hardworking_employee[0]} "
+        f"(Количество отработанных смен: {least_hardworking_employee[1]})").bold = True
+
+    title1 = doc.add_heading('Точки', level=2)
+
+    for run in title1.runs:
+        run.font.name = 'Times New Roman'
+        run.font.size = Pt(16)
+        run.font.color.rgb = RGBColor(0, 0, 0)
+
+    p = doc.add_paragraph()
+    p.paragraph_format.line_spacing = 1.5  # Полуторный интервал
+    p.paragraph_format.space_before = Pt(12)  # Отступ перед абзацем
+    p.paragraph_format.space_after = Pt(12)
+    p.add_run("Топ лучших точек:").bold = True
+
+    for ind, (point, stat) in enumerate(top_points):
+        p = doc.add_paragraph()
+        p.paragraph_format.line_spacing = 1.5  # Полуторный интервал
+        p.paragraph_format.space_before = Pt(12)  # Отступ перед абзацем
+        p.paragraph_format.space_after = Pt(12)
+        p.add_run(
+            f"{ind + 1} - {point} - {stat}% отработанного времени.").bold = True
+
+    p = doc.add_paragraph()
+    p.paragraph_format.line_spacing = 1.5  # Полуторный интервал
+    p.paragraph_format.space_before = Pt(12)  # Отступ перед абзацем
+    p.paragraph_format.space_after = Pt(12)
+    p.add_run("Топ худших точек:").bold = True
+
+    for ind, (point, stat) in enumerate(worst_points):
+        p = doc.add_paragraph()
+        p.paragraph_format.line_spacing = 1.5  # Полуторный интервал
+        p.paragraph_format.space_before = Pt(12)  # Отступ перед абзацем
+        p.paragraph_format.space_after = Pt(12)
+        p.add_run(
+            f"{ind + 1} - {point} - {stat}% отработанного времени.").bold = True
+
+    doc.save(filename)

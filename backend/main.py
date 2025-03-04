@@ -8,6 +8,10 @@ from app.routers.employee import employee_router
 from app.routers.general import general_router
 from app.routers.utils import get_current_user
 
+from backend.app.functions.admin_functions import create_general_report
+
+create_general_report('2025-01-01', '2025-04-01')
+
 app = FastAPI(
     root_path='/api'
 )
