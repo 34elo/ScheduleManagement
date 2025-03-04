@@ -24,6 +24,7 @@ def get_schedule(point, period) -> list[tuple]:
                                            WHERE "Дата" BETWEEN "{datetime.today().strftime('%Y-%m-%d')}" 
                                            AND "{(datetime.today() + timedelta(days=29)).strftime('%Y-%m-%d')}"'''
                                        ).fetchall()
+
     return schedule
 
 def edit_info(info: dict) -> None:

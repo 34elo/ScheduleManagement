@@ -9,114 +9,96 @@ import ModalEditSchedule from "../../Manager/ScheduleMenu/ModalEditSchedule.jsx"
 import TableSchedule from "./TableSchedule.jsx";
 import axios from "axios";
 
-const tabsData = [
-    {
-        id: '1',
-        name: 'Point 1',
-        info: {
-            address: 'Address 1',
-            city: 'City 1',
-            state: 'State 1',
-        }
-    },
-    {
-        id: '2',
-        name: 'Point 2',
-        info: []
-    },
-    {
-        id: '3',
-        name: 'Point 3',
-        info: {
-            address: 'Address 3',
-            city: 'City 3',
-            state: 'State 3',
-        }
-    }
-];
-
 const styleBox = {
-
-    minHeight: '500px',
-    backgroundColor: '#f0f0f0',
-    borderRadius: '20px',
-
+    minHeight: '500px', backgroundColor: '#f0f0f0', borderRadius: '20px',
     '& .MuiTab-root': {
-
-        transition: 'opacity 0.3s ease, transform 0.3s ease',
-        opacity: 0.6,
-        transform: 'scale(0.95)',
-
+        transition: 'opacity 0.3s ease, transform 0.3s ease', opacity: 0.6, transform: 'scale(0.95)',
         '&.Mui-selected': {
             backgroundColor: '#c1c1c1',
             color: 'black',
             borderRadius: "20px",
             opacity: 1,
-            transform: 'scale(1)',
+            transform: 'scale(1)'
         },
     },
-}
+};
 
 export default function ScheduleMenu({admin}) {
-
-
-    const getTabInfo = () => {
-        const selectedTab = tabsData.find(tab => tab.id === value);
-        if (selectedTab) {
-            return selectedTab.name;
-        }
-        return null;
-    }
-
-    const [value, setValue] = useState(tabsData.length > 0 ? tabsData[0].id : null  );
     const [period, setPeriod] = useState(true);
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const [data, setData] = useState({});
-    const [loading, setLoading] = useState(false);
+    const [data, setData] = useState([]);  // Инициализируем как пустой массив
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/schedule/?period=${period ? 'month' : 'week'}`);
-                setData(response.data);  // Обновляем данные
+                const token = localStorage.getItem('token'); // Получаем токен из localStorage
+
+                const response = await axios.get(`http://127.0.0.1:8000/api/schedule/?period=${period ? 'month' : 'week'}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}` // Добавляем токен в заголовок запроса
+                    }
+                });
+                setData(response.data.data);  // Устанавливаем полученные данные
                 console.log(response.data);
             } catch (err) {
-                setError('Ошибка загрузки данных');  // Обрабатываем ошибки
+                setError('Ошибка загрузки данных');
                 console.log(err);
             } finally {
-                setLoading(false);  // Заканчиваем загрузку
+                setLoading(false);
             }
         };
+        fetchData();
+    }, [period]);
 
-        fetchData();  // Запускаем запрос
-    }, []);
-    console.log(data)
 
+    const [value, setValue] = useState(null);
+
+    useEffect(() => {
+        if (data.length > 0) {
+            setValue(data[0].id);
+        }
+    }, [data]);
+
+    function getSchedule() {
+        if (data) {
+            console.log(data, 'check');
+            data.forEach((item) => {
+                console.log(item);
+                if (item.id === value) {
+                    return item;
+                }
+            })
+        } else {
+            return false
+        }
+    }
 
     function handleChange(e, newValue) {
         setValue(newValue);
     }
 
     function changePeriod(e, newValue) {
-        console.log('change', e, newValue);
         setPeriod(newValue);
     }
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
 
     return (
         <>
             <Box sx={{justifyContent: 'space-between', flexGrow: 1, display: 'flex'}}>
-                <h1 style={{paddingBottom: '20px', margin: 0}}>{name}
-                    Расписание
+                <h1 style={{paddingBottom: '20px', margin: 0}}>Расписание
                     {admin && <IconButton aria-label="edit" onClick={handleOpen} sx={{margin: '20px'}}>
                         <EditIcon/>
                     </IconButton>}
                 </h1>
 
                 <FormControlLabel
-                    control={<Switch checked={period} onChange={changePeriod} color="transparent" />}
+                    control={<Switch checked={period} onChange={changePeriod} color="transparent"/>}
                     label="Расписание на месяц"
                 />
             </Box>
@@ -128,8 +110,7 @@ export default function ScheduleMenu({admin}) {
             >
                 <ModalEditSchedule setOpen={setOpen}></ModalEditSchedule>
             </Modal>
-            <Box sx={{flexGrow: 1, backgroundColor: 'white', display: 'flex', height: 224}}>
-
+            <Box sx={{flexGrow: 1, backgroundColor: 'white', display: 'flex', minHeight: 224,}}>
                 <TabContext value={value}>
                     <Box sx={styleBox}>
                         <TabList
@@ -140,14 +121,21 @@ export default function ScheduleMenu({admin}) {
                             color='transparent'
                             textColor="primary"
                         >
-                            {tabsData.map((tab) => (
-                                <Tab key={tab.id} label={tab.name} value={tab.id}/>
+                            {/* Проверяем, что data является массивом перед вызовом map */}
+                            {Array.isArray(data) && data.map((tab) => (
+                                <Tab key={tab.id} label={tab.point} value={tab.id}/>
                             ))}
                         </TabList>
                     </Box>
-                    <TabPanel value={value} key={value} sx={{width: '100%', paddingTop: '0px'}}>
-                        <Box style={{backgroundColor: '#f0f0f0', minHeight: '500px', borderRadius: '20px', width: '100%', minWidth: '500px'}}>
-                            <TableSchedule data={data}></TableSchedule>
+                    <TabPanel value={value} sx={{width: '100%', paddingTop: '0px'}}>
+                        <Box style={{
+                            backgroundColor: '#f0f0f0',
+                            minHeight: '500px',
+                            borderRadius: '20px',
+                            width: '100%',
+                            minWidth: '500px'
+                        }}>
+                            <TableSchedule data={getSchedule()}/>
                         </Box>
                     </TabPanel>
                 </TabContext>

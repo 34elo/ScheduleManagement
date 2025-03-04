@@ -5,22 +5,17 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import {useState} from "react";
 
-const data = [
-    {date: '20.03.2025', employees: ['Petr', 'Vasya']},
-    {date: '21.03.2025', employees: ['Kolya', 'Dasha']},
-    {date: '21.03.2025', employees: ['Kolya', 'Dasha']},
-    {date: '21.03.2025', employees: ['Kolya', 'Dasha']},
-    {date: '21.03.2025', employees: ['Kolya', 'Dasha']},
-    {date: '21.03.2025', employees: ['Kolya', 'Dasha']},
-    {date: '21.03.2025', employees: ['Kolya', 'Dasha']}
-]
 
 // eslint-disable-next-line react/prop-types
-export default function TableSchedule({data}) {
-    
+export default function TableSchedule(data) {
 
-
+    const [myData, setMyData] = useState([{date: 'Данные отсутсвуют', employees: ['Данные отсутсвуют']},]);
+    if (!data === null || !data === undefined) {
+        setMyData(data);
+    }
+    console.log(data)
     return (
         <>
             <TableContainer component={Paper}
@@ -34,7 +29,7 @@ export default function TableSchedule({data}) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data.map((row, index) => (
+                        {myData.map((row, index) => (
                             <TableRow key={index}>
                                 <TableCell sx={{textAlign: 'center', maxWidth: '1px'}}>{row.date}</TableCell>
                                 <TableCell sx={{textAlign: 'center'}}>{row.employees.join(', ')}</TableCell>
@@ -43,5 +38,4 @@ export default function TableSchedule({data}) {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <h1>{name} {period}</h1>
-    </>)}
+        </>)}

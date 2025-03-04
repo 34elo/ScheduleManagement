@@ -1,4 +1,4 @@
-from app.constants import DAYS_MAPPING
-days = ['ВТ', "ПТ"]
-res_days = [DAYS_MAPPING[day.lower()] for day in days]
-print(res_days)
+from app.constants import POINTS
+
+for i, point in enumerate(POINTS):
+    print(i, point)

@@ -31,7 +31,11 @@ def schedule(
     schedule_data = []
 
     for i, point in enumerate(POINTS):
-        schedule_data.append({'id'})
+        result = []
+        for date, employee in get_schedule(point, period):
+            result.append({'date': date, 'employees': [employee]})
+
+        schedule_data.append({'id': i, 'point': point, 'schedule': result})
 
     return {'data': schedule_data}
 
