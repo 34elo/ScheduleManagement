@@ -71,8 +71,8 @@ def edit_schedule(
         user: dict = Depends(get_current_admin),
 ):
     date = str(info.date.date())
-    change_schedule(date, info.person, info.point)
-    return {'message': 'success'}
+    message = change_schedule(date, info.person, info.point)
+    return {'message': message}
 
 
 @admin_router.post('/telegram/send_notification/', summary="Отправить уведомление")
