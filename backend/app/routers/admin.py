@@ -98,8 +98,8 @@ def create_new_employee(
         person: Employee,
         user: dict = Depends(get_current_admin),
 ):
-    code = create_employee(person.name)
-    return {'code': code, 'message': 'success'}
+    create_employee(person.name)
+    return
 
 
 @admin_router.delete('/employee')
@@ -108,4 +108,4 @@ def delete_employee_by_name(
         user: dict = Depends(get_current_admin),
 ):
     delete_employee(person.name)
-    return {'message': 'success'}
+    return

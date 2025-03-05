@@ -56,6 +56,15 @@ export default function EmployeesManagerMenu() {
     };
 
     function handleDeleteEmployee() {
+        let person = cards.find(card => card.id === selectedCard)?.title || ""
+        axios.delete(`${API_URL}/admin/employee/`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            data : {
+                'name': person,
+            }
+        })
         setOpen(false);
     }
 
