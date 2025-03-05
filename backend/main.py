@@ -1,12 +1,10 @@
 from fastapi import FastAPI, Security
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from app.routers.admin import admin_router
 from app.routers.auth import auth_router
 from app.routers.employee import employee_router
 from app.routers.general import general_router
-from app.routers.utils import get_current_user
 
 
 app = FastAPI(

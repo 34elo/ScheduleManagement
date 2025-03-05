@@ -38,12 +38,14 @@ def check_code(code) -> (str, str, bool):
         role = 'Сотрудник'
         valid = True
         id_user, name = data
-
+    connection.close()
     return id_user, name, role, valid
+
 
 
 def create_access_token(data: dict, expires_delta: timedelta = timedelta(days=7)):
     to_encode = data.copy()
     expire = datetime.utcnow() + expires_delta
     to_encode.update({"exp": expire})
+
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)

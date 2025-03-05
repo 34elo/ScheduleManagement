@@ -13,6 +13,7 @@ def get_employees_names() -> list:
     employees_names = data_cursor.execute('''SELECT full_name
                                              FROM employees_passwords''').fetchall()
     employees_names = [name[0] for name in employees_names]
+    connection.close()
     return employees_names
 
 
@@ -27,6 +28,7 @@ def get_employee_contact(employee_name) -> list:
     employee_contact = data_cursor.execute(f'''SELECT age, post, mobile_number, username
                                                FROM employees_passwords
                                                WHERE full_name = "{employee_name}"''').fetchone()
+    connection.close()
     return employee_contact
 
 

@@ -26,7 +26,7 @@ export default function LoginPage() {
                 navigate('/employee');
             }
         }
-    }, [isLoggedIn, navigate, role]);
+    }, [isLoggedIn, navigate, role]);   
 
     const handleLogin = async () => {
         try {

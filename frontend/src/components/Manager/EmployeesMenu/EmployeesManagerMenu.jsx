@@ -101,7 +101,7 @@ export default function EmployeesManagerMenu() {
                 <Box sx={{width: "33.33%", minWidth: "200px", display: "flex", flexDirection: "column", gap: "20px"}}>
                     <>
                         <Box sx={{flex: 1, backgroundColor: "#f1f1f1", borderRadius: "20px"}}>
-                            <NotificationEmployee/>
+                            <NotificationEmployee cards={cards}/>
                         </Box>
                     </>
                 </Box>

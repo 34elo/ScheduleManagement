@@ -7,7 +7,7 @@ export default function CardsEmployees({cards, selectedCard, setSelectedCard, se
     if (!cards.length > 0) {
         cards = [{id: 0, name: 'Данные отсутствуют'}];
     }
-    console.log(cards);
+    console.log(cards, 'CARDS');
     function handleInfoCard(id) {
         setSelectedCard(id);
         setAddEmployeeCards(false);
@@ -48,8 +48,8 @@ export default function CardsEmployees({cards, selectedCard, setSelectedCard, se
                 <Card
                     sx={{
                         borderRadius: "20px",
-                        width: "50px",
-                        height: "100%",
+                        width: "70px",
+                        height: "70px",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -74,7 +74,7 @@ export default function CardsEmployees({cards, selectedCard, setSelectedCard, se
                         }}
                     >
                         <CardContent sx={{display: "flex", justifyContent: "center", alignItems: "center", padding: 0}}>
-                            <AddIcon sx={{fontSize: 24, color: "black", opacity: 0.7}}/>
+                            <AddIcon sx={{fontSize: 46, color: "black", opacity: 0.7}}/>
                         </CardContent>
                     </CardActionArea>
                 </Card>

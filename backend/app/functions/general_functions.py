@@ -24,11 +24,47 @@ def get_schedule(point, period) -> list[tuple]:
                                            WHERE "Дата" BETWEEN "{datetime.today().strftime('%Y-%m-%d')}" 
                                            AND "{(datetime.today() + timedelta(days=29)).strftime('%Y-%m-%d')}"'''
                                        ).fetchall()
-
+    connection.close()
     return schedule
+
 
 def edit_info(info: dict) -> None:
     """
     Получает JSON с данными, которые надо будет изменить
     """
     return
+
+
+def get_info_me(id_user: int, role: str) -> dict:
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
+    result = {}
+    data_cursor = connection.cursor()
+    if role == 'Администратор':
+
+        data = data_cursor.execute(f'''
+            SELECT id, full_name, username, mobile_number
+            FROM "admin_passwords"
+            WHERE id = "{id_user}"
+        ''').fetchone()
+        keys = ['id', 'name', 'username', 'contact']
+        for key, value in zip(keys, data):
+            result[key] = value
+
+
+
+
+    elif role == 'Сотрудник':
+        data = data_cursor.execute(f'''
+        SELECT id, full_name, age, post, mobile_number, username
+        FROM "employees_passwords"
+        WHERE id = "{id_user}"''').fetchone()
+        keys = ['id', 'name', 'age', 'post', 'contact', 'username']
+        for key, value in zip(keys, data):
+            result[key] = value
+
+    connection.close()
+
+    return result

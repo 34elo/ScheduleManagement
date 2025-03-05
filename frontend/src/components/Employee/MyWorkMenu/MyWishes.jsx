@@ -20,7 +20,7 @@ export default function MyWishes(props) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${API_URL}/api/points/`, {headers: {
+                const response = await axios.get(`${API_URL}/points/`, {headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}` // Добавляем токен в заголовок запроса
                 }})
                 setAddresses(response.data);

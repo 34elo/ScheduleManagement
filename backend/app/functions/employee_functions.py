@@ -52,7 +52,7 @@ def get_my_schedule(full_name, period, date1=None, date2=None) -> dict:
                 date_other_view = date[0].split('-')
                 date_other_view = date_other_view[2] + '-' + date_other_view[1] + '-' + date_other_view[0]
                 out[date_other_view] = point
-
+    connection.close()
     return out
 
 
@@ -66,6 +66,7 @@ def get_admin_names() -> list:
     admin_names = data_cursor.execute('''SELECT full_name
                                          FROM admin_passwords''').fetchall()
     admin_names = [name[0] for name in admin_names]
+    connection.close()
     return admin_names
 
 
@@ -79,6 +80,8 @@ def get_admin_contact(admin_name) -> str:
     admin_contact = data_cursor.execute(f'''SELECT mobile_number, username
                                         FROM admin_passwords
                                         WHERE full_name = "{admin_name}"''').fetchone()
+
+    connection.close()
     return admin_contact
 
 
@@ -113,6 +116,7 @@ def change_point_wishes(employee, point, mode) -> None:
                                 SET "point_wishes" = "{point_wishes}"
                                 WHERE full_name = "{employee}"''')
         connection.commit()
+        connection.close()
     else:
         print('Wrong point')
         raise ValueError
@@ -153,6 +157,7 @@ def change_day_wishes(employee, day, mode) -> None:
                                 SET "day_wishes" = "{day_wishes}"
                                 WHERE full_name = "{employee}"''')
         connection.commit()
+        connection.close()
     else:
         print('Wrong day')
         raise ValueError

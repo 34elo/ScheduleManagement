@@ -1,15 +1,12 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Chip, FormControl, InputLabel, MenuItem, OutlinedInput, Select, TextField} from "@mui/material";
 import {Box} from "@mui/system";
 
 
-const names = ['Oliver Hansen', 'Van Henry', 'April Tucker', 'Ralph Hubbard', 'Omar Alexander', 'Carlos Abbott', 'Miriam Wagner', 'Bradley Wilkerson', 'Virginia Andrews', 'Kelly Snyder',];
 
-
-export default function NotificationEmployee() {
+export default function NotificationEmployee({cards}) {
     const [text, setText] = useState("");
     const [personName, setPersonName] = useState([]);
-
     const handleChange = (event) => {
         const {
             target: {value},
@@ -26,6 +23,8 @@ export default function NotificationEmployee() {
         setText('')
         setPersonName([]);
     }
+
+    const names = cards.map((card) => (card.title))
 
     console.log(personName);
     return (<>
