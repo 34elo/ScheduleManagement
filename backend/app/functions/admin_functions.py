@@ -82,6 +82,62 @@ def create_employee(name: str) -> str:
     return password
 
 
+def check_name(name: str) -> bool:
+    """
+    Функция проверяет наличие работника в БД
+    """
+
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
+    data_cursor = connection.cursor()
+
+    name = data_cursor.execute(f'''
+    SELECT full_name FROM employees_passwords
+    WHERE full_name == "{name}"
+    ''').fetchone()
+
+    if name:
+        return True
+    return False
+
+
+def change_shedule(date: str, name: str, point: str):
+    """
+    Изменить расписание(по дате, сотруднику)
+    Дата в формате "ГГГГ-ММ-ДД"
+    """
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
+    data_cursor = connection.cursor()
+
+    # Сначала проверяем адекватная ли это дата и есть ли она в БД
+    try:
+        data_cursor.execute(f'''
+        SELECT Дата, {point} FROM schedule WHERE Дата = "{date}"
+        ''').fetchone()
+    except sqlite3.OperationalError:
+        return 'Введены неправильные данные. Попробуйте изменить дату либо нахвание точки'
+
+    if check_name(name):
+        data_cursor.execute(f'''
+        UPDATE schedule
+        SET {point}  = "{name}"
+        WHERE Дата = "{date}"
+        ''')
+        connection.commit()
+        connection.close()
+    else:
+        return 'Такого сотрудника нет в базе данных'
+    return 'succes'
+
+
+print(change_shedule('2025-03-04', 'Георгий Андреевич Смирнов', 'Багратиона_16'))
+
+
 def get_all_chats_ids() -> list:
     """
     Возвращает все id для отправки уведомлений
@@ -267,7 +323,6 @@ def create_general_report(date1, date2) -> None:
         points_working_time.append((point, working_time))
     top_points = sorted(points_working_time, key=lambda x: x[1], reverse=True)[:3]
     worst_points = sorted(points_working_time, key=lambda x: x[1])[:3]
-
 
     create_general_report_func(
         filename="general_report.docx",
