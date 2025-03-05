@@ -70,7 +70,8 @@ def edit_schedule(
         info: EditingSchedule,
         user: dict = Depends(get_current_admin),
 ):
-    date = str(info.date.date())
+    date = info.date.date().strftime("%Y-%m-%d")
+    print(date, info)
     change_schedule(date, info.person, info.point)
     return
 
@@ -80,8 +81,9 @@ def send_notification(
         notification: Notification,
         user: dict = Depends(get_current_admin),
 ):
+    print(notification)
     send_notification_by_names(notification.persons, notification.message)
-    return {'message': 'success'}
+    return
 
 
 @admin_router.get('/telegram/chats-id', summary='Возвращает все id для отправки уведомлений')

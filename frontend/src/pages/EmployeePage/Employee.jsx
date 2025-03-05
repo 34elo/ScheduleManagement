@@ -24,13 +24,13 @@ const stylesTabList = {
         '&.Mui-selected': {
             backgroundColor: '#c1c1c1',
             color: 'black',
-            borderRadius: "15px",
+            borderRadius: "25px",
             opacity: 1,
         },
         '&:last-child': {
             backgroundColor: 'black',
             color: 'white',
-            borderRadius: "15px",
+            borderRadius: "25px",
             opacity: 1,
         },
     },
@@ -46,7 +46,8 @@ export default function Employee() {
     function handleChange(e, newValue) {
         setValue(newValue);
     }
-    const [open , setOpen] = useState(false);
+
+    const [open, setOpen] = useState(false);
 
     return (
         <Box sx={{display: 'flex', justifyContent: 'center', height: '100vh'}}>
@@ -70,10 +71,10 @@ export default function Employee() {
                             indicatorColor="transparent"
                             sx={stylesTabList}
                         >
-                            <Tab label="Расписание" value="1"/>
-                            <Tab label="Моя работа" value="2"/>
-                            <Tab label="Администраторы" value="3"/>
-                            <Tab label="Личный кабинет" value="4"/>
+                            <Tab label="Расписание" value="1" style={{marginRight: '15px', borderRadius: '25px'}}/>
+                            <Tab label="Моя работа" value="2" style={{marginRight: '15px', borderRadius: '25px'}}/>
+                            <Tab label="Администраторы" value="3" style={{marginRight: '15px', borderRadius: '25px'}}/>
+                            <Tab label="Личный кабинет" value="4" style={{borderRadius: '25px'}}/>
                         </TabList>
                     </TabContext>
                 </Box>
@@ -103,7 +104,12 @@ export default function Employee() {
                                     <ModalEditAccount setOpen={setOpen}></ModalEditAccount>
                                 </Modal>
                                 <Button variant='contained'
-                                        style={{marginTop: '10px', backgroundColor: 'black', color: 'white', borderRadius: '10px'}}
+                                        style={{
+                                            marginTop: '10px',
+                                            backgroundColor: 'black',
+                                            color: 'white',
+                                            borderRadius: '10px'
+                                        }}
                                         onClick={() => setOpen(true)}>
                                     Редактировать
                                 </Button>

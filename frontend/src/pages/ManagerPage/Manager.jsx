@@ -75,10 +75,10 @@ export default function ManagerPage() {
                             indicatorColor="transparent"
                             sx={stylesTabList}
                         >
-                            <Tab label="Расписание" value="1"/>
-                            <Tab label="Отчеты" value="2"/>
-                            <Tab label="Сотрудники" value="3"/>
-                            <Tab label="Личный кабинет" value="4"/>
+                            <Tab label="Расписание" value="1" style={{marginRight: '15px', borderRadius: '25px'}}/>
+                            <Tab label="Отчеты" value="2" style={{marginRight: '15px', borderRadius: '25px'}}/>
+                            <Tab label="Сотрудники" value="3" style={{marginRight: '15px', borderRadius: '25px'}}/>
+                            <Tab label="Личный кабинет" value="4" style={{borderRadius: '25px'}}/>
                         </TabList>
                     </TabContext>
                 </Box>

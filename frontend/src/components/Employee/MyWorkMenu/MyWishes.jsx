@@ -20,16 +20,18 @@ export default function MyWishes(props) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${API_URL}/points/`, {headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}` // Добавляем токен в заголовок запроса
-                }})
+                const response = await axios.get(`${API_URL}/points/`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}` // Добавляем токен в заголовок запроса
+                    }
+                })
                 const r = response.data
                 r.push('Убрать адреса')
                 setAddresses(r);
-            }catch(err) {
-                    console.log(err);
-                }
-                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
         fetchData();
     }, [])
 
@@ -37,12 +39,10 @@ export default function MyWishes(props) {
         setSelectedAddress([]);
         setSelectedDays([]);
         axios.patch(`${API_URL}/employee/wishes/`, {
-            days: selectedDays,
-            points: selectedAddress,
+            days: selectedDays, points: selectedAddress,
         }, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                "Content-Type": "application/json"
+                Authorization: `Bearer ${localStorage.getItem('token')}`, "Content-Type": "application/json"
             }
         }).then(r => console.log(r))
     }
@@ -62,7 +62,8 @@ export default function MyWishes(props) {
 
             <SelectAny setSelected={setSelectedAddress} MyArray={addresses} label='Адрес'
                        selectAnything={selectedAddress}></SelectAny>
-            <SelectAny setSelected={setSelectedDays} MyArray={['ПН', 'ВТ', "СР", "ЧТ", "ПТ", "СБ", "ВС", 'Убрать рабочие дни']}
+            <SelectAny setSelected={setSelectedDays}
+                       MyArray={['ПН', 'ВТ', "СР", "ЧТ", "ПТ", "СБ", "ВС", 'Убрать рабочие дни']}
                        selectAnything={selectedDays} label='День'></SelectAny>
             <Button variant="contained" onClick={handleChange} sx={{backgroundColor: '#c1c1c1'}}>
                 Изменить

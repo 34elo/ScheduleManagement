@@ -39,9 +39,16 @@ export default function ModalEditSchedule({setOpen, selectedPoint}) {
 
     function handleEdit() {
         setOpen(false);
+        let emp = employee;
+        if (emp === 'Очистить день' || emp === '' || emp === ' ' || emp === 'Сотрудник') {
+            emp = ' '
+        }
+
+        const date = selectedDate.add(1, 'day');
+
         axios.patch(`${API_URL}/admin/edit-schedule/`, {
-            person: employee,
-            date: selectedDate,
+            person: emp,
+            date: date.toISOString(),
             point: selectedPoint,
         }, {
             headers: {
@@ -102,7 +109,7 @@ export default function ModalEditSchedule({setOpen, selectedPoint}) {
                         <DatePicker
                             value={selectedDate}
                             onChange={changeDate}
-                            format="DD/MM/YYYY"
+                            format="MM/DD/YYYY"
                             minDate={dayjs().add(1, 'day')}
                             maxDate={dayjs().add(30, 'day')}
                             views={['year', 'month', 'day']}
@@ -119,6 +126,7 @@ export default function ModalEditSchedule({setOpen, selectedPoint}) {
                     onChange={handleChangeEmployee}
                     autoWidth
                     label="Сотрудник"
+                    required
                 >
                     {employees.map((item, index) => (
                         <MenuItem value={item} key={index}>
