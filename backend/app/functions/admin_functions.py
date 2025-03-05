@@ -103,7 +103,7 @@ def check_name(name: str) -> bool:
     return False
 
 
-def change_shedule(date: str, name: str, point: str):
+def change_schedule(date: str, name: str, point: str):
     """
     Изменить расписание(по дате, сотруднику)
     Дата в формате "ГГГГ-ММ-ДД"
