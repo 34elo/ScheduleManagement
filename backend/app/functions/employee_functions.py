@@ -20,8 +20,8 @@ def get_my_schedule(full_name, period, date1=None, date2=None) -> dict:
     out = {}
     data_cursor = connection.cursor()
     if period == 'week':
-        schedule = data_cursor.execute(f'''SELECT "Дата", "25_Сентября_35а", "25_Сентября_35а/2", "Багратиона_16", 
-                                           "Дзержинского_9", "Коммунистическая_6", "Лавочкина_54/6", "Николаева_50", 
+        schedule = data_cursor.execute(f'''SELECT "Дата", "25_Сентября_35а", "25_Сентября_35а/2", "Багратиона_16",
+                                           "Дзержинского_9", "Коммунистическая_6", "Лавочкина_54/6", "Николаева_50",
                                            "Ново-московская_2/8_ст4", "Проспект_Гагарина_1/1", "Рыленкова_18",
                                            "Энергетический_проезд_3/4", "Крупской_42"
                                            FROM schedule
@@ -29,8 +29,8 @@ def get_my_schedule(full_name, period, date1=None, date2=None) -> dict:
                                            AND "{(datetime.today() + timedelta(days=6)).strftime('%Y-%m-%d')}"'''
                                        ).fetchall()
     elif period == 'month':
-        schedule = data_cursor.execute(f'''SELECT "Дата", "25_Сентября_35а", "25_Сентября_35а/2", "Багратиона_16", 
-                                                   "Дзержинского_9", "Коммунистическая_6", "Лавочкина_54/6", "Николаева_50", 
+        schedule = data_cursor.execute(f'''SELECT "Дата", "25_Сентября_35а", "25_Сентября_35а/2", "Багратиона_16",
+                                                   "Дзержинского_9", "Коммунистическая_6", "Лавочкина_54/6", "Николаева_50",
                                                    "Ново-московская_2/8_ст4", "Проспект_Гагарина_1/1", "Рыленкова_18",
                                                    "Энергетический_проезд_3/4", "Крупской_42"
                                                    FROM schedule
@@ -38,8 +38,8 @@ def get_my_schedule(full_name, period, date1=None, date2=None) -> dict:
                                                    AND "{(datetime.today() + timedelta(days=29)).strftime('%Y-%m-%d')}"'''
                                        ).fetchall()
     elif period == 'custom':
-        schedule = data_cursor.execute(f'''SELECT "Дата", "25_Сентября_35а", "25_Сентября_35а/2", "Багратиона_16", 
-                                                   "Дзержинского_9", "Коммунистическая_6", "Лавочкина_54/6", "Николаева_50", 
+        schedule = data_cursor.execute(f'''SELECT "Дата", "25_Сентября_35а", "25_Сентября_35а/2", "Багратиона_16",
+                                                   "Дзержинского_9", "Коммунистическая_6", "Лавочкина_54/6", "Николаева_50",
                                                    "Ново-московская_2/8_ст4", "Проспект_Гагарина_1/1", "Рыленкова_18",
                                                    "Энергетический_проезд_3/4", "Крупской_42"
                                                    FROM schedule
@@ -161,3 +161,26 @@ def change_day_wishes(employee, day, mode) -> None:
     else:
         print('Wrong day')
         raise ValueError
+
+
+def get_favorite_points(name: str) -> list:
+    """
+    Функция прринмает имя работника и возваращет его любимые точки списком
+    """
+
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
+    data_cursor = connection.cursor()
+
+    try:
+        points = data_cursor.execute(f'''
+        SELECT day_wishes FROM employees_passwords
+        WHERE full_name = "{name}"
+        ''').fetchone()[0]
+        points = points.split(';')
+    except TypeError:
+        return 'Такого работника нет в базе данных'
+
+    return points
