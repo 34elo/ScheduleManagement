@@ -117,7 +117,43 @@ export default function ManagerPage() {
                         </TabPanel>
                     </TabContext>
                 </Box>
+                <Box sx={{
+                    position: 'fixed',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    backgroundColor: '#f1f1f1',
+                    padding: '10px 0',
+                    boxShadow: '0px -2px 5px rgba(0,0,0,0.1)',
+                    display: 'none',
+                    '@media (max-width: 768px)': {
+                        display: 'flex',
+                        justifyContent: 'center'
+                    }
+                }}>
+                    <TabContext value={value}>
+                        <TabList
+                            onChange={handleChange}
+                            textColor="primary"
+                            indicatorColor="transparent"
+                            centered
+                            sx={{
+                                ...stylesTabList,
+                                '& .MuiTab-root': {
+                                    fontSize: '12px', // уменьшенный текст
+                                    minWidth: '70px', // компактные кнопки
+                                }
+                            }}
+                        >
+                            <Tab label="1" value="1" title="Расписание"/>
+                            <Tab label="2" value="2" title="Отчеты"/>
+                            <Tab label="3" value="3" title="Сотрудники"/>
+                            <Tab label="4" value="4" title="Личный кабинет"/>
+                        </TabList>
+                    </TabContext>
+                </Box>
             </Box>
         </Box>
+
     );
 }
