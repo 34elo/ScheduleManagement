@@ -1,25 +1,21 @@
-import {FormControlLabel, IconButton, Modal, Switch, Tab} from "@mui/material";
+import {Button, FormControlLabel, Modal, Switch, Tab} from "@mui/material";
 import {useEffect, useState} from "react";
 import TabPanel from "@mui/lab/TabPanel";
 import {Box} from "@mui/system";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
-import EditIcon from '@mui/icons-material/Edit';
 import ModalEditSchedule from "../../Manager/ScheduleMenu/ModalEditSchedule.jsx";
 import TableSchedule from "./TableSchedule.jsx";
 import axios from "axios";
 import {API_URL} from "../../../API_URL.js";
 
 const styleBox = {
-    minHeight: '500px', backgroundColor: '#f0f0f0', borderRadius: '20px',
-    '& .MuiTab-root': {
-        transition: 'opacity 0.3s ease, transform 0.3s ease', opacity: 0.6, transform: 'scale(0.95)',
+    minHeight: '500px', backgroundColor: '#f0f0f0', borderRadius: '20px', '& .MuiTab-root': {
+        transition: 'opacity 0.3s ease, transform 0.3s ease',
+        opacity: 0.6,
+        transform: 'scale(0.95)',
         '&.Mui-selected': {
-            backgroundColor: '#c1c1c1',
-            color: 'black',
-            borderRadius: "20px",
-            opacity: 1,
-            transform: 'scale(1)'
+            backgroundColor: '#c1c1c1', color: 'black', borderRadius: "20px", opacity: 1, transform: 'scale(1)'
         },
     },
 };
@@ -33,6 +29,7 @@ export default function ScheduleMenu({admin}) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selected, setSelected] = useState([{date: 'Данные отсутсвуют', employees: ['Данные отсутсвуют']},]);
+    const [selectedPoint, setSelectedPoint] = useState()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -66,9 +63,13 @@ export default function ScheduleMenu({admin}) {
 
     useEffect(() => {
         if (data.length > 0) {
-        const selectedData = data.find(item => item.id === value);
-        setSelected(selectedData ? selectedData.schedule : [{date: 'Данные отсутсвуют', employees: ['Данные отсутсвуют'] }]);
+            const selectedData = data.find(item => item.id === value);
+            setSelected(selectedData ? selectedData.schedule : [{
+                date: 'Данные отсутсвуют', employees: ['Данные отсутсвуют']
+            }]);
+            setSelectedPoint(selectedData ? selectedData.point : null)
         }
+
     }, [value, data, period]);
 
     function handleChange(e, newValue) {
@@ -82,59 +83,56 @@ export default function ScheduleMenu({admin}) {
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
+    return (<>
+        <Box sx={{justifyContent: 'space-between', flexGrow: 1, display: 'flex'}}>
+            <h1 style={{paddingBottom: '20px', margin: 0}}>Расписание
+            </h1>
 
-    return (
-        <>
-            <Box sx={{justifyContent: 'space-between', flexGrow: 1, display: 'flex'}}>
-                <h1 style={{paddingBottom: '20px', margin: 0}}>Расписание
-                    {admin && <IconButton aria-label="edit" onClick={handleOpen} sx={{margin: '20px'}}>
-                        <EditIcon/>
-                    </IconButton>}
-                </h1>
-
-                <FormControlLabel
-                    control={<Switch checked={period} onChange={changePeriod} color="transparent"/>}
-                    label="Расписание на месяц"
-                />
-            </Box>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <ModalEditSchedule setOpen={setOpen}></ModalEditSchedule>
-            </Modal>
-            <Box sx={{flexGrow: 1, backgroundColor: 'white', display: 'flex', minHeight: 224,}}>
-                <TabContext value={value}>
-                    <Box sx={styleBox}>
-                        <TabList
-                            onChange={handleChange}
-                            aria-label="lab API tabs example"
-                            orientation="vertical"
-                            indicatorColor="transparent"
-                            color='transparent'
-                            textColor="primary"
-                        >
-                            {/* Проверяем, что data является массивом перед вызовом map */}
-                            {Array.isArray(data) && data.map((tab) => (
-                                <Tab key={tab.id} label={tab.point} value={tab.id}/>
-                            ))}
-                        </TabList>
+            <FormControlLabel
+                control={<Switch checked={period} onChange={changePeriod} color="transparent"/>}
+                label="Расписание на месяц"
+            />
+        </Box>
+        <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <ModalEditSchedule setOpen={setOpen} selectedPoint={selectedPoint}></ModalEditSchedule>
+        </Modal>
+        <Box sx={{flexGrow: 1, backgroundColor: 'white', display: 'flex', minHeight: 224,}}>
+            <TabContext value={value}>
+                <Box sx={styleBox}>
+                    <TabList
+                        onChange={handleChange}
+                        aria-label="lab API tabs example"
+                        orientation="vertical"
+                        indicatorColor="transparent"
+                        color='transparent'
+                        textColor="primary"
+                    >
+                        {/* Проверяем, что data является массивом перед вызовом map */}
+                        {Array.isArray(data) && data.map((tab) => (
+                            <Tab key={tab.id} label={tab.point} value={tab.id}/>))}
+                    </TabList>
+                </Box>
+                <TabPanel value={value} sx={{width: '100%', paddingTop: '0px'}}>
+                    <Box style={{
+                        backgroundColor: '#f0f0f0',
+                        minHeight: '500px',
+                        borderRadius: '20px',
+                        width: '100%',
+                        minWidth: '500px'
+                    }}>
+                        <TableSchedule data={selected}/>
                     </Box>
-                    <TabPanel value={value} sx={{width: '100%', paddingTop: '0px'}}>
-                        <Box style={{
-                            backgroundColor: '#f0f0f0',
-                            minHeight: '500px',
-                            borderRadius: '20px',
-                            width: '100%',
-                            minWidth: '500px'
-                        }}>
-                            <TableSchedule data={selected}/>
-                        </Box>
-                    </TabPanel>
-                </TabContext>
-            </Box>
-        </>
-    );
+                    {admin && <Button size='large' variant="contained" aria-label="edit" onClick={handleOpen}
+                                      sx={{margin: '20px', backgroundColor: '#c1c1c1'}}>
+                        Изменить
+                    </Button>}
+                </TabPanel>
+            </TabContext>
+        </Box>
+    </>);
 }

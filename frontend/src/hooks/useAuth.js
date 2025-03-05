@@ -1,4 +1,4 @@
-import {useEffect, useState, useCallback} from "react";
+import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {API_URL} from "../API_URL.js";
 
@@ -10,7 +10,7 @@ function useAuth() {
     const [error, setError] = useState(null);
 
     // Получаем токен из localStorage
-    const [token, setToken] = useState(() => localStorage.getItem("token") || "");
+    const [token, setToken] = useState(() => localStorage.getItem("token") || null);
 
     const auth = useCallback(async () => {
         if (!token) {
@@ -23,7 +23,8 @@ function useAuth() {
                     authorization: `Bearer ${token}`
                 }
             });
-            console.log(response.data);
+            console.log(response.data, 'response');
+            console.log(token)
             setUser(response.data.user);
             setRole(response.data.role);
             setIsLoggedIn(true);

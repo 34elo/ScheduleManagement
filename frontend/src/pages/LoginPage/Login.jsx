@@ -8,8 +8,8 @@ import {API_URL} from "../../API_URL.js";
 export default function LoginPage() {
 
     const [code, setCode] = useState("");
-    const {setError, error, login, isLoggedIn, role} = useAuth(); // Получаем функцию login из хука useAuth
-    const navigate = useNavigate(); // Получаем функцию navigate
+    const {setError, error, login, isLoggedIn, role} = useAuth();
+    const navigate = useNavigate();
 
     const handleChange = (event) => {
         setCode(event.target.value);
@@ -33,7 +33,7 @@ export default function LoginPage() {
             await login(code);
 
         } catch (err) {
-            setError("Произошла ошибка при авторизации"); // Обрабатываем ошибки авторизации
+            setError("Произошла ошибка при авторизации");
         }
     };
     return (

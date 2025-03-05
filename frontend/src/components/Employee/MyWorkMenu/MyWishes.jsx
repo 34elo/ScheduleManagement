@@ -23,8 +23,9 @@ export default function MyWishes(props) {
                 const response = await axios.get(`${API_URL}/points/`, {headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}` // Добавляем токен в заголовок запроса
                 }})
-                setAddresses(response.data);
-                console.log(response.data);
+                const r = response.data
+                r.push('Убрать адреса')
+                setAddresses(r);
             }catch(err) {
                     console.log(err);
                 }
@@ -61,7 +62,7 @@ export default function MyWishes(props) {
 
             <SelectAny setSelected={setSelectedAddress} MyArray={addresses} label='Адрес'
                        selectAnything={selectedAddress}></SelectAny>
-            <SelectAny setSelected={setSelectedDays} MyArray={['ПН', 'ВТ', "СР", "ЧТ", "ПТ", "СБ", "ВС"]}
+            <SelectAny setSelected={setSelectedDays} MyArray={['ПН', 'ВТ', "СР", "ЧТ", "ПТ", "СБ", "ВС", 'Убрать рабочие дни']}
                        selectAnything={selectedDays} label='День'></SelectAny>
             <Button variant="contained" onClick={handleChange} sx={{backgroundColor: '#c1c1c1'}}>
                 Изменить
