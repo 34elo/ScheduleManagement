@@ -22,9 +22,9 @@ const styleModal = {
     p: 4,
 };
 
-export default function ModalEditSchedule({setOpen}) {
+export default function ModalEditSchedule({setOpen, selectedPoint}) {
     const [selectedDate, setSelectedDate] = useState(dayjs().add(1, 'day'));
-    const [selectedAddress, setSelectedAddress] = useState();
+
     const [addresses, setAddresses] = useState([]);
     const [employee, setEmployee] = useState([]);
     const [employees, setEmployees] = useState([]);
@@ -39,7 +39,16 @@ export default function ModalEditSchedule({setOpen}) {
 
     function handleEdit() {
         setOpen(false);
-        console.log('Расписание изменено', selectedDate, employee);
+        axios.patch(`${API_URL}/admin/edit-schedule/`, {
+            person: employee,
+            date: selectedDate,
+            point: selectedPoint,
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+        })
     }
 
     useEffect(() => {
