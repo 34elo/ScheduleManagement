@@ -52,19 +52,6 @@ def get_employees(
     return {'employees': get_employees_names()}
 
 
-'''
-ВСЁ ЧТО ДАЛЬШЕ ПРОСТО ЭНДПОИНТЫ С ЗАГЛУШКАМИ
-'''
-
-
-@admin_router.post('/make-schedule', summary='Создание расписание')
-def make_schedule(
-        user: dict = Depends(get_current_admin),
-):
-    making_schedule()
-    return {'message': 'success'}
-
-
 @admin_router.patch('/edit-schedule/', summary="Изменение расписания")
 def edit_schedule(
         info: EditingSchedule,
@@ -73,15 +60,6 @@ def edit_schedule(
     date = str(info.date.date())
     message = change_schedule(date, info.person, info.point)
     return {'message': message}
-
-
-@admin_router.post('/telegram/send_notification/', summary="Отправить уведомление")
-def send_notification(
-        notification: Notification,
-        user: dict = Depends(get_current_admin),
-):
-    send_notification_by_names(notification.persons, notification.message)
-    return {'message': 'success'}
 
 
 @admin_router.get('/telegram/chats-id', summary='Возвращает все id для отправки уведомлений')
@@ -100,10 +78,32 @@ def create_new_employee(
     return {'code': code, 'message': 'success'}
 
 
-@admin_router.delete('/employee')
+@admin_router.delete('/employee', summary="Удаляет сотрудника")
 def delete_employee_by_name(
         person: Employee,
         user: dict = Depends(get_current_admin),
 ):
     delete_employee(person.name)
+    return {'message': 'success'}
+
+
+'''
+ВСЁ ЧТО ДАЛЬШЕ ПРОСТО ЭНДПОИНТЫ С ЗАГЛУШКАМИ
+'''
+
+
+@admin_router.post('/make-schedule', summary='Создание расписание')
+def make_schedule(
+        user: dict = Depends(get_current_admin),
+):
+    making_schedule()
+    return {'message': 'success'}
+
+
+@admin_router.post('/telegram/send_notification/', summary="Отправить уведомление")
+def send_notification(
+        notification: Notification,
+        user: dict = Depends(get_current_admin),
+):
+    send_notification_by_names(notification.persons, notification.message)
     return {'message': 'success'}
