@@ -135,9 +135,6 @@ def change_shedule(date: str, name: str, point: str):
     return 'succes'
 
 
-print(change_shedule('2025-03-04', 'Георгий Андреевич Смирнов', 'Багратиона_16'))
-
-
 def get_all_chats_ids() -> list:
     """
     Возвращает все id для отправки уведомлений
