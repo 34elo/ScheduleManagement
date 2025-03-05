@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from app.constants import POINTS, DAYS, DAYS_MAPPING
 from app.functions.employee_functions import change_point_wishes, get_my_schedule, get_admin_contact, get_admin_names, \
-    change_day_wishes
+    change_day_wishes, get_favorite_points
 from app.routers.utils import get_current_user
 
 employee_router = APIRouter(
@@ -66,3 +66,11 @@ def get_admins(
         user: dict = Depends(get_current_employee)
 ):
     return {'admins': get_admin_names()}
+
+
+@employee_router.get("/day_wishes/", summary='Возвращает список "любимых точек" пользователя')
+def get_day_wishes(
+        user: dict = Depends(get_current_employee)
+):
+    name = user['name']
+    return {'day_wishes': get_favorite_points(name)}
