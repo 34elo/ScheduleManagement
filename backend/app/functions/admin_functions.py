@@ -117,15 +117,15 @@ def change_shedule(date: str, name: str, point: str):
     # Сначала проверяем адекватная ли это дата и есть ли она в БД
     try:
         data_cursor.execute(f'''
-        SELECT Дата, {point} FROM schedule WHERE Дата = "{date}"
+        SELECT Дата, "{point}" FROM schedule WHERE Дата = "{date}"
         ''').fetchone()
     except sqlite3.OperationalError:
-        return 'Введены неправильные данные. Попробуйте изменить дату либо нахвание точки'
+        return 'Введены неправильные данные. Попробуйте изменить дату либо название точки'
 
     if check_name(name):
         data_cursor.execute(f'''
         UPDATE schedule
-        SET {point}  = "{name}"
+        SET "{point}"  = "{name}"
         WHERE Дата = "{date}"
         ''')
         connection.commit()
