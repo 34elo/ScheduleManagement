@@ -68,7 +68,7 @@ def get_admins(
     return {'admins': get_admin_names()}
 
 
-@employee_router.get("/day_wishes/", summary='Возвращает список "любимых точек" пользователя')
+@employee_router.get("/day-wishes/", summary='Возвращает список "любимых точек" пользователя')
 def get_day_wishes(
         user: dict = Depends(get_current_employee)
 ):

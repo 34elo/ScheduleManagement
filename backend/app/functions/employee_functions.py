@@ -176,6 +176,28 @@ def get_favorite_points(name: str) -> list:
 
     try:
         points = data_cursor.execute(f'''
+        SELECT point_wishes FROM employees_passwords
+        WHERE full_name = "{name}"
+        ''').fetchone()[0]
+        points = points.split(';')
+    except TypeError:
+        return 'Такого работника нет в базе данных'
+
+    return points
+
+def get_favorite_days(name: str) -> list:
+    """
+    Функция прринмает имя работника и возваращет его любимые точки списком
+    """
+
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
+    data_cursor = connection.cursor()
+
+    try:
+        points = data_cursor.execute(f'''
         SELECT day_wishes FROM employees_passwords
         WHERE full_name = "{name}"
         ''').fetchone()[0]
