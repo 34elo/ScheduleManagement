@@ -1,7 +1,8 @@
 import {Box} from "@mui/system";
 import {Button, TextField, Typography} from "@mui/material";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
+import {API_URL} from "../../../API_URL.js";
 
 const styleModal = {
     position: 'absolute',
@@ -22,15 +23,42 @@ const styleModal = {
 
 export default function ModalAddEmployee({setOpen}) {
 
+    const [text, setText] = useState(null);
+    const [code, setCode] = useState(null);
+
+    function handleChangeText(e) {
+        setText(e.target.value);
+    }
+
+    async function handleAddEmployee() {
+        const response = await axios.post(`${API_URL}/admin/employee`, {
+            name: text,
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        setCode(response.data.code);
+    }
+
+
     return (
         <Box sx={styleModal}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{marginBottom: '10px'}}>
-                Добавить сотруднкиа
+                Добавить сотрудника
             </Typography>
-            <TextField label='Введите ФИО' sx={{marginBottom: '10px'}}>
-            </TextField>
-
-            <Button variant="contained" onClick={() => setOpen(false)} sx={{backgroundColor: '#c1c1c1', marginTop: '10px'}}>
+            <TextField
+                sx={{
+                    maxWidth: '90%', width: '250px',
+                }}
+                size="small"
+                label="Текст"
+                onChange={handleChangeText}
+            />
+            {code ? code : null}
+            <Button variant="contained" onClick={handleAddEmployee}
+                    sx={{backgroundColor: '#c1c1c1', marginTop: '10px'}}>
                 Добавить
             </Button>
         </Box>
