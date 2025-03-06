@@ -33,13 +33,13 @@ DAYS_MAPPING = {
     "вс": "Sunday"
 }
 DAYS_MAPPING_REVERSE = {
-    "Monday": "понедельник",
-    "Tuesday": "вторник",
-    "Wednesday": "среда",
-    "Thursday": "четверг",
-    "Friday": "пятница",
-    "Saturday": "суббота",
-    "Sunday": "воскресенье",
+    "Monday": "Понедельник",
+    "Tuesday": "Вторник",
+    "Wednesday": "Среда",
+    "Thursday": "Четверг",
+    "Friday": "Пятница",
+    "Saturday": "Суббота",
+    "Sunday": "Воскресенье",
     "Mon": "пн",
     "Tue": "вт",
     "Wed": "ср",

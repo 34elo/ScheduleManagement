@@ -159,12 +159,55 @@ def send_notification_by_names(persons: list[str], message: str) -> None:
     return
 
 
+def generate_schedule() -> None:
+    """Генерирует график на основе пожеланий сотрудников"""
+    import sqlite3
+    from backend.app.constants import POINTS
+    from datetime import datetime, timedelta
 
-def making_schedule() -> None:
-    """
-    Создает расписание
-    """
-    return
+    today = datetime.today()
+
+    date_list = []
+    for i in range(1, 8):
+        date = today + timedelta(days=i)
+        day_of_week = date.strftime('%A')
+        date_list.append((date.strftime('%Y-%m-%d'), day_of_week))
+
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
+    data_cursor = connection.cursor()
+
+    employees_wishes = data_cursor.execute("""
+                SELECT full_name, point_wishes, day_wishes
+                FROM employees_passwords
+                """).fetchall()
+
+    employees_wishes = [(i[0], i[1].split(';'), i[2].split(';')) for i in employees_wishes]
+    for point in POINTS:
+        for date, day_of_week in date_list:
+            wish_employees = [employee[0] for employee in employees_wishes if point in employee[1] and day_of_week in employee[2]]
+            working_employees = data_cursor.execute(f"""
+            SELECT "Дата", "25_Сентября_35а", "25_Сентября_35а/2", "Багратиона_16",
+            "Дзержинского_9", "Коммунистическая_6", "Лавочкина_54/6", "Николаева_50",
+            "Ново-московская_2/8_ст4", "Проспект_Гагарина_1/1", "Рыленкова_18",
+            "Энергетический_проезд_3/4", "Крупской_42"
+            FROM schedule
+            WHERE "Дата" = "{date}"
+            """).fetchall()
+            for worker in working_employees[0][1:]:
+                if worker in wish_employees:
+                    wish_employees.remove(worker)
+
+            if data_cursor.execute(f"""SELECT "{point}" FROM schedule WHERE "Дата" = "{date}" 
+            """).fetchone() == (None,) and wish_employees:
+                employee_for_work = random.choice(wish_employees)
+                data_cursor.execute(f'UPDATE "schedule" '
+                                    f'SET "{point}" = "{employee_for_work}" '
+                                    f'WHERE "Дата" = "{date}"')
+            connection.commit()
+    connection.close()
 
 
 def delete_employee(name: str) -> None:
