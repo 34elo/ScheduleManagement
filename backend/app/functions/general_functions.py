@@ -68,3 +68,29 @@ def get_info_me(id_user: int, role: str) -> dict:
     connection.close()
 
     return result
+
+def edit_info_f(name: str, username: str, contact: str, role: str) -> None:
+    '''
+    Изменяет данные в БД пользователя с именем name
+    '''
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
+    cursor = connection.cursor()
+    print(role, name, contact, username)
+    if role == 'Администратор':
+        cursor.execute(f'''
+UPDATE "admin_passwords"
+SET mobile_number = "{contact}", username = "{username}"
+WHERE full_name = "{name}"
+''')
+    elif role == 'Сотрудник':
+        cursor.execute(f'''
+        UPDATE "employees_passwords"
+        SET mobile_number = "{contact}", username = "{username}"
+        WHERE full_name = "{name}"
+        ''')
+    connection.commit()
+    connection.close()
+    return

@@ -23,6 +23,7 @@ function useAuth() {
                     authorization: `Bearer ${token}`
                 }
             });
+            console.log(API_URL, 'asdasdasdasdasdasdasdsad')
             console.log(response.data, 'response');
             console.log(token)
             setUser(response.data.user);

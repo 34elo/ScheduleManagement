@@ -7,20 +7,14 @@ from app.constants import POINTS
 from app.functions.general_functions import get_schedule, get_info_me
 from app.routers.utils import get_current_user
 
+from app.functions.general_functions import edit_info_f
+
 general_router = APIRouter()
 
 
-class Description(BaseModel):
-    age: Optional[int] = None
-    post: Optional[str] = None
-    contact: Optional[str] = None
-    username: Optional[str] = None
-
-
 class Info(BaseModel):
-    name: str
-    role: str
-    description: Description
+    username: str
+    contact: str
 
 
 @general_router.get("/schedule/", summary='Возвращает расписание всех точек')
@@ -47,14 +41,13 @@ def points(
     return POINTS
 
 
-@general_router.put('/info')
+@general_router.post('/info')
 def edit_info(
         info: Info,
         user: dict = Depends(get_current_user)
 ):
-    # Будет определять
-
-    return {'message': 'success'}
+    edit_info_f(user['name'], info.username, info.contact, user['role'])
+    return
 
 
 @general_router.get("/me/", summary='Возвращает информацию об авторизованном пользователе')

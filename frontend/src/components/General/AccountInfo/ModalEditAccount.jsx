@@ -1,5 +1,8 @@
 import {Box} from "@mui/system";
 import {Button, TextField, Typography} from "@mui/material";
+import {useState} from "react";
+import axios from "axios";
+import {API_URL} from "../../../API_URL.js";
 
 const styleModal = {
     position: 'absolute',
@@ -18,21 +21,44 @@ const styleModal = {
     alignItems: 'center'
 };
 
-export default function ModalEditAccount({setOpen}) {
+export default function ModalEditAzzzccount({setOpen}) {
+
+    const [contact, setContact] = useState();
+    const [username, setUsername] = useState();
+
+    function handleUsernameChange(evt) {
+        setUsername(evt.target.value);
+    }
+
+    function handleContactChange(evt) {
+        setContact(evt.target.value);
+    }
+
+    function handleButton() {
+        console.log('sdf')
+        setOpen(false);
+        axios.post(`${API_URL}/info`, {
+            contact: contact,
+            username: username,
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+
+    }
 
     return (
         <Box sx={styleModal}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{marginBottom: '10px'}}>
                 Изменить информацию
             </Typography>
-            <TextField label='1' sx={{marginBottom: '10px'}}>
+            <TextField label='Номер телефона' onChange={handleContactChange} sx={{marginBottom: '10px'}}>
             </TextField>
-            <TextField label='2' sx={{marginBottom: '10px'}}>
+            <TextField label='Телеграм' sx={{marginBottom: '10px'}} onChange={handleUsernameChange}>
             </TextField>
-            <TextField label='3' sx={{marginBottom: '10px'}}>
-            </TextField>
-
-            <Button variant="contained" onClick={() => setOpen(false)} sx={{backgroundColor: '#c1c1c1', marginTop: '10px'}}>
+            <Button variant="contained" onClick={handleButton} sx={{backgroundColor: '#c1c1c1', marginTop: '10px'}}>
                 Изменить
             </Button>
         </Box>

@@ -159,12 +159,6 @@ def send_notification_by_names(persons: list[str], message: str) -> None:
     return
 
 
-def editing_schedule(person: str, date: datetime) -> None:
-    """
-    Изменяет расписание по имени и дате
-    """
-    return
-
 
 def making_schedule() -> None:
     """
