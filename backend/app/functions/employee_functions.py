@@ -1,8 +1,6 @@
 import sqlite3
 from datetime import datetime, timedelta
 
-from app.constants import POINTS, DAYS
-
 
 def get_my_schedule(full_name, period, date1=None, date2=None) -> dict:
     """Возвращает свой график работы для сотрудника.
@@ -184,6 +182,7 @@ def get_favorite_points(name: str) -> list:
         return 'Такого работника нет в базе данных'
 
     return points
+
 
 def get_favorite_days(name: str) -> list:
     """

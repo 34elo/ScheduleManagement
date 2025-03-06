@@ -28,13 +28,6 @@ def get_schedule(point, period) -> list[tuple]:
     return schedule
 
 
-def edit_info(info: dict) -> None:
-    """
-    Получает JSON с данными, которые надо будет изменить
-    """
-    return
-
-
 def get_info_me(id_user: int, role: str) -> dict:
     if __name__ == '__main__':
         connection = sqlite3.connect('../data/data.sqlite')
@@ -53,9 +46,6 @@ def get_info_me(id_user: int, role: str) -> dict:
         for key, value in zip(keys, data):
             result[key] = value
 
-
-
-
     elif role == 'Сотрудник':
         data = data_cursor.execute(f'''
         SELECT id, full_name, age, post, mobile_number, username
@@ -69,10 +59,11 @@ def get_info_me(id_user: int, role: str) -> dict:
 
     return result
 
+
 def edit_info_f(name: str, username: str, contact: str, role: str) -> None:
-    '''
+    """
     Изменяет данные в БД пользователя с именем name
-    '''
+    """
     if __name__ == '__main__':
         connection = sqlite3.connect('../data/data.sqlite')
     else:
@@ -81,10 +72,10 @@ def edit_info_f(name: str, username: str, contact: str, role: str) -> None:
     print(role, name, contact, username)
     if role == 'Администратор':
         cursor.execute(f'''
-UPDATE "admin_passwords"
-SET mobile_number = "{contact}", username = "{username}"
-WHERE full_name = "{name}"
-''')
+    UPDATE "admin_passwords"
+    SET mobile_number = "{contact}", username = "{username}"
+    WHERE full_name = "{name}"
+    ''')
     elif role == 'Сотрудник':
         cursor.execute(f'''
         UPDATE "employees_passwords"
