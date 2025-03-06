@@ -32,5 +32,22 @@ DAYS_MAPPING = {
     "сб": "Saturday",
     "вс": "Sunday"
 }
+DAYS_MAPPING_REVERSE = {
+    "Monday": "понедельник",
+    "Tuesday": "вторник",
+    "Wednesday": "среда",
+    "Thursday": "четверг",
+    "Friday": "пятница",
+    "Saturday": "суббота",
+    "Sunday": "воскресенье",
+    "Mon": "пн",
+    "Tue": "вт",
+    "Wed": "ср",
+    "Thu": "чт",
+    "Fri": "пт",
+    "Sat": "сб",
+    "Sun": "вс"
+}
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")

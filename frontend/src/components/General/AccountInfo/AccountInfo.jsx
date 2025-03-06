@@ -38,6 +38,7 @@ export default function AccountInfo({children, name, label, role, lc = false}) {
                     const data = response.data
                     data.name = name
                     setInfo(data)
+                    console.log(data)
 
 
                 } catch (error) {

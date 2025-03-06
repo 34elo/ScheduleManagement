@@ -21,7 +21,7 @@ const styleModal = {
     alignItems: 'center'
 };
 
-export default function ModalEditAzzzccount({setOpen}) {
+export default function ModalEditAccount({setOpen}) {
 
     const [contact, setContact] = useState();
     const [username, setUsername] = useState();

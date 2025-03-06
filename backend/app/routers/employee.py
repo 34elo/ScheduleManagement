@@ -3,9 +3,9 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from app.constants import POINTS, DAYS, DAYS_MAPPING
+from app.constants import POINTS, DAYS, DAYS_MAPPING, DAYS_MAPPING_REVERSE
 from app.functions.employee_functions import change_point_wishes, get_my_schedule, get_admin_contact, get_admin_names, \
-    change_day_wishes, get_favorite_points
+    change_day_wishes, get_favorite_points, get_favorite_days
 from app.routers.utils import get_current_user
 
 employee_router = APIRouter(
@@ -57,7 +57,7 @@ def get_admin_by_name(
         name: str,
         user: dict = Depends(get_current_user)
 ):
-    username, contact = get_admin_contact(name)
+    contact, username = get_admin_contact(name)
     return {'contact': contact, 'username': username}
 
 
@@ -68,9 +68,10 @@ def get_admins(
     return {'admins': get_admin_names()}
 
 
-@employee_router.get("/day-wishes/", summary='Возвращает список "любимых точек" пользователя')
+@employee_router.get("/wishes/", summary='Возвращает список "любимых точек" пользователя')
 def get_day_wishes(
         user: dict = Depends(get_current_employee)
 ):
     name = user['name']
-    return {'day_wishes': get_favorite_points(name)}
+    days = [DAYS_MAPPING_REVERSE[_].capitalize() for _ in get_favorite_days(name)]
+    return {'days': days, 'address': get_favorite_points(name)}

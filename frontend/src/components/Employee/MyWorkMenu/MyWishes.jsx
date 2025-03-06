@@ -12,10 +12,29 @@ export default function MyWishes(props) {
     const [selectedAddress, setSelectedAddress] = useState([]);
     const [selectedDays, setSelectedDays] = useState([]);
 
-    const [address, setAddress] = useState();
-    const [days, setDay] = useState();
+    const [address, setAddress] = useState([]);
+    const [days, setDays] = useState([]);
 
     const [addresses, setAddresses] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/employee/wishes/`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        ContentType: "application/json"
+                    }
+                });
+                console.log(response);
+                setAddress(response.data.address)
+                setDays(response.data.days);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        fetchData();
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -26,7 +45,6 @@ export default function MyWishes(props) {
                     }
                 })
                 const r = response.data
-                r.push('Убрать адреса')
                 setAddresses(r);
             } catch (err) {
                 console.log(err);
@@ -56,18 +74,23 @@ export default function MyWishes(props) {
 
         }}>
             <h2 style={{margin: 0, marginTop: '10px'}}>Моя информация</h2>
-            <Paragraph>Мои желаемые адреса: {address}</Paragraph>
-            <Paragraph>Мои желаемые дни: {days}</Paragraph>
+            <h4 style={{margin: '2px'}}>Мои желаемые адреса:</h4>
+            <p style={{margin: '2px'}}>{address.join(', ')}</p>
+            <h4 style={{margin: '2px'}}>Мои желаемые дни:</h4>
+            <p style={{margin: '2px'}}>{days.join(', ')}</p>
             <h2 style={{margin: 0, marginTop: '10px'}}>Хотите изменить?</h2>
 
             <SelectAny setSelected={setSelectedAddress} MyArray={addresses} label='Адрес'
                        selectAnything={selectedAddress}></SelectAny>
             <SelectAny setSelected={setSelectedDays}
-                       MyArray={['ПН', 'ВТ', "СР", "ЧТ", "ПТ", "СБ", "ВС", 'Убрать рабочие дни']}
+                       MyArray={['ПН', 'ВТ', "СР", "ЧТ", "ПТ", "СБ", "ВС"]}
                        selectAnything={selectedDays} label='День'></SelectAny>
             <Button variant="contained" onClick={handleChange} sx={{backgroundColor: '#c1c1c1'}}>
                 Изменить
             </Button>
+            <p style={{color: 'gray', fontStyle: 'italic', margin: 'auto', fontSize: '12px', marginTop: '15px'}}>При
+                необходимости вы можете удалить свои желаемые точки, для этого вам требуется нажать кнопку изменить,
+                оставив поля пустыми</p>
         </Box>
     </>)
 }

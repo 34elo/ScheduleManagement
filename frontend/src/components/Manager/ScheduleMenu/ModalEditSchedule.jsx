@@ -44,7 +44,7 @@ export default function ModalEditSchedule({setOpen, selectedPoint}) {
             emp = ' '
         }
 
-        const date = selectedDate.add(1, 'day');
+        const date = selectedDate
 
         axios.patch(`${API_URL}/admin/edit-schedule/`, {
             person: emp,
