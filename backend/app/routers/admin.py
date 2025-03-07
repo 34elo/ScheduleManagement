@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from app.functions.admin_functions import get_employee_contact, get_employees_names, create_employee, get_all_chats_ids, \
-    making_schedule, send_notification_by_names, delete_employee, change_schedule
+    send_notification_by_names, delete_employee, change_schedule, generate_schedule
 from app.routers.utils import get_current_user
 
 admin_router = APIRouter(
@@ -57,14 +57,6 @@ def get_employees(
 '''
 
 
-@admin_router.post('/make-schedule', summary='Создание расписание')
-def make_schedule(
-        user: dict = Depends(get_current_admin),
-):
-    making_schedule()
-    return {'message': 'success'}
-
-
 @admin_router.patch('/edit-schedule/', summary="Изменение расписания")
 def edit_schedule(
         info: EditingSchedule,
@@ -102,10 +94,20 @@ def create_new_employee(
     return {'code': code}
 
 
-@admin_router.delete('/employee')
+@admin_router.delete('/employee', summary='Удаление сотрудника')
 def delete_employee_by_name(
         person: Employee,
         user: dict = Depends(get_current_admin),
 ):
     delete_employee(person.name)
+    return
+
+
+@admin_router.put('/schedule/generating', summary='Составление расписания')
+def generating_schedule(
+
+        user: dict = Depends(get_current_admin),
+):
+    print('generating schedule')
+    generate_schedule()
     return

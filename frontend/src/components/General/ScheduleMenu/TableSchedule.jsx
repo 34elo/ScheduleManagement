@@ -14,7 +14,13 @@ export default function TableSchedule(data) {
     return (
         <>
             <TableContainer component={Paper}
-                            sx={{boxShadow: 'none', minWidth: 500, backgroundColor: '#f0f0f0', borderRadius: '20px', maxHeight: '500px'}}>
+                            sx={{
+                                boxShadow: 'none',
+                                minWidth: 500,
+                                backgroundColor: '#f0f0f0',
+                                borderRadius: '20px',
+                                height: '600px'
+                            }}>
                 <Table
                     aria-label="simple table">
                     <TableHead>
@@ -33,4 +39,5 @@ export default function TableSchedule(data) {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </>)}
+        </>)
+}

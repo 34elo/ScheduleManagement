@@ -1,4 +1,4 @@
-import {Button, FormControlLabel, Modal, Switch, Tab} from "@mui/material";
+import {Button, FormControlLabel, IconButton, Modal, Switch, Tab} from "@mui/material";
 import {useEffect, useState} from "react";
 import TabPanel from "@mui/lab/TabPanel";
 import {Box} from "@mui/system";
@@ -8,6 +8,7 @@ import ModalEditSchedule from "../../Manager/ScheduleMenu/ModalEditSchedule.jsx"
 import TableSchedule from "./TableSchedule.jsx";
 import axios from "axios";
 import {API_URL} from "../../../API_URL.js";
+import EditIcon from '@mui/icons-material/Edit';
 
 const styleBox = {
     minHeight: '500px', backgroundColor: '#f0f0f0', borderRadius: '20px', '& .MuiTab-root': {
@@ -81,11 +82,25 @@ export default function ScheduleMenu({admin}) {
         setPeriod(newValue);
     }
 
+    function handleButton() {
+        axios.put(`${API_URL}/admin/schedule/generating`,{}, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        location.reload();
+    }
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
     return (<>
         <Box sx={{justifyContent: 'space-between', flexGrow: 1, display: 'flex'}}>
             <h1 style={{paddingBottom: '20px', margin: 0}}>Расписание
+                {admin && <Button variant="contained" onClick={handleButton}
+                                  sx={{backgroundColor: '#c1c1c1', marginLeft: '25px', borderRadius: '25px', color: 'white'}}>
+                    Сформировать
+                </Button>}
             </h1>
 
             <FormControlLabel
@@ -106,18 +121,35 @@ export default function ScheduleMenu({admin}) {
                 <Box sx={styleBox}>
                     <TabList
                         onChange={handleChange}
-                        aria-label="lab API tabs example"
                         orientation="vertical"
                         indicatorColor="transparent"
                         color='transparent'
                         textColor="primary"
+                        style={{maxWidth: '250px', height: '600px'}}
                     >
                         {/* Проверяем, что data является массивом перед вызовом map */}
                         {Array.isArray(data) && data.map((tab) => (
-                            <Tab key={tab.id} label={tab.point} value={tab.id}/>))}
+                            <Tab key={tab.id}
+                                 label={(tab.point === selectedPoint) && (admin) ?
+                                     <div style={{
+                                         display: "flex",
+                                         direction: 'row',
+                                         justifyContent: 'center',
+                                         alignItems: 'center'
+                                     }}>
+                                         {tab.point}
+                                         <IconButton
+                                             aria-label="edit" onClick={handleOpen}
+                                             sx={{marginLeft: '10px', maxHeight: '22px', maxWidth: '22px'}}>
+                                             <EditIcon/>
+                                         </IconButton>
+                                     </div>
+                                     :
+                                     tab.point}
+                                 value={tab.id}/>))}
                     </TabList>
                 </Box>
-                <TabPanel value={value} sx={{width: '100%', paddingTop: '0px'}}>
+                <TabPanel value={value} sx={{padding: 0, width: '100%', paddingLeft: '20px'}}>
                     <Box style={{
                         backgroundColor: '#f0f0f0',
                         minHeight: '500px',
@@ -127,10 +159,7 @@ export default function ScheduleMenu({admin}) {
                     }}>
                         <TableSchedule data={selected}/>
                     </Box>
-                    {admin && <Button size='large' variant="contained" aria-label="edit" onClick={handleOpen}
-                                      sx={{margin: '20px', backgroundColor: '#c1c1c1'}}>
-                        Изменить
-                    </Button>}
+
                 </TabPanel>
             </TabContext>
         </Box>
