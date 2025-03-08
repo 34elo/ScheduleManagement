@@ -51,7 +51,9 @@ export default function AccountInfo({children, name, label, role, lc = false}) {
 
 
     return (<>
-        <h2 style={{marginTop: 0}}>{label}</h2>
+        <h2 style={{marginTop: 0}}>
+            {label}
+        </h2>
         <Box sx={{
             margin: "0 auto",
             maxWidth: '900px',
@@ -69,7 +71,8 @@ export default function AccountInfo({children, name, label, role, lc = false}) {
                 <NameField name={info.name}></NameField>
                 <MoreInfoField username={info.username ? '@' + info.username : 'Данные отсутсвуют'}
                                contact={info.contact ? '' + info.contact : 'Данные отсутсвуют'}
-                               age={info.age ? '' + info.age : 'Данные отсутсвуют'}></MoreInfoField>
+                               age={info.age ? '' + info.age : 'Данные отсутсвуют'} code={info.code}>
+                </MoreInfoField>
             </Box>
             {children}
         </Box>

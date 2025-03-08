@@ -16,7 +16,7 @@ export default function TableSchedule(data) {
             <TableContainer component={Paper}
                             sx={{
                                 boxShadow: 'none',
-                                minWidth: 500,
+                                minWidth: '300px',
                                 backgroundColor: '#f0f0f0',
                                 borderRadius: '20px',
                                 height: '600px'

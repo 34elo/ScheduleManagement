@@ -9,7 +9,7 @@ export default function MyWorkMenu(props) {
             {/* Левая колонка с карточками */}
             <Box
                 sx={{
-                    minWidth: "150px",
+                    minWidth: '250px',
                     width: "66.66%",
                     bgcolor: "#f1f1f1",
                     marginRight: 2,

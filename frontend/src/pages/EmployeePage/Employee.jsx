@@ -147,10 +147,10 @@ export default function Employee() {
                                 }
                             }}
                         >
-                            <Tab label="📅" value="1" title="Расписание"/>
-                            <Tab label="1" value="2" title="Моя работа"/>
-                            <Tab label="2" value="3" title="Администраторы"/>
-                            <Tab label="👤" value="4" title="Личный кабинет"/>
+                            <Tab label="1" value="1" title="Расписание"/>
+                            <Tab label="2" value="2" title="Моя работа"/>
+                            <Tab label="3" value="3" title="Администраторы"/>
+                            <Tab label="4" value="4" title="Личный кабинет"/>
                         </TabList>
                     </TabContext>
                 </Box>

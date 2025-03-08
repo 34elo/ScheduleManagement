@@ -1,8 +1,8 @@
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.functions.admin_functions import get_employee_contact, get_employees_names, create_employee, get_all_chats_ids, \
     send_notification_by_names, delete_employee, change_schedule, generate_schedule
@@ -16,6 +16,8 @@ admin_router = APIRouter(
 
 class Employee(BaseModel):
     name: str
+    age: Optional[int] = Field(None, lt=100, gt=14)
+    post: Optional[str] = None
 
 
 class Notification(BaseModel):
@@ -41,8 +43,8 @@ def get_employee_by_name(
         name: str,
         user: dict = Depends(get_current_user)
 ):
-    age, post, contact, username = get_employee_contact(name)
-    return {'name': name, 'age': age, 'post': post, 'contact': contact, 'username': username}
+    age, post, contact, username, code = get_employee_contact(name)
+    return {'name': name, 'age': age, 'post': post, 'contact': contact, 'username': username, 'code': code}
 
 
 @admin_router.get("/employees/", summary='Возвращает список всех сотрудников')
@@ -90,7 +92,7 @@ def create_new_employee(
         person: Employee,
         user: dict = Depends(get_current_admin),
 ):
-    code = create_employee(person.name)
+    code = create_employee(person.name, person.age, person.post)
     return {'code': code}
 
 

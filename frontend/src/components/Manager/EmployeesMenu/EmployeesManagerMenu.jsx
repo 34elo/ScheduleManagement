@@ -61,10 +61,14 @@ export default function EmployeesManagerMenu() {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
-            data : {
+            data: {
                 'name': person,
             }
         })
+        console.log(person)
+        console.log(cards, 'DDDD');
+        console.log(selectedCard);
+        setCards(cards.filter(person => person.id !== selectedCard));
         setOpen(false);
     }
 
@@ -76,13 +80,16 @@ export default function EmployeesManagerMenu() {
                     : selectedCard !== null ? (
                             <ModalAccountInfo name={cards.find(card => card.id === selectedCard)?.title || "Неизвестный"}
                                               label='Подробная ифнормация'
-                                              role='admin'>
+                                              role='admin'
+                                                close={() => setOpen(false)}>
                                 <Button variant="contained" onClick={handleDeleteEmployee}
                                         sx={{backgroundColor: '#c1c1c1', marginTop: '10px'}}>
                                     Удалить сотрудника
                                 </Button>
                             </ModalAccountInfo>)
-                        : <div></div>}
+                        : <div>
+
+                        </div>}
             </Modal>
             <Box sx={{display: "flex", height: "100%", padding: 2, minHeight: "550px"}}>
                 {/* Левая колонка с карточками */}

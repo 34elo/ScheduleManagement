@@ -25,7 +25,7 @@ def get_employee_contact(employee_name) -> list:
     else:
         connection = sqlite3.connect('app/data/data.sqlite')
     data_cursor = connection.cursor()
-    employee_contact = data_cursor.execute(f'''SELECT age, post, mobile_number, username
+    employee_contact = data_cursor.execute(f'''SELECT age, post, mobile_number, username, password
                                                FROM employees_passwords
                                                WHERE full_name = "{employee_name}"''').fetchone()
     connection.close()
@@ -54,7 +54,7 @@ def format_data(lst: list):
     return data_lst
 
 
-def create_employee(name: str) -> str:
+def create_employee(name: str, age: int, post: str) -> str:
     """
     Берет имя сотрудника и создает его в базе данных, а возвращает его код/пароль
     """
@@ -73,8 +73,8 @@ def create_employee(name: str) -> str:
         password = generate_password()
 
     data_cursor.execute(f'''
-    INSERT INTO employees_passwords(full_name, password)
-    VALUES ("{name}", "{password}")
+    INSERT INTO employees_passwords(full_name, post, age, password)
+    VALUES ("{name}", "{post}", "{age}", "{password}")
     ''')
 
     connection.commit()
