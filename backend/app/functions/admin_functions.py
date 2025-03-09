@@ -1,6 +1,9 @@
-import sqlite3
 import random
+import sqlite3
 from datetime import datetime
+
+from app.constants import POINTS
+from app.functions.employee_functions import get_my_schedule
 
 
 def get_employees_names() -> list:
@@ -187,7 +190,8 @@ def generate_schedule() -> None:
     employees_wishes = [(i[0], i[1].split(';'), i[2].split(';')) for i in employees_wishes]
     for point in POINTS:
         for date, day_of_week in date_list:
-            wish_employees = [employee[0] for employee in employees_wishes if point in employee[1] and day_of_week in employee[2]]
+            wish_employees = [employee[0] for employee in employees_wishes if
+                              point in employee[1] and day_of_week in employee[2]]
             working_employees = data_cursor.execute(f"""
             SELECT "Дата", "25_Сентября_35а", "25_Сентября_35а/2", "Багратиона_16",
             "Дзержинского_9", "Коммунистическая_6", "Лавочкина_54/6", "Николаева_50",
@@ -370,3 +374,45 @@ def create_general_report(date1, date2) -> None:
     destination_dir = "../reports/general_report.docx"
 
     shutil.move(source_file, destination_dir)
+
+
+def get_general_report(date1: str, date2: str) -> dict:
+    """Возвращает данные отчёта в виде dict для использования в FastAPI."""
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
+
+    data_cursor = connection.cursor()
+    employees_work_days = []
+    for full_name in get_employees_names():
+        working_days = len(get_my_schedule(full_name, 'custom', date1, date2))
+        employees_work_days.append({"name": full_name, "shifts": working_days})
+
+    most_hardworking_employee = max(employees_work_days, key=lambda x: x["shifts"])
+    least_hardworking_employee = min(employees_work_days, key=lambda x: x["shifts"])
+
+    date1_obj = datetime.strptime(date1, "%Y-%m-%d")
+    date2_obj = datetime.strptime(date2, "%Y-%m-%d")
+    days_difference = (date2_obj - date1_obj).days
+
+    points_working_time = []
+    for point in POINTS:
+        schedule = data_cursor.execute(f'''SELECT "{point}"
+                                           FROM schedule
+                                           WHERE "Дата" BETWEEN "{date1}"
+                                           AND "{date2}"''').fetchall()
+        working_days = len([day for day in schedule if day[0] is not None])
+        working_time = round(working_days / days_difference * 100, 1)
+        points_working_time.append({"name": point, "working_time": working_time})
+
+    top_points = sorted(points_working_time, key=lambda x: x["working_time"], reverse=True)[:3]
+    worst_points = sorted(points_working_time, key=lambda x: x["working_time"])[:3]
+
+    return {
+        "period": f"{date1} - {date2}",
+        "most_hardworking_employee": most_hardworking_employee,
+        "least_hardworking_employee": least_hardworking_employee,
+        "top_points": top_points,
+        "worst_points": worst_points
+    }

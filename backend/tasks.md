@@ -31,4 +31,8 @@
 - [x] Вернуть все точки (*backend.app.constants.POINTS*) - in testing
 
 Авторизация (*backend.app.functions.auth_functions*):
-- [x] check_codeО
+- [x] check_code
+
+### BUGS
+
+- [ ] Заполнение желаемых точек и дней

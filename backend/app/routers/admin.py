@@ -3,9 +3,11 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
+from starlette.responses import StreamingResponse
 
 from app.functions.admin_functions import get_employee_contact, get_employees_names, create_employee, get_all_chats_ids, \
-    send_notification_by_names, delete_employee, change_schedule, generate_schedule
+    send_notification_by_names, delete_employee, change_schedule, generate_schedule, get_general_report
+from app.functions.reports_functions import create_general_report_func
 from app.routers.utils import get_current_user
 
 admin_router = APIRouter(
@@ -113,3 +115,24 @@ def generating_schedule(
     print('generating schedule')
     generate_schedule()
     return
+
+@admin_router.get("/report/general")
+def report(date1: str, date2: str):
+    return get_general_report(date1, date2)
+
+@admin_router.get('/report/general/download')
+def download_report(date1: str, date2: str):
+    report_data = get_general_report(date1, date2)  # Получаем данные для отчёта
+    file_stream = create_general_report_func(
+        most_hardworking_employee=report_data["most_hardworking_employee"],
+        least_hardworking_employee=report_data["least_hardworking_employee"],
+        top_points=report_data["top_points"],
+        worst_points=report_data["worst_points"],
+        period=report_data["period"]
+    )
+
+    return StreamingResponse(
+        file_stream,
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers={"Content-Disposition": "attachment; filename=general_report.docx"}
+    )
