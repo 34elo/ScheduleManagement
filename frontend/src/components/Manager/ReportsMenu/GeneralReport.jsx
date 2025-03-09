@@ -67,7 +67,7 @@ export default function GeneralReport() {
                 <p>Лучший работник - {data.most_hardworking_employee && data.most_hardworking_employee.name}</p>
                 <p>Худший работник - {data.least_hardworking_employee && data.least_hardworking_employee.name}</p>
 
-                <ol> Лучшие точки <br />
+                <ol style={{padding: 0}}> Лучшие точки <br />
                     {data.top_points && data.top_points.map((item, index) => {
                         return (
                             <>{index + 1}. {item.name} - {item.working_time}<br/></>
@@ -75,7 +75,7 @@ export default function GeneralReport() {
                     })}
                 </ol>
 
-                <ol> Худшие точки <br />
+                <ol style={{padding: 0}}> Худшие точки <br />
                     {data.worst_points && Array.isArray(data.worst_points) && data.worst_points.map((item, index) => {
                         return (
                             <>{index + 1}. {item.name} - {item.working_time}<br/></>
