@@ -85,7 +85,7 @@ export default function MyWishes(props) {
             <SelectAny setSelected={setSelectedDays}
                        MyArray={['ПН', 'ВТ', "СР", "ЧТ", "ПТ", "СБ", "ВС"]}
                        selectAnything={selectedDays} label='День'></SelectAny>
-            <Button variant="contained" onClick={handleChange} sx={{backgroundColor: '#c1c1c1'}}>
+            <Button variant="contained" onClick={handleChange} sx={{backgroundColor: '#c1c1c1', color: 'black'}}>
                 Изменить
             </Button>
             <p style={{color: 'gray', fontStyle: 'italic', margin: 'auto', fontSize: '12px', marginTop: '15px'}}>При

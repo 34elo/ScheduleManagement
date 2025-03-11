@@ -82,7 +82,7 @@ export default function NotificationEmployee({cards}) {
                 </Select>
             </FormControl>
             <Button variant="contained" onClick={sendNotification}
-                    sx={{backgroundColor: '#c1c1c1', marginBottom: '10px'}}>
+                    sx={{backgroundColor: '#c1c1c1', marginBottom: '10px', color: 'black'}}>
                 Отправить
             </Button>
         </Box>

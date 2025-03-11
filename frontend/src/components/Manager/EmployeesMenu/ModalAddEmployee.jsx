@@ -87,7 +87,7 @@ export default function ModalAddEmployee({setOpen}) {
                {code}
             </div> : null}
             <Button variant="contained" onClick={handleAddEmployee}
-                    sx={{backgroundColor: '#c1c1c1', marginTop: '10px'}}>
+                    sx={{backgroundColor: '#c1c1c1', marginTop: '10px', color: 'black'}}>
                 Добавить
             </Button>
         </Box>)

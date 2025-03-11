@@ -135,7 +135,7 @@ export default function ModalEditSchedule({setOpen, selectedPoint}) {
                     ))}
                 </Select>
             </FormControl>
-            <Button variant="contained" onClick={handleEdit} sx={{backgroundColor: '#c1c1c1', marginTop: '10px'}}>
+            <Button variant="contained" onClick={handleEdit} sx={{backgroundColor: '#c1c1c1', marginTop: '10px', color: 'black'}}>
                 Изменить расписание
             </Button>
         </Box>
