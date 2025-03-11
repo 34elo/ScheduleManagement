@@ -85,27 +85,6 @@ def create_employee(name: str, age: int, post: str) -> str:
     return password
 
 
-def check_name(name: str) -> bool:
-    """
-    Функция проверяет наличие работника в БД
-    """
-
-    if __name__ == '__main__':
-        connection = sqlite3.connect('../data/data.sqlite')
-    else:
-        connection = sqlite3.connect('app/data/data.sqlite')
-    data_cursor = connection.cursor()
-
-    name = data_cursor.execute(f'''
-    SELECT full_name FROM employees_passwords
-    WHERE full_name == "{name}"
-    ''').fetchone()
-
-    if name:
-        return True
-    return False
-
-
 def change_schedule(date: str, name: str, point: str):
     """
     Изменить расписание(по дате, сотруднику)
@@ -125,16 +104,13 @@ def change_schedule(date: str, name: str, point: str):
     except sqlite3.OperationalError:
         return 'Введены неправильные данные. Попробуйте изменить дату либо название точки'
 
-    if check_name(name):
-        data_cursor.execute(f'''
-        UPDATE schedule
-        SET "{point}"  = "{name}"
-        WHERE Дата = "{date}"
-        ''')
-        connection.commit()
-        connection.close()
-    else:
-        return 'Такого сотрудника нет в базе данных'
+    data_cursor.execute(f'''
+    UPDATE schedule
+    SET "{point}"  = "{name}"
+    WHERE Дата = "{date}"
+    ''')
+    connection.commit()
+    connection.close()
     return 'succes'
 
 
@@ -165,7 +141,7 @@ def send_notification_by_names(persons: list[str], message: str) -> None:
 def generate_schedule() -> None:
     """Генерирует график на основе пожеланий сотрудников"""
     import sqlite3
-    from backend.app.constants import POINTS
+    from app.constants import POINTS
     from datetime import datetime, timedelta
 
     today = datetime.today()
@@ -187,7 +163,7 @@ def generate_schedule() -> None:
                 FROM employees_passwords
                 """).fetchall()
 
-    employees_wishes = [(i[0], i[1].split(';'), i[2].split(';')) for i in employees_wishes]
+    employees_wishes = [(i[0], i[1].split(';'), i[2].split(';')) for i in employees_wishes if i[1] and i[2]]
     for point in POINTS:
         for date, day_of_week in date_list:
             wish_employees = [employee[0] for employee in employees_wishes if
