@@ -1,18 +1,34 @@
 from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
+from telegram.functions.employee_functions import get_all_admins
 
-from database_functions.constants import DAYS, DAYS_RU
+from telegram.constants import DAYS
 
 
 def main() -> ReplyKeyboardMarkup:
     kb = ReplyKeyboardBuilder()
     kb.button(text="Получить расписание на точке")
-    kb.button(text="Получить своё расписание")
+    kb.button(text="Получить расписание своих смен")
     kb.button(text="Связь с администратором")
-    kb.button(text='Изменить желаемые точки')
-    kb.button(text='Изменить желаемые смены')
+    kb.button(text='Посмотреть желаемые точки')
+    kb.button(text='Посмотреть желаемые смены')
     kb.adjust(2)
     return kb.as_markup(resize_keyboard=True)
+
+
+def admins_list(token):
+    admins_buttons = InlineKeyboardBuilder()
+    all_admins = get_all_admins(token)
+    for i in all_admins:
+        admins_buttons.add(InlineKeyboardButton(
+            text=i,
+            callback_data=f"admins_{i}"
+        ))
+
+    # Располагаем все кнопки вертикально (по 1 в ряд)
+    admins_buttons.adjust(1)
+
+    return admins_buttons.as_markup(resize_keyboard=True)
 
 
 def points_list(all_points: list) -> InlineKeyboardMarkup:
@@ -43,32 +59,32 @@ def points_list_for_put_point(all_points: list) -> InlineKeyboardMarkup:
     return builder.as_markup(resize_keyboard=True)
 
 
-def days_list() -> InlineKeyboardMarkup:
-    builder = InlineKeyboardBuilder()
-
-    for i in range(len(DAYS)):
-        builder.add(InlineKeyboardButton(
-            text=DAYS_RU[i],
-            callback_data=f"put_day_{DAYS[i]}"
-        ))
-
-    # Располагаем все кнопки вертикально (по 2 в ряд)
-    builder.adjust(2)
-    return builder.as_markup(resize_keyboard=True)
-
-
-def days_list_delete() -> InlineKeyboardMarkup:
-    builder = InlineKeyboardBuilder()
-
-    for i in range(len(DAYS)):
-        builder.add(InlineKeyboardButton(
-            text=DAYS_RU[i],
-            callback_data=f"del_day_{DAYS[i]}"
-        ))
-
-    # Располагаем все кнопки вертикально (по 2 в ряд)
-    builder.adjust(2)
-    return builder.as_markup(resize_keyboard=True)
+# def days_list() -> InlineKeyboardMarkup:
+#     builder = InlineKeyboardBuilder()
+#
+#     for i in range(len(DAYS)):
+#         builder.add(InlineKeyboardButton(
+#             text=DAYS_RU[i],
+#             callback_data=f"put_day_{DAYS[i]}"
+#         ))
+#
+#     # Располагаем все кнопки вертикально (по 2 в ряд)
+#     builder.adjust(2)
+#     return builder.as_markup(resize_keyboard=True)
+#
+#
+# def days_list_delete() -> InlineKeyboardMarkup:
+#     builder = InlineKeyboardBuilder()
+#
+#     for i in range(len(DAYS)):
+#         builder.add(InlineKeyboardButton(
+#             text=DAYS_RU[i],
+#             callback_data=f"del_day_{DAYS[i]}"
+#         ))
+#
+#     # Располагаем все кнопки вертикально (по 2 в ряд)
+#     builder.adjust(2)
+#     return builder.as_markup(resize_keyboard=True)
 
 
 def points_list_delete(all_points: list) -> InlineKeyboardMarkup:

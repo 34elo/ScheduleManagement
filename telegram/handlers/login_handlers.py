@@ -18,9 +18,10 @@ class AuthWorker(StatesGroup):
 
 @login_router.message(CommandStart())
 async def start(message: Message, state: FSMContext):
-    token = await state.get_data()
+    data = await state.get_data()
+    token = data.get('token')
     if token:
-        await message.answer('Добрый день!', reply_markup=user_keyboards.main())
+        await message.answer(f'Добрый день!', reply_markup=user_keyboards.main())
     else:
         await state.set_state(AuthWorker.worker_code)
         await message.answer('Добрый день, введите код сотрудника, для дальнейшего пользования')
@@ -34,6 +35,6 @@ async def start(message: Message, state: FSMContext):
         await state.clear()
         await state.set_state(UserToken.token_state)
         await state.update_data(token=token)
-        await message.answer('Вы успешно авторизовались!', reply_markup=user_keyboards.main())
+        await message.answer(f'Вы успешно авторизовались!', reply_markup=user_keyboards.main())
     except Exception:
-        await message.answer('Вы ввели неправильный код работника')
+        await message.answer(f'Вы ввели неправильный код работника')
