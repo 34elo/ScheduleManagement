@@ -58,7 +58,7 @@ export default function ModalEditAccount({setOpen}) {
             </TextField>
             <TextField label='Телеграм' sx={{marginBottom: '10px'}} onChange={handleUsernameChange}>
             </TextField>
-            <Button variant="contained" onClick={handleButton} sx={{backgroundColor: '#c1c1c1', marginTop: '10px'}}>
+            <Button variant="contained" onClick={handleButton} sx={{backgroundColor: '#c1c1c1', marginTop: '10px', color: 'black'}}>
                 Изменить
             </Button>
         </Box>

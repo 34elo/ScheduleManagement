@@ -84,7 +84,7 @@ export default function GeneralReport() {
                 </ol>
 
                 <Button variant="contained" onClick={handleDownload}
-                        sx={{ backgroundColor: '#c1c1c1', marginLeft: '25px', borderRadius: '25px', color: 'white' }}>
+                        sx={{ backgroundColor: '#c1c1c1', marginLeft: '25px', borderRadius: '25px', color: 'black'}}>
                     Скачать отчет
                 </Button>
             </Box>

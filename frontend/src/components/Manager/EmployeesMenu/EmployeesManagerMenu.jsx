@@ -83,7 +83,7 @@ export default function EmployeesManagerMenu() {
                                               role='admin'
                                                 close={() => setOpen(false)}>
                                 <Button variant="contained" onClick={handleDeleteEmployee}
-                                        sx={{backgroundColor: '#c1c1c1', marginTop: '10px'}}>
+                                        sx={{backgroundColor: '#c1c1c1', marginTop: '10px', color: 'black'}}>
                                     Удалить сотрудника
                                 </Button>
                             </ModalAccountInfo>)

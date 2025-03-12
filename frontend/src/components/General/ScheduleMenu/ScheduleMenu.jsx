@@ -15,8 +15,10 @@ const styleBox = {
         transition: 'opacity 0.3s ease, transform 0.3s ease',
         opacity: 0.6,
         transform: 'scale(0.95)',
+        color: 'black',
+        overflow: 'scroll',
         '&.Mui-selected': {
-            backgroundColor: '#c1c1c1', color: 'black', borderRadius: "20px", opacity: 1, transform: 'scale(1)'
+            backgroundColor: '#c1c1c1', borderRadius: "20px", opacity: 1, transform: 'scale(1)'
         },
     },
 };
@@ -83,7 +85,7 @@ export default function ScheduleMenu({admin}) {
     }
 
     function handleButton() {
-        axios.put(`${API_URL}/admin/schedule/generating`,{}, {
+        axios.put(`${API_URL}/admin/schedule/generating`, {}, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
@@ -95,10 +97,15 @@ export default function ScheduleMenu({admin}) {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
     return (<>
-        <Box sx={{justifyContent: 'space-between', flexGrow: 1, display: 'flex'}}>
+        <Box sx={{justifyContent: 'space-between', flexGrow: 1, display: 'flex', overflow: 'scroll'}}>
             <h1 style={{paddingBottom: '20px', margin: 0}}>Расписание
                 {admin && <Button variant="contained" onClick={handleButton}
-                                  sx={{backgroundColor: '#c1c1c1', marginLeft: '25px', borderRadius: '25px', color: 'white'}}>
+                                  sx={{
+                                      backgroundColor: '#c1c1c1',
+                                      marginLeft: '25px',
+                                      borderRadius: '25px',
+                                      color: 'black'
+                                  }}>
                     Сформировать
                 </Button>}
             </h1>
@@ -116,7 +123,7 @@ export default function ScheduleMenu({admin}) {
         >
             <ModalEditSchedule setOpen={setOpen} selectedPoint={selectedPoint}></ModalEditSchedule>
         </Modal>
-        <Box sx={{flexGrow: 1, backgroundColor: 'white', display: 'flex', minHeight: 224,}}>
+        <Box sx={{flexGrow: 1, backgroundColor: 'white', display: 'flex', minHeight: 224, overflow: 'scroll'}}>
             <TabContext value={value}>
                 <Box sx={styleBox}>
                     <TabList
@@ -125,9 +132,8 @@ export default function ScheduleMenu({admin}) {
                         indicatorColor="transparent"
                         color='transparent'
                         textColor="primary"
-                        style={{maxWidth: '250px', height: '600px'}}
+                        style={{maxWidth: '270px', height: '600px', overflow: 'auto'}}
                     >
-                        {/* Проверяем, что data является массивом перед вызовом map */}
                         {Array.isArray(data) && data.map((tab) => (
                             <Tab key={tab.id}
                                  label={(tab.point === selectedPoint) && (admin) ?
@@ -135,9 +141,10 @@ export default function ScheduleMenu({admin}) {
                                          display: "flex",
                                          direction: 'row',
                                          justifyContent: 'center',
-                                         alignItems: 'center'
+                                         alignItems: 'center',
+                                         color: 'black',
                                      }}>
-                                         {tab.point}
+                                         {tab.point.replace('_', ' ')}
                                          <IconButton
                                              aria-label="edit" onClick={handleOpen}
                                              sx={{marginLeft: '10px', maxHeight: '22px', maxWidth: '22px'}}>
@@ -145,7 +152,7 @@ export default function ScheduleMenu({admin}) {
                                          </IconButton>
                                      </div>
                                      :
-                                     tab.point}
+                                     tab.point.replace('_', ' ')}
                                  value={tab.id}/>))}
                     </TabList>
                 </Box>
