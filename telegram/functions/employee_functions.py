@@ -1,7 +1,17 @@
 import requests
-from telegram.constans import SERVER, PORT
+from telegram.constants import SERVER, PORT
 
 test_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJuYW1lIjoiXHUwNDFmXHUwNDM1XHUwNDQyXHUwNDQwIFx1MDQxY1x1MDQzMFx1MDQzYVx1MDQ0MVx1MDQzOFx1MDQzY1x1MDQzZVx1MDQzMlx1MDQzOFx1MDQ0NyBcdTA0MTBcdTA0NDFcdTA0NDJcdTA0MzBcdTA0NDRcdTA0NGNcdTA0MzVcdTA0MzIiLCJyb2xlIjoiXHUwNDIxXHUwNDNlXHUwNDQyXHUwNDQwXHUwNDQzXHUwNDM0XHUwNDNkXHUwNDM4XHUwNDNhIiwiY29kZSI6InBhc3N3MSIsImV4cCI6MTc0MjIzMzQ4NX0.iq6Okk2j5JUG8dWz5kQJAL4Rd2dQvnJvZ2030VYfMcE'
+
+
+def employe_auth(code):
+    url = f'http://{SERVER}:{PORT}/api/login?input_code={code}'
+    request = requests.get(url).json()
+    token = request['token']
+    return token
+
+
+employe_auth('passw1')
 
 
 def get_my_schedule_by_token(token):
