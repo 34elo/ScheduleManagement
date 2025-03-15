@@ -3,17 +3,13 @@ from aiogram.types import Message
 from aiogram.filters.command import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-
-from database_functions.login_functions import check_worker_code, put_data, check_admin_code
-from telegram.keyboards import admin_keyboards, user_keyboards, login_keyboards
+from telegram.handlers.user_handlers import UserToken
+from telegram.functions.employee_functions import employe_auth
+from telegram.keyboards import user_keyboards
 
 login_router = Router()
 
 path_to_database_users = '../data/users_data.sqlite'
-
-
-class AuthAdmin(StatesGroup):
-    admin_code = State()
 
 
 class AuthWorker(StatesGroup):
@@ -21,42 +17,24 @@ class AuthWorker(StatesGroup):
 
 
 @login_router.message(CommandStart())
-async def start(message: Message):
-    await message.answer(
-        'Вам нужно авторизоваться, выберите вашу роль:',
-        reply_markup=login_keyboards.main())
-
-
-@login_router.message(F.text == 'Сотрудник')
-async def message_with_text(message: Message, state: FSMContext):
-    await message.answer("Введите пароль сотрудника")
-    await state.set_state(AuthWorker.worker_code)
-
-
-@login_router.message(F.text == 'Администратор')
-async def message_with_text(message: Message, state: FSMContext):
-    await message.answer("Введите пароль администратора")
-    await state.set_state(AuthAdmin.admin_code)
+async def start(message: Message, state: FSMContext):
+    data = await state.get_data()
+    token = data.get('token')
+    if token:
+        await message.answer(f'Добрый день!', reply_markup=user_keyboards.main())
+    else:
+        await state.set_state(AuthWorker.worker_code)
+        await message.answer('Добрый день, введите код сотрудника, для дальнейшего пользования')
 
 
 @login_router.message(AuthWorker.worker_code)
-async def message_with_text(message: Message, state: FSMContext):
-    if check_worker_code(message.text, path_to_database_users):
+async def start(message: Message, state: FSMContext):
+    try:
+        code = message.text
+        token = employe_auth(code)
         await state.clear()
-        await message.answer('Вы успешно авторизовались', reply_markup=user_keyboards.main())
-        put_data(message.from_user.id, message.text, 'Сотрудник', path_to_database_users)
-    else:
-        await message.answer('Данные неверны, Попробуйте снова')
-        await state.set_state(AuthWorker.worker_code)
-
-
-@login_router.message(AuthAdmin.admin_code)
-async def message_with_text(message: Message, state: FSMContext):
-    if check_admin_code(message.text, path_to_database_users):
-        await state.clear()
-        await message.answer('Вы успешно авторизовались', reply_markup=admin_keyboards.main())
-        put_data(message.from_user.id, message.text, 'Администратор', path_to_database_users)
-
-    else:
-        await message.answer('Данные неверны, Попробуйте снова')
-        await state.set_state(AuthAdmin.admin_code)
+        await state.set_state(UserToken.token_state)
+        await state.update_data(token=token)
+        await message.answer(f'Вы успешно авторизовались!', reply_markup=user_keyboards.main())
+    except Exception:
+        await message.answer(f'Вы ввели неправильный код работника')

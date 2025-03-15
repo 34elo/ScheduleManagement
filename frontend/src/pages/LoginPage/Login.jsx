@@ -61,7 +61,7 @@ export default function LoginPage() {
                     helperText={error}
                     sx={{marginBottom: 2, width: '300px'}}
                 />
-                <Button variant="contained" onClick={handleLogin} sx={{backgroundColor: '#c1c1c1'}}>
+                <Button variant="contained" onClick={handleLogin} sx={{backgroundColor: '#c1c1c1', color: 'black'}}>
                     Войти
                 </Button>
             </Box>
