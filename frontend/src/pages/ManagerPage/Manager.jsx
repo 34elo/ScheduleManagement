@@ -76,7 +76,7 @@ export default function ManagerPage() {
                             sx={stylesTabList}
                         >
                             <Tab label="Расписание" value="1" style={{marginRight: '15px', borderRadius: '25px'}}/>
-                            <Tab label="Отчеты" value="2" style={{marginRight: '15px', borderRadius: '25px'}}/>
+                            <Tab label="Отчёты" value="2" style={{marginRight: '15px', borderRadius: '25px'}}/>
                             <Tab label="Сотрудники" value="3" style={{marginRight: '15px', borderRadius: '25px'}}/>
                             <Tab label="Личный кабинет" value="4" style={{borderRadius: '25px'}}/>
                         </TabList>
@@ -108,7 +108,7 @@ export default function ManagerPage() {
                                     <ModalEditAccount setOpen={setOpen}></ModalEditAccount>
                                 </Modal>
                                 <Button variant='contained'
-                                        style={{marginTop: '10px', backgroundColor: 'black', color: 'white', borderRadius: '10px'}}
+                                        style={{marginTop: '10px', backgroundColor: 'black', borderRadius: '10px'}}
                                         onClick={() => setOpen(true)}>
                                     Редактировать
                                 </Button>
