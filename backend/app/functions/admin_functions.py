@@ -252,7 +252,6 @@ def create_point_report(point, date1, date2) -> None:
     """Создаёт отчёт по точке
        date в формате YYYY-MM-DD
     """
-    import shutil
     from app.functions.reports_functions import create_point_report_func
 
     if __name__ == '__main__':
@@ -264,7 +263,7 @@ def create_point_report(point, date1, date2) -> None:
 
     point_wishes = data_cursor.execute(f'''SELECT full_name, point_wishes
                                            FROM "employees_passwords"''').fetchall()
-    people_who_wish = [full_name for full_name, wishes in point_wishes if point in wishes.split(';')]
+    people_who_wish = [full_name for full_name, wishes in point_wishes if wishes and point in wishes.split(';')]
 
     schedule = data_cursor.execute(f'''SELECT "{point}"
                                        FROM schedule
@@ -280,7 +279,7 @@ def create_point_report(point, date1, date2) -> None:
     delta = date2 - date1
     days_difference = delta.days
     days_off = days_difference - working_days + 1
-    create_point_report_func(
+    file = create_point_report_func(
         filename="point_report.docx",
         point=point,
         people_who_wish=people_who_wish,
@@ -289,6 +288,8 @@ def create_point_report(point, date1, date2) -> None:
         working_days=working_days,
         days_off=days_off
     )
+
+    return file
 
 
 def create_general_report(date1, date2) -> None:

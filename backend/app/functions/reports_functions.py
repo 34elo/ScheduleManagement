@@ -213,7 +213,11 @@ def create_point_report_func(filename, point, people_who_wish, people_who_work, 
     paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
     plt.close(fig)  # Закрываем фигуру, чтобы освободить память
 
-    doc.save(filename)
+    file_stream = BytesIO()
+    doc.save(file_stream)
+    file_stream.seek(0)
+
+    return file_stream
 
 
 def create_general_report_func(most_hardworking_employee, least_hardworking_employee, top_points, worst_points, period):

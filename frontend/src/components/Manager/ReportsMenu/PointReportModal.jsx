@@ -9,30 +9,29 @@ import dayjs from "dayjs";
 import axios from "axios";
 import { API_URL } from "../../../API_URL.js";
 
-export default function EmployeeReportModal({ open, onClose }) {
+export default function PointReportModal({ open, onClose }) {
     const [startDate, setStartDate] = useState(dayjs());
     const [endDate, setEndDate] = useState(dayjs().add(1, 'day'));
-    const [employees, setEmployees] = useState([]);
-    const [selectedEmployee, setSelectedEmployee] = useState('');
+    const [points, setPoints] = useState([]);
+    const [selectedPoint, setSelectedPoint] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Загрузка списка сотрудников
+    // Загрузка списка точек
     useEffect(() => {
-        const fetchEmployees = async () => {
+        const fetchPoints = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get(`${API_URL}/admin/employees/`, {
+                const response = await axios.get(`${API_URL}/points/`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                const data = response.data.employees.map(emp => typeof emp === 'string' ? emp : emp.name);
-                setEmployees(data);
+                setPoints(response.data || []);
             } catch (err) {
-                console.error("Ошибка при загрузке сотрудников:", err);
-                setError("Не удалось загрузить список сотрудников.");
+                console.error("Ошибка при загрузке точек:", err);
+                setError("Не удалось загрузить список точек.");
             }
         };
-        fetchEmployees();
+        fetchPoints();
     }, []);
 
     // Функция для скачивания отчёта
@@ -42,8 +41,8 @@ export default function EmployeeReportModal({ open, onClose }) {
             return;
         }
 
-        if (!selectedEmployee) {
-            setError("Выберите сотрудника!");
+        if (!selectedPoint) {
+            setError("Выберите точку!");
             return;
         }
 
@@ -56,7 +55,7 @@ export default function EmployeeReportModal({ open, onClose }) {
             const date2 = endDate.format("YYYY-MM-DD");
 
             // Выполняем запрос на сервер для скачивания файла
-            const response = await axios.get(`${API_URL}/admin/report/employee/download?date1=${date1}&date2=${date2}&employee=${selectedEmployee}`, {
+            const response = await axios.get(`${API_URL}/admin/report/point/download?date1=${date1}&date2=${date2}&point=${selectedPoint}`, {
                 responseType: 'blob', // Указываем, что ожидаем файл в виде blob
                 headers: {
                     "Content-Type": "application/json",
@@ -68,7 +67,7 @@ export default function EmployeeReportModal({ open, onClose }) {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const a = document.createElement("a");
             a.href = url;
-            a.download = `employee_report_${date1}_to_${date2}.docx`; // Имя файла для скачивания
+            a.download = `point_report_${selectedPoint}_${date1}_to_${date2}.docx`; // Имя файла для скачивания
             document.body.appendChild(a);
             a.click(); // Симулируем клик для начала скачивания
             document.body.removeChild(a); // Убираем ссылку после скачивания
@@ -113,7 +112,7 @@ export default function EmployeeReportModal({ open, onClose }) {
             </IconButton>
 
             <Typography id="modal-modal-title" variant="h5" component="h2">
-                Выберите диапазон дат и сотрудника
+                Выберите диапазон дат и точку
             </Typography>
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -123,6 +122,8 @@ export default function EmployeeReportModal({ open, onClose }) {
                             value={startDate}
                             onChange={(newValue) => setStartDate(newValue)}
                             format="MM/DD/YYYY"
+                            minDate={dayjs()}
+                            maxDate={dayjs().add(30, 'day')}
                             views={['year', 'month', 'day']}
                         />
                     </DemoItem>
@@ -132,27 +133,28 @@ export default function EmployeeReportModal({ open, onClose }) {
                             onChange={(newValue) => setEndDate(newValue)}
                             format="MM/DD/YYYY"
                             minDate={startDate} // Минимальная дата — выбранная начальная дата
+                            maxDate={dayjs().add(30, 'day')}
                             views={['year', 'month', 'day']}
                         />
                     </DemoItem>
                 </DemoContainer>
             </LocalizationProvider>
 
-            {/* Выбор сотрудника */}
+            {/* Выбор точки */}
             <FormControl fullWidth sx={{ marginTop: '10px' }}>
-                <InputLabel id="employee-select-label">Сотрудник</InputLabel>
+                <InputLabel id="point-select-label">Точка</InputLabel>
                 <Select
-                    labelId="employee-select-label"
-                    id="employee-select"
-                    value={selectedEmployee}
-                    onChange={(e) => setSelectedEmployee(e.target.value)}
+                    labelId="point-select-label"
+                    id="point-select"
+                    value={selectedPoint}
+                    onChange={(e) => setSelectedPoint(e.target.value)}
                     autoWidth
-                    label="Сотрудник"
+                    label="Точка"
                     required
                 >
-                    {employees.map((item, index) => (
-                        <MenuItem value={item} key={index}>
-                            {item}
+                    {points.map((point, index) => (
+                        <MenuItem value={point} key={index}>
+                            {point}
                         </MenuItem>
                     ))}
                 </Select>
