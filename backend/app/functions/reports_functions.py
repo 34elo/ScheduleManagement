@@ -1,5 +1,7 @@
 from io import BytesIO
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt, RGBColor, Inches
@@ -90,6 +92,7 @@ def create_employee_report_func(filename, full_name, age, contact_info, role, pe
         f"За указанный период сотрудник работал {round(working_days / (working_days + days_off) * 100, 1)}% времени"
     ).bold = True
 
+    plt.ioff()
     fig, ax = plt.subplots()
     categories = ['Рабочие дни', 'Выходные дни']
     values = [working_days, days_off]
@@ -107,7 +110,12 @@ def create_employee_report_func(filename, full_name, age, contact_info, role, pe
     paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
     plt.close(fig)  # Закрываем фигуру, чтобы освободить память
 
-    doc.save(filename)
+    file_stream = BytesIO()
+    doc.save(file_stream)
+    file_stream.seek(0)
+
+    return file_stream
+
 
 
 def create_point_report_func(filename, point, people_who_wish, people_who_work, period, working_days, days_off):

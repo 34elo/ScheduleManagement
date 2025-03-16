@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 from starlette.responses import StreamingResponse
 
 from app.functions.admin_functions import get_employee_contact, get_employees_names, create_employee, get_all_chats_ids, \
-    send_notification_by_names, delete_employee, change_schedule, generate_schedule, get_general_report
+    send_notification_by_names, delete_employee, change_schedule, generate_schedule, get_general_report, create_employee_report
 from app.functions.reports_functions import create_general_report_func
 from app.routers.utils import get_current_user
 
@@ -135,4 +135,15 @@ def download_report(date1: str, date2: str):
         file_stream,
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         headers={"Content-Disposition": "attachment; filename=general_report.docx"}
+    )
+
+
+@admin_router.get('/report/employee/download')
+def download_employee_report(date1: str, date2: str, employee: str):
+    file_stream = create_employee_report(employee, date1, date2)
+
+    return StreamingResponse(
+        file_stream,
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers={"Content-Disposition": f"attachment; filename=employee_report.docx"}
     )
