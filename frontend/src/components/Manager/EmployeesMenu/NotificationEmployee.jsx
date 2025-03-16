@@ -44,7 +44,7 @@ export default function NotificationEmployee({cards}) {
             justifyContent: 'center', // Центрируем по вертикали
 
         }}>
-            <h2 style={{margin: 0, marginTop: '10px', marginBottom: '10px'}}>Уведомления</h2>
+            <h2 style={{margin: 0, marginBottom: '10px'}}>Уведомления</h2>
             <TextField
                 sx={{
                     maxWidth: '90%', width: '250px',
@@ -82,7 +82,7 @@ export default function NotificationEmployee({cards}) {
                 </Select>
             </FormControl>
             <Button variant="contained" onClick={sendNotification}
-                    sx={{backgroundColor: '#c1c1c1', marginBottom: '10px', color: 'black'}}>
+                    sx={{backgroundColor: 'black', marginBottom: '20px', color: 'white', borderRadius: '25px'}}>
                 Отправить
             </Button>
         </Box>

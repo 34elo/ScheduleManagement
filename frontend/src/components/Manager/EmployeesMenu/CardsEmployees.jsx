@@ -23,58 +23,63 @@ export default function CardsEmployees({cards, selectedCard, setSelectedCard, se
             <Box
                 sx={{
                     width: "100%",
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(min(100px, 100%), 1fr))",
-                    gap: 2,
+                    display: "flex",
+                    flexDirection: "column", // Элементы выстраиваются вертикально
+                    gap: 1, // Отступ между элементами
                 }}
             >
-                {cards.map((card) => (<Card key={card.id} sx={{borderRadius: "20px", boxShadow: "none",}}>
+                {cards.map((card) => (
+                    <Card
+                        key={card.id}
+                        sx={{
+                            borderRadius: "10px", // Скругление углов
+                            boxShadow: "none", // Убираем тень
+                            width: "100%", // Ширина на всю доступную ширину
+                            "&:hover": {
+                                backgroundColor: "action.hover", // Цвет фона при наведении
+                            },
+                        }}
+                    >
                         <CardActionArea
                             onClick={() => handleInfoCard(card.id)}
                             data-active={selectedCard === card.id ? "" : undefined}
                             sx={{
-                                height: "100%", "&[data-active]": {
-                                    backgroundColor: "action.selected", "&:hover": {
-                                        backgroundColor: "action.selectedHover",
-                                    },
-                                },
+                                width: "100%",
                             }}
                         >
-                            <CardContent sx={{height: "100%"}}>
-                                <Typography>{card.title}</Typography>
+                            <CardContent sx={{ padding: 2 }}> {/* Отступы внутри карточки */}
+                                <Typography variant="body1">{card.title}</Typography> {/* Текст карточки */}
                             </CardContent>
                         </CardActionArea>
-                    </Card>))}
+                    </Card>
+                ))}
+
+                {/* Кнопка добавления сотрудника */}
                 <Card
                     sx={{
-                        borderRadius: "20px",
-                        width: "70px",
-                        height: "70px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        transition: "background-color 0.3s ease",
+                        borderRadius: "10px",
                         boxShadow: "none",
+                        width: "100%",
+                        "&:hover": {
+                            backgroundColor: "action.hover",
+                        },
                     }}
                 >
                     <CardActionArea
                         onClick={handleAddEmployee}
                         data-active={selectedCard === -1 ? "" : undefined}
                         sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
                             width: "100%",
-                            height: "100%",
                             "&[data-active]": {
-                                backgroundColor: "action.selected", "&:hover": {
+                                backgroundColor: "action.selected",
+                                "&:hover": {
                                     backgroundColor: "action.selectedHover",
                                 },
                             },
                         }}
                     >
-                        <CardContent sx={{display: "flex", justifyContent: "center", alignItems: "center", padding: 0}}>
-                            <AddIcon sx={{fontSize: 46, color: "black", opacity: 0.7}}/>
+                        <CardContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", padding: 2 }}>
+                            <AddIcon sx={{ fontSize: 24, color: "black", opacity: 0.7 }} /> {/* Иконка добавления */}
                         </CardContent>
                     </CardActionArea>
                 </Card>

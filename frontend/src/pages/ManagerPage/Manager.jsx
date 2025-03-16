@@ -108,7 +108,7 @@ export default function ManagerPage() {
                                     <ModalEditAccount setOpen={setOpen}></ModalEditAccount>
                                 </Modal>
                                 <Button variant='contained'
-                                        style={{marginTop: '10px', backgroundColor: 'black', borderRadius: '10px'}}
+                                        style={{backgroundColor: 'black', borderRadius: '25px', width: '30%'}}
                                         onClick={() => setOpen(true)}>
                                     Редактировать
                                 </Button>

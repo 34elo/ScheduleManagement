@@ -1,6 +1,6 @@
-import {Box} from "@mui/system";
-import {Button, TextField, Typography} from "@mui/material";
-import AccountInfo from "./AccountInfo.jsx";
+import { Box, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close"; // Импортируем иконку закрытия
+import AccountInfo from "./AccountInfo.jsx"; // Предполагаем, что AccountInfo — это ваш компонент
 
 const styleModal = {
     position: 'absolute',
@@ -8,25 +8,36 @@ const styleModal = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     maxWidth: '400px',
-    minWidth: '100px',
+    minWidth: '300px',
     backgroundColor: 'white',
     borderRadius: "20px",
     boxShadow: 24,
     p: 4,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    maxHeight: '100vh',
-    overflow: 'scroll',
 };
 
-export default function ModalAccountInfo({children, name, label, role, close}) {
+export default function ModalAccountInfo({ children, name, label, role, close }) {
     console.log("ModalAccountInfo");
-    return (<Box sx={styleModal}>
+
+    return (
+        <Box sx={styleModal}>
+            {/* Кнопка закрытия (крестик) */}
+            <IconButton
+                aria-label="close"
+                onClick={close}
+                sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: 8,
+                    color: (theme) => theme.palette.grey[500], // Серый цвет для крестика
+                }}
+            >
+                <CloseIcon />
+            </IconButton>
+
+            {/* Основное содержимое модального окна */}
             <AccountInfo name={name} label={label} role={role}>
                 {children}
             </AccountInfo>
-            <Button style={{color: 'black'}} onClick={close}>Назад</Button>
-        </Box>)
+        </Box>
+    );
 }

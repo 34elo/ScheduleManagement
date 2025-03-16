@@ -1,5 +1,5 @@
-import {Box} from "@mui/system";
-import {Button, TextField, Typography} from "@mui/material";
+import { Box, Button, TextField, Typography, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close"; // Импортируем иконку закрытия
 import {useState} from "react";
 import axios from "axios";
 import {API_URL} from "../../../API_URL.js";
@@ -51,14 +51,51 @@ export default function ModalEditAccount({setOpen}) {
 
     return (
         <Box sx={styleModal}>
-            <Typography id="modal-modal-title" variant="h5" component="h2" sx={{marginBottom: '10px'}}>
+            {/* Кнопка закрытия (крестик) */}
+            <IconButton
+                aria-label="close"
+                onClick={() => setOpen(false)} // Закрываем модальное окно
+                sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: 8,
+                    color: (theme) => theme.palette.grey[500], // Серый цвет для крестика
+                }}
+            >
+                <CloseIcon />
+            </IconButton>
+
+            {/* Заголовок модального окна */}
+            <Typography id="modal-modal-title" variant="h5" component="h2" sx={{ marginBottom: '20px', marginTop: '20px'}}>
                 Изменить информацию
             </Typography>
-            <TextField label='Номер телефона' onChange={handleContactChange} sx={{marginBottom: '10px'}}>
-            </TextField>
-            <TextField label='Телеграм' sx={{marginBottom: '10px'}} onChange={handleUsernameChange}>
-            </TextField>
-            <Button variant="contained" onClick={handleButton} sx={{backgroundColor: '#c1c1c1', marginTop: '10px', color: 'black'}}>
+
+            {/* Поле для ввода номера телефона */}
+            <TextField
+                label="Номер телефона"
+                onChange={handleContactChange}
+                sx={{ marginBottom: '10px', width: '100%' }}
+            />
+
+            {/* Поле для ввода телеграма */}
+            <TextField
+                label="Телеграм"
+                onChange={handleUsernameChange}
+                sx={{ marginBottom: '10px', width: '100%' }}
+            />
+
+            {/* Кнопка "Изменить" */}
+            <Button
+                variant="contained"
+                onClick={handleButton}
+                sx={{
+                    backgroundColor: 'black',
+                    marginTop: '10px',
+                    color: 'white',
+                    borderRadius: '25px',
+                    width: '100%',
+                }}
+            >
                 Изменить
             </Button>
         </Box>

@@ -9,7 +9,7 @@ export default function LogoutButton() {
 
     return (
         <Button variant='contained'
-                style={{margin: '10px', backgroundColor: 'black', color: 'white', borderRadius: '10px'}}
+                style={{backgroundColor: 'black', color: 'white', borderRadius: '25px', width:"30%"}}
                 onClick={logOut}>
             Выйти из системы
         </Button>

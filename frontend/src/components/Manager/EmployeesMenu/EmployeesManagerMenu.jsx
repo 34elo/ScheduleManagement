@@ -79,11 +79,13 @@ export default function EmployeesManagerMenu() {
                 {addEmployeeCards ? <ModalAddEmployee setOpen={setOpen}/>
                     : selectedCard !== null ? (
                             <ModalAccountInfo name={cards.find(card => card.id === selectedCard)?.title || "Неизвестный"}
-                                              label='Подробная ифнормация'
+                                              label='Подробная информация'
                                               role='admin'
                                                 close={() => setOpen(false)}>
                                 <Button variant="contained" onClick={handleDeleteEmployee}
-                                        sx={{backgroundColor: '#c1c1c1', marginTop: '10px', color: 'black'}}>
+                                        sx={{backgroundColor: 'black', marginTop: '10px', color: 'white', borderRadius: '25px',
+                                            width: '100%'
+                                        }}>
                                     Удалить сотрудника
                                 </Button>
                             </ModalAccountInfo>)
