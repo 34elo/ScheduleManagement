@@ -71,26 +71,22 @@ export default function MyWishes(props) {
             flexDirection: 'column', // Располагаем элементы друг под другом
             alignItems: 'center', // Центрируем по горизонтали
             justifyContent: 'center', // Центрируем по вертикали
-
         }}>
             <h2 style={{margin: 0, marginTop: '10px'}}>Моя информация</h2>
             <h4 style={{margin: '2px'}}>Мои желаемые адреса:</h4>
             <p style={{margin: '2px'}}>{address.join(', ')}</p>
             <h4 style={{margin: '2px'}}>Мои желаемые дни:</h4>
             <p style={{margin: '2px'}}>{days.join(', ')}</p>
-            <h2 style={{margin: 0, marginTop: '10px'}}>Хотите изменить?</h2>
+            <h2 style={{margin: '10px', marginTop: '10px'}}>Хотите изменить?</h2>
 
             <SelectAny setSelected={setSelectedAddress} MyArray={addresses} label='Адрес'
                        selectAnything={selectedAddress}></SelectAny>
             <SelectAny setSelected={setSelectedDays}
                        MyArray={['ПН', 'ВТ', "СР", "ЧТ", "ПТ", "СБ", "ВС"]}
                        selectAnything={selectedDays} label='День'></SelectAny>
-            <Button variant="contained" onClick={handleChange} sx={{backgroundColor: '#c1c1c1', color: 'black'}}>
+            <Button variant="contained" onClick={handleChange} sx={{marginTop: '10px', backgroundColor: 'black', color: 'white', borderRadius: '25px'}}>
                 Изменить
             </Button>
-            <p style={{color: 'gray', fontStyle: 'italic', margin: 'auto', fontSize: '12px', marginTop: '15px'}}>При
-                необходимости вы можете удалить свои желаемые точки, для этого вам требуется нажать кнопку изменить,
-                оставив поля пустыми</p>
         </Box>
     </>)
 }

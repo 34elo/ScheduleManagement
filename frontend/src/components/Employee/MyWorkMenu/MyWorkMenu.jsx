@@ -29,6 +29,7 @@ export default function MyWorkMenu(props) {
                 gap: "20px",
                 bgcolor: "#f1f1f1",
                 borderRadius: "20px",
+                minHeight: '500px'
             }}>
                 <MyWishes></MyWishes>
             </Box>

@@ -86,7 +86,7 @@ export default function Employee() {
                         </TabPanel>
 
                         <TabPanel value="2" style={{padding: 0}}>
-                            <MyWorkMenu></MyWorkMenu>
+                            <MyWorkMenu height= '500px'></MyWorkMenu>
                         </TabPanel>
 
                         <TabPanel value="3" style={{padding: 0}}>
@@ -108,7 +108,8 @@ export default function Employee() {
                                             marginTop: '10px',
                                             backgroundColor: 'black',
                                             color: 'white',
-                                            borderRadius: '10px'
+                                            borderRadius: '25px',
+                                            width: '30%'
                                         }}
                                         onClick={() => setOpen(true)}>
                                     Редактировать
