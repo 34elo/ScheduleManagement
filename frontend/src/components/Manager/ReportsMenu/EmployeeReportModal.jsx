@@ -11,7 +11,7 @@ import { API_URL } from "../../../API_URL.js";
 
 export default function EmployeeReportModal({ open, onClose }) {
     const [startDate, setStartDate] = useState(dayjs());
-    const [endDate, setEndDate] = useState(dayjs().add(1, 'day'));
+    const [endDate, setEndDate] = useState(dayjs());
     const [employees, setEmployees] = useState([]);
     const [selectedEmployee, setSelectedEmployee] = useState('');
     const [loading, setLoading] = useState(false);
@@ -123,6 +123,7 @@ export default function EmployeeReportModal({ open, onClose }) {
                             value={startDate}
                             onChange={(newValue) => setStartDate(newValue)}
                             format="MM/DD/YYYY"
+                            maxDate={dayjs()}
                             views={['year', 'month', 'day']}
                         />
                     </DemoItem>
@@ -132,6 +133,7 @@ export default function EmployeeReportModal({ open, onClose }) {
                             onChange={(newValue) => setEndDate(newValue)}
                             format="MM/DD/YYYY"
                             minDate={startDate} // Минимальная дата — выбранная начальная дата
+                            maxDate={dayjs()}
                             views={['year', 'month', 'day']}
                         />
                     </DemoItem>

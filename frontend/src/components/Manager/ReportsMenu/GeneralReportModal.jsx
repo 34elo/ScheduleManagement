@@ -11,7 +11,7 @@ import { API_URL } from "../../../API_URL.js";
 
 export default function GeneralReportModal({ open, onClose }) {
     const [startDate, setStartDate] = useState(dayjs());
-    const [endDate, setEndDate] = useState(dayjs().add(1, 'day'));
+    const [endDate, setEndDate] = useState(dayjs());
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -98,6 +98,7 @@ export default function GeneralReportModal({ open, onClose }) {
                             value={startDate}
                             onChange={(newValue) => setStartDate(newValue)}
                             format="MM/DD/YYYY"
+                            maxDate={dayjs()}
                             views={['year', 'month', 'day']}
                         />
                     </DemoItem>
@@ -106,7 +107,8 @@ export default function GeneralReportModal({ open, onClose }) {
                             value={endDate}
                             onChange={(newValue) => setEndDate(newValue)}
                             format="MM/DD/YYYY"
-                            minDate={startDate}
+                            minDate={startDate} // Минимальная дата — выбранная начальная дата
+                            maxDate={dayjs()}
                             views={['year', 'month', 'day']}
                         />
                     </DemoItem>

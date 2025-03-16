@@ -11,7 +11,7 @@ import { API_URL } from "../../../API_URL.js";
 
 export default function PointReportModal({ open, onClose }) {
     const [startDate, setStartDate] = useState(dayjs());
-    const [endDate, setEndDate] = useState(dayjs().add(1, 'day'));
+    const [endDate, setEndDate] = useState(dayjs());
     const [points, setPoints] = useState([]);
     const [selectedPoint, setSelectedPoint] = useState('');
     const [loading, setLoading] = useState(false);
@@ -122,8 +122,7 @@ export default function PointReportModal({ open, onClose }) {
                             value={startDate}
                             onChange={(newValue) => setStartDate(newValue)}
                             format="MM/DD/YYYY"
-                            minDate={dayjs()}
-                            maxDate={dayjs().add(30, 'day')}
+                            maxDate={dayjs()}
                             views={['year', 'month', 'day']}
                         />
                     </DemoItem>
@@ -133,7 +132,7 @@ export default function PointReportModal({ open, onClose }) {
                             onChange={(newValue) => setEndDate(newValue)}
                             format="MM/DD/YYYY"
                             minDate={startDate} // Минимальная дата — выбранная начальная дата
-                            maxDate={dayjs().add(30, 'day')}
+                            maxDate={dayjs()}
                             views={['year', 'month', 'day']}
                         />
                     </DemoItem>
