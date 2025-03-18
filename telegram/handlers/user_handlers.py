@@ -6,7 +6,7 @@ from telegram.constants import POINTS
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from telegram.functions.employee_functions import get_my_schedule_by_token, get_admin_by_name, get_point_wishes, \
-    get_day_wishes
+    get_day_wishes, get_shedule_point
 
 user_router = Router()
 path_to_database_users = '../data/users_data.sqlite'
@@ -111,3 +111,26 @@ async def get_my_point_wishes(message: Message, state: FSMContext) -> None:
     text = 'Вот ваши желаемые точки:\n' + '\n'.join(day_wishes)
 
     await message.answer(text, reply_markup=user_keyboards.main())
+
+@user_router.message(F.text == "Получить расписание на точке")
+async def get_my_point_wishes(message: Message, state: FSMContext) -> None:
+    """
+    Отправляет сообщение с желаемыми точками
+    """
+
+    data = await state.get_data()
+    token = data.get('token')
+    day_wishes = get_point_wishes(token)
+    text = 'Выберите точку у которой хотите посмотреть расписание'
+
+    await message.answer(text, reply_markup=user_keyboards.points_list(POINTS))
+
+
+@user_router.callback_query(F.data[:12] == 'get_schedule')
+async def get_schedule_point_callback(callback: CallbackQuery, state: FSMContext) -> None:
+    data = await state.get_data()
+    token = data.get('token')
+    point = callback.data[12:]
+    period = 'week'
+    text = get_shedule_point(point, token, period)
+    await callback.message.answer(text, reply_markup=user_keyboards.main())

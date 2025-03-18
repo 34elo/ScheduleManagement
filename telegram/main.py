@@ -2,7 +2,7 @@ import asyncio
 import logging
 from aiogram import Bot, Dispatcher
 from config import config
-from telegram.handlers.admin_handlers import admin_router
+
 from telegram.handlers.login_handlers import login_router
 from telegram.handlers.user_handlers import user_router
 
@@ -12,8 +12,7 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(token=config.bot_token.get_secret_value())
 # Диспетчер
 dp = Dispatcher()
-
-dp.include_routers(admin_router, login_router, user_router)
+dp.include_routers(login_router, user_router)
 
 
 async def main():

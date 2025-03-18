@@ -11,7 +11,7 @@ def main() -> ReplyKeyboardMarkup:
     kb.button(text="Получить расписание своих смен")
     kb.button(text="Связь с администратором")
     kb.button(text='Посмотреть желаемые точки')
-    kb.button(text='Посмотреть желаемые смены')
+    kb.button(text='Посмотреть желаемые рабочие дни')
     kb.adjust(2)
     return kb.as_markup(resize_keyboard=True)
 

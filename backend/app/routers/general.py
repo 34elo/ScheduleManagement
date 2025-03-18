@@ -34,6 +34,22 @@ def schedule(
     return {'data': schedule_data}
 
 
+@general_router.get("/schedule/{point}", summary='Возвращает расписание всех точек')
+def schedule(
+        point: str,
+        period: str,
+        user: int = Depends(get_current_user),
+):
+    message = f'Вот расписание на точке "{point}":\n'
+    data = get_schedule(point, period)
+
+    for i in range(7):
+        date, man = data[i]
+        message += f'{date}: {man}\n'
+
+    return {'data': data, 'message': message}
+
+
 @general_router.get("/points/", summary='Возвращает список всех точек')
 def points(
         user: int = Depends(get_current_user),
