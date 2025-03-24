@@ -67,7 +67,7 @@ export default function ManagerPage() {
                         display: 'none'
                     }
                 }}>
-                    <h3 style={{margin: 0}}>WorkFlow</h3>
+                    <h3 style={{margin: 0}}>ГрафикУм</h3>
                     <TabContext value={value}>
                         <TabList
                             onChange={handleChange}
@@ -90,7 +90,7 @@ export default function ManagerPage() {
                         </TabPanel>
 
                         <TabPanel value="2" style={{padding: 0}}>
-                            <ReportsMenu />
+                            <ReportsMenu/>
                         </TabPanel>
 
                         <TabPanel value="3" style={{padding: 0}}>

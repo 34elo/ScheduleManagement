@@ -63,7 +63,7 @@ export default function Employee() {
                         display: 'none'
                     }
                 }}>
-                    <h3 style={{margin: 0}}>WorkFlow</h3>
+                    <h3 style={{margin: 0}}>ГрафикУм</h3>
                     <TabContext value={value}>
                         <TabList
                             onChange={handleChange}
