@@ -63,7 +63,7 @@ export default function Employee() {
                         display: 'none'
                     }
                 }}>
-                    <h3 style={{margin: 0}}>Employee Menu</h3>
+                    <h3 style={{margin: 0}}>WorkFlow</h3>
                     <TabContext value={value}>
                         <TabList
                             onChange={handleChange}
@@ -86,7 +86,7 @@ export default function Employee() {
                         </TabPanel>
 
                         <TabPanel value="2" style={{padding: 0}}>
-                            <MyWorkMenu height= '500px'></MyWorkMenu>
+                            <MyWorkMenu height='500px'></MyWorkMenu>
                         </TabPanel>
 
                         <TabPanel value="3" style={{padding: 0}}>

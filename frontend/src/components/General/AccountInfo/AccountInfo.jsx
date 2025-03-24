@@ -56,7 +56,7 @@ export default function AccountInfo({children, name, label, role, lc = false}) {
         </h2>
         <Box sx={{
             margin: "0 auto",
-            maxWidth: '900px',
+            maxWidth: '700px',
             backgroundColor: '#f1f1f1',
             borderRadius: '20px',
             display: 'flex',

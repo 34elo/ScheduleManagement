@@ -3,12 +3,11 @@ import {useEffect, useState} from "react";
 import {Box} from "@mui/system";
 import useAuth from "../../hooks/useAuth.js";
 import {useNavigate} from "react-router-dom";
-import {API_URL} from "../../API_URL.js";
 
 export default function LoginPage() {
 
     const [code, setCode] = useState("");
-    const {setError, error, login, isLoggedIn, role} = useAuth();
+    const {error, login, isLoggedIn, role} = useAuth();
     const navigate = useNavigate();
 
     const handleChange = (event) => {
@@ -32,8 +31,8 @@ export default function LoginPage() {
         try {
             await login(code);
 
-        } catch (err) {
-            setError("Произошла ошибка при авторизации");
+        } catch (e) {
+            console.log(e)
         }
     };
     return (

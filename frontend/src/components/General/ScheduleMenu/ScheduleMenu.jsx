@@ -85,13 +85,13 @@ export default function ScheduleMenu({admin}) {
     }
 
     function handleButton() {
-        axios.put(`${API_URL}/admin/schedule/generating`, {}, {
+        const response = axios.put(`${API_URL}/admin/schedule/generating`, {}, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
             }
         })
-        location.reload();
+        console.log(response)
     }
 
     if (loading) return <div>Loading...</div>;
@@ -143,6 +143,7 @@ export default function ScheduleMenu({admin}) {
                                          justifyContent: 'center',
                                          alignItems: 'center',
                                          color: 'black',
+                                         overflow: 'hidden'
                                      }}>
                                          {tab.point.replace('_', ' ')}
                                          <IconButton

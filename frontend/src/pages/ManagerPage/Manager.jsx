@@ -67,7 +67,7 @@ export default function ManagerPage() {
                         display: 'none'
                     }
                 }}>
-                    <h3 style={{margin: 0}}>Manager Menu</h3>
+                    <h3 style={{margin: 0}}>WorkFlow</h3>
                     <TabContext value={value}>
                         <TabList
                             onChange={handleChange}
