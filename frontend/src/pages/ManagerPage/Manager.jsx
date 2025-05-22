@@ -17,22 +17,33 @@ const stylesTabList = {
     justifyContent: 'center',
     '& .MuiTab-root': {
         backgroundColor: 'transparent',
-        transition: 'opacity 0.3s ease, transform 0.3s ease',
-        opacity: 0.7,
+        transition: 'all 0.3s ease',
+        opacity: 0.8,
         textAlign: 'center',
         minWidth: '100px',
+        fontFamily: "'Roboto', sans-serif",
+        fontWeight: 500,
+        fontSize: '0.9rem',
+        letterSpacing: '0.5px',
         '&.Mui-selected': {
-            backgroundColor: '#c1c1c1',
-            color: 'black',
-            borderRadius: "15px",
+            background: 'linear-gradient(135deg, #0571ff, #05bfff)',
+            color: 'white',
+            borderRadius: "12px",
             opacity: 1,
+            boxShadow: '0 2px 6px rgba(5, 113, 255, 0.3)',
+            fontWeight: 600
         },
         '&:last-child': {
-            backgroundColor: 'black',
+            background: 'linear-gradient(135deg, #ff7105, #ff9e05)',
             color: 'white',
-            borderRadius: "15px",
+            borderRadius: "12px",
             opacity: 1,
+            boxShadow: '0 2px 6px rgba(255, 113, 5, 0.3)'
         },
+        '&:hover': {
+            opacity: 1,
+            transform: 'translateY(-2px)'
+        }
     },
     '@media (max-width: 768px)': {
         justifyContent: 'space-around',
@@ -54,20 +65,36 @@ export default function ManagerPage() {
     }
 
     return (
-        <Box sx={{display: 'flex', justifyContent: 'center', height: '100vh'}}>
+        <Box sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            height: '100vh',
+            background: 'linear-gradient(to bottom, #f8faff, #ffffff)',
+            fontFamily: "'Roboto', sans-serif"
+        }}>
             <Box sx={{width: '100%', maxWidth: '1280px', display: 'flex', flexDirection: 'column', height: '100%'}}>
                 <Box sx={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '10px 20px',
-                    backgroundColor: '#f1f1f1',
-                    borderRadius: '10px',
+                    padding: '12px 24px',
+                    backgroundColor: 'white',
+                    borderRadius: '14px',
+                    boxShadow: '0 4px 12px rgba(5, 113, 255, 0.08)',
+                    margin: '10px',
                     '@media (max-width: 768px)': {
                         display: 'none'
                     }
                 }}>
-                    <h3 style={{margin: 0}}>ГрафикУм</h3>
+                    <h3 style={{
+                        margin: 0,
+                        color: '#0571ff',
+                        fontFamily: "'Roboto', sans-serif",
+                        fontWeight: 700,
+                        fontSize: '1.4rem',
+                        letterSpacing: '0.5px',
+                        textShadow: '0 2px 4px rgba(5, 113, 255, 0.1)'
+                    }}>ГрафикУм</h3>
                     <TabContext value={value}>
                         <TabList
                             onChange={handleChange}
@@ -75,14 +102,36 @@ export default function ManagerPage() {
                             indicatorColor="transparent"
                             sx={stylesTabList}
                         >
-                            <Tab label="Расписание" value="1" style={{marginRight: '15px', borderRadius: '25px'}}/>
-                            <Tab label="Отчёты" value="2" style={{marginRight: '15px', borderRadius: '25px'}}/>
-                            <Tab label="Сотрудники" value="3" style={{marginRight: '15px', borderRadius: '25px'}}/>
-                            <Tab label="Личный кабинет" value="4" style={{borderRadius: '25px'}}/>
+                            <Tab label="Расписание" value="1" style={{
+                                marginRight: '15px',
+                                color: '#2a4365',
+                                fontWeight: 500
+                            }}/>
+                            <Tab label="Отчёты" value="2" style={{
+                                marginRight: '15px',
+                                color: '#2a4365',
+                                fontWeight: 500
+                            }}/>
+                            <Tab label="Сотрудники" value="3" style={{
+                                marginRight: '15px',
+                                color: '#2a4365',
+                                fontWeight: 500
+                            }}/>
+                            <Tab label="Личный кабинет" value="4" style={{color: '#2a4365'}}/>
                         </TabList>
                     </TabContext>
                 </Box>
-                <Box sx={{flex: 1, padding: '20px', paddingBottom: '60px', overflowY: 'auto', alignItems: 'center'}}>
+                <Box sx={{
+                    flex: 1,
+                    padding: '20px',
+                    paddingBottom: '60px',
+                    overflowY: 'auto',
+                    alignItems: 'center',
+                    backgroundColor: 'white',
+                    borderRadius: '14px',
+                    margin: '0 10px',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
+                }}>
                     <TabContext value={value}>
 
                         <TabPanel value="1" style={{padding: 0}}>
@@ -108,7 +157,18 @@ export default function ManagerPage() {
                                     <ModalEditAccount setOpen={setOpen}></ModalEditAccount>
                                 </Modal>
                                 <Button variant='contained'
-                                        style={{backgroundColor: 'black', borderRadius: '25px', width: '30%'}}
+                                        style={{
+                                            background: 'linear-gradient(135deg, #0571ff, #05bfff)',
+                                            borderRadius: '12px',
+                                            width: '30%',
+                                            color: 'white',
+                                            fontWeight: 500,
+                                            letterSpacing: '0.5px',
+                                            padding: '8px 16px',
+                                            boxShadow: '0 2px 6px rgba(5, 113, 255, 0.3)',
+                                            textTransform: 'none',
+                                            fontSize: '0.9rem'
+                                        }}
                                         onClick={() => setOpen(true)}>
                                     Редактировать
                                 </Button>
@@ -122,9 +182,9 @@ export default function ManagerPage() {
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    backgroundColor: '#f1f1f1',
-                    padding: '10px 0',
-                    boxShadow: '0px -2px 5px rgba(0,0,0,0.1)',
+                    backgroundColor: 'white',
+                    padding: '12px 0',
+                    boxShadow: '0px -4px 12px rgba(5, 113, 255, 0.08)',
                     display: 'none',
                     '@media (max-width: 768px)': {
                         display: 'flex',
@@ -140,20 +200,21 @@ export default function ManagerPage() {
                             sx={{
                                 ...stylesTabList,
                                 '& .MuiTab-root': {
-                                    fontSize: '12px', // уменьшенный текст
-                                    minWidth: '70px', // компактные кнопки
+                                    fontSize: '0.7rem',
+                                    minWidth: '60px',
+                                    color: '#2a4365',
+                                    margin: '0 5px'
                                 }
                             }}
                         >
-                            <Tab label="1" value="1" title="Расписание"/>
-                            <Tab label="2" value="2" title="Отчеты"/>
-                            <Tab label="3" value="3" title="Сотрудники"/>
-                            <Tab label="4" value="4" title="Личный кабинет"/>
+                            <Tab label="Расписание" value="1" title="Расписание"/>
+                            <Tab label="Отчеты" value="2" title="Отчеты"/>
+                            <Tab label="Сотрудники" value="3" title="Сотрудники"/>
+                            <Tab label="Кабинет" value="4" title="Личный кабинет"/>
                         </TabList>
                     </TabContext>
                 </Box>
             </Box>
         </Box>
-
     );
 }

@@ -1,88 +1,108 @@
 import React from "react";
-import {Box} from "@mui/system";
-import {Card, CardActionArea, CardContent, Typography} from "@mui/material";
+import { Box } from "@mui/system";
+import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-export default function CardsEmployees({cards, selectedCard, setSelectedCard, setAddEmployeeCards, setOpen}) {
-    if (!cards.length > 0) {
-        cards = [{id: 0, name: 'Данные отсутствуют'}];
-    }
-    console.log(cards, 'CARDS');
-    function handleInfoCard(id) {
+export default function CardsEmployees({
+    cards,
+    selectedCard,
+    setSelectedCard,
+    setAddEmployeeCards,
+    setOpen
+}) {
+    // Обработка пустого списка
+    const displayCards = cards.length > 0 ? cards : [{ id: 0, title: 'Данные отсутствуют' }];
+
+    const handleInfoCard = (id) => {
         setSelectedCard(id);
         setAddEmployeeCards(false);
         setOpen(true);
-    }
-    function handleAddEmployee() {
-        setAddEmployeeCards(true)
-        setOpen(true)
-    }
+    };
 
-    return (<>
-            <h2 style={{paddingBottom: "10px", margin: 0}}>Сотрудники</h2>
-            <Box
-                sx={{
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "column", // Элементы выстраиваются вертикально
-                    gap: 1, // Отступ между элементами
-                }}
-            >
-                {cards.map((card) => (
+    const handleAddEmployee = () => {
+        setAddEmployeeCards(true);
+        setOpen(true);
+    };
+
+    return (
+        <Box sx={{ width: "100%", p: 1, overflow: 'hidden'}}>
+            <Typography variant="h6" component="h2" sx={{ mb: 2, fontWeight: 600 }}>
+                Сотрудники
+            </Typography>
+
+            <Box sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 1,
+                maxHeight: '500px',
+                overflowY: 'auto',
+                pr: 1,
+                '&::-webkit-scrollbar': {
+                    width: '6px'
+                },
+                '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: 'rgba(0,0,0,0.2)',
+                    borderRadius: '3px'
+                }
+            }}>
+                {displayCards.map((card) => (
                     <Card
                         key={card.id}
                         sx={{
-                            borderRadius: "10px", // Скругление углов
-                            boxShadow: "none", // Убираем тень
-                            width: "100%", // Ширина на всю доступную ширину
-                            "&:hover": {
-                                backgroundColor: "action.hover", // Цвет фона при наведении
+                            borderRadius: "8px",
+                            boxShadow: "none",
+                            border: selectedCard === card.id
+                                ? '2px solid #0571ff'
+                                : '1px solid rgba(0,0,0,0.1)',
+                            transition: 'all 0.2s ease',
+                            '&:hover': {
+                                borderColor: '#0571ff',
+                                backgroundColor: 'rgba(5, 113, 255, 0.05)'
                             },
                         }}
                     >
-                        <CardActionArea
-                            onClick={() => handleInfoCard(card.id)}
-                            data-active={selectedCard === card.id ? "" : undefined}
-                            sx={{
-                                width: "100%",
-                            }}
-                        >
-                            <CardContent sx={{ padding: 2 }}> {/* Отступы внутри карточки */}
-                                <Typography variant="body1">{card.title}</Typography> {/* Текст карточки */}
+                        <CardActionArea onClick={() => handleInfoCard(card.id)}>
+                            <CardContent sx={{ p: 1.5 }}>
+                                <Typography
+                                    variant="body1"
+                                    sx={{
+                                        fontWeight: selectedCard === card.id ? 600 : 400,
+                                        color: selectedCard === card.id ? '#0571ff' : 'inherit'
+                                    }}
+                                >
+                                    {card.title}
+                                </Typography>
                             </CardContent>
                         </CardActionArea>
                     </Card>
                 ))}
 
-                {/* Кнопка добавления сотрудника */}
+                {/* Кнопка добавления */}
                 <Card
                     sx={{
-                        borderRadius: "10px",
+                        borderRadius: "8px",
                         boxShadow: "none",
-                        width: "100%",
-                        "&:hover": {
-                            backgroundColor: "action.hover",
+                        border: '1px dashed rgba(0,0,0,0.3)',
+                        '&:hover': {
+                            borderColor: '#0571ff',
+                            backgroundColor: 'rgba(5, 113, 255, 0.05)'
                         },
                     }}
                 >
-                    <CardActionArea
-                        onClick={handleAddEmployee}
-                        data-active={selectedCard === -1 ? "" : undefined}
-                        sx={{
-                            width: "100%",
-                            "&[data-active]": {
-                                backgroundColor: "action.selected",
-                                "&:hover": {
-                                    backgroundColor: "action.selectedHover",
-                                },
-                            },
-                        }}
-                    >
-                        <CardContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", padding: 2 }}>
-                            <AddIcon sx={{ fontSize: 24, color: "black", opacity: 0.7 }} /> {/* Иконка добавления */}
+                    <CardActionArea onClick={handleAddEmployee}>
+                        <CardContent sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            p: 1.5,
+                            color: '#0571ff'
+                        }}>
+                            <AddIcon sx={{ mr: 1 }} />
+                            <Typography variant="body1">Добавить сотрудника</Typography>
                         </CardContent>
                     </CardActionArea>
                 </Card>
             </Box>
-        </>);
+        </Box>
+    );
 }

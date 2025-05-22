@@ -1,90 +1,161 @@
-import React, {useEffect, useState} from "react";
-import {Button, Chip, FormControl, InputLabel, MenuItem, OutlinedInput, Select, TextField} from "@mui/material";
+import React, {useState} from "react";
+import {
+    Alert,
+    Button,
+    Chip,
+    FormControl,
+    InputLabel,
+    MenuItem, OutlinedInput,
+    Select,
+    TextField,
+    Typography
+} from "@mui/material";
 import {Box} from "@mui/system";
 import axios from "axios";
 import {API_URL} from "../../../API_URL.js";
 
-
 export default function NotificationEmployee({cards}) {
     const [text, setText] = useState("");
-    const [personName, setPersonName] = useState([]);
-    const handleChange = (event) => {
-        const {
-            target: {value},
-        } = event;
-        setPersonName(typeof value === 'string' ? value.split(',') : value,);
+    const [selectedEmployees, setSelectedEmployees] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [notificationStatus, setNotificationStatus] = useState(null);
+
+    const handleEmployeeChange = (event) => {
+        setSelectedEmployees(event.target.value);
     };
 
-    function handleChangeText(e) {
+    const handleTextChange = (e) => {
         setText(e.target.value);
-    }
+    };
 
-    function sendNotification() {
-        console.log(text, personName);
+    const sendNotification = async () => {
+        if (!text.trim() || selectedEmployees.length === 0) {
+            setNotificationStatus({type: "error", message: "Заполните текст и выберите сотрудников"});
+            return;
+        }
 
-        axios.post(`${API_URL}/admin/telegram/send_notification/`, {
-            persons: personName,
-            message: text,
-        }, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                "Content-Type": "application/json"
-            }
-        })
-        setText('')
-        setPersonName([]);
-    }
+        setLoading(true);
+        setNotificationStatus(null);
 
-    const names = cards.map((card) => (card.title))
-    return (<>
+        try {
+            await axios.post(
+                `${API_URL}/admin/telegram/send_notification/`,
+                {
+                    persons: selectedEmployees,
+                    message: text.trim(),
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
+
+            setText("");
+            setSelectedEmployees([]);
+            setNotificationStatus({type: "success", message: "Уведомления отправлены"});
+        } catch (error) {
+            console.error("Ошибка отправки уведомления:", error);
+            setNotificationStatus({type: "error", message: "Ошибка при отправке уведомлений"});
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const employeeNames = cards.map((card) => card.title).filter(name => name !== 'Данные отсутствуют');
+
+    return (
         <Box sx={{
-            display: 'flex', // Используем Flexbox
-            flexDirection: 'column', // Располагаем элементы друг под другом
-            alignItems: 'center', // Центрируем по горизонтали
-            justifyContent: 'center', // Центрируем по вертикали
-
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 2,
+            p: 2,
+            width: '100%'
         }}>
-            <h2 style={{margin: 0, marginBottom: '10px'}}>Уведомления</h2>
+            <Typography variant="h6" component="h2" sx={{fontWeight: 600}}>
+                Уведомления сотрудникам
+            </Typography>
+
             <TextField
-                sx={{
-                    maxWidth: '90%', width: '250px',
-                }}
+                fullWidth
+                multiline
+                rows={3}
                 size="small"
-                label="Текст"
-                onChange={handleChangeText}
-
+                label="Текст уведомления"
+                value={text}
+                onChange={handleTextChange}
+                sx={{
+                    maxWidth: '400px',
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: '8px',
+                    }
+                }}
             />
-            <FormControl sx={{m: 1, width: '250px', maxWidth: '90%'}}>
-                <InputLabel id="demo-multiple-chip-label" variant='outlined'>Имена</InputLabel>
+
+            <FormControl sx={{width: '100%', maxWidth: '400px'}}>
+                <InputLabel>Выберите сотрудников</InputLabel>
                 <Select
-                    sx={{
-                        maxHeight: '90%', overflow: 'scroll',
-
-                    }}
-
-                    labelId="demo-multiple-chip-label"
-                    id="demo-multiple-chip"
                     multiple
-                    size='small'
-                    value={personName}
-                    onChange={handleChange}
-                    input={<OutlinedInput id="select-multiple-chip" label="Chip"/>}
-                    renderValue={(selected) => (<Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                        {selected.map((value) => (<Chip key={value} label={value}/>))}
-                    </Box>)}
+                    value={selectedEmployees}
+                    onChange={handleEmployeeChange}
+                    input={<OutlinedInput label="Выберите сотрудников"/>}
+                    renderValue={(selected) => (
+                        <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                            {selected.map((value) => (
+                                <Chip
+                                    key={value}
+                                    label={value}
+                                    sx={{
+                                        backgroundColor: '#0571ff',
+                                        color: 'white'
+                                    }}
+                                />
+                            ))}
+                        </Box>
+                    )}
+                    sx={{
+                        borderRadius: '8px',
+                        '& .MuiSelect-select': {
+                            py: 1
+                        }
+                    }}
                 >
-                    {names.map((name) => (<MenuItem
-                        key={name}
-                        value={name}
-                    >
-                        {name}
-                    </MenuItem>))}
+                    {employeeNames.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            {name}
+                        </MenuItem>
+                    ))}
                 </Select>
             </FormControl>
-            <Button variant="contained" onClick={sendNotification}
-                    sx={{backgroundColor: 'black', marginBottom: '20px', color: 'white', borderRadius: '25px'}}>
-                Отправить
+
+            {notificationStatus && (
+                <Alert severity={notificationStatus.type} sx={{width: '100%', maxWidth: '400px'}}>
+                    {notificationStatus.message}
+                </Alert>
+            )}
+
+            <Button
+                variant="contained"
+                onClick={sendNotification}
+                disabled={loading}
+                sx={{
+                    backgroundColor: '#0571ff',
+                    color: 'white',
+                    borderRadius: '8px',
+                    px: 4,
+                    py: 1,
+                    '&:hover': {
+                        backgroundColor: '#0460d6'
+                    },
+                    '&:disabled': {
+                        backgroundColor: '#e0e0e0'
+                    }
+                }}
+            >
+                {loading ? 'Отправка...' : 'Отправить уведомления'}
             </Button>
         </Box>
-    </>)
+    );
 }

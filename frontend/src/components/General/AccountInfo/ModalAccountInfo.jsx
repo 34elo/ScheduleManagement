@@ -1,43 +1,61 @@
-import { Box, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close"; // Импортируем иконку закрытия
-import AccountInfo from "./AccountInfo.jsx"; // Предполагаем, что AccountInfo — это ваш компонент
+import { Box, IconButton, useTheme } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import AccountInfo from "./AccountInfo.jsx";
 
-const styleModal = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    maxWidth: '400px',
-    minWidth: '300px',
-    backgroundColor: 'white',
-    borderRadius: "20px",
-    boxShadow: 24,
-    p: 4,
-};
+const ModalAccountInfo = ({ children, name, label, role, close }) => {
+    const theme = useTheme();
 
-export default function ModalAccountInfo({ children, name, label, role, close }) {
-    console.log("ModalAccountInfo");
+    const modalStyle = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: { xs: '90vw', sm: '400px' },
+        maxWidth: '400px',
+        bgcolor: 'background.paper',
+        borderRadius: theme.shape.borderRadius,
+        boxShadow: theme.shadows[5],
+        p: 3,
+        outline: 'none',
+        maxHeight: '90vh',
+        overflowY: 'auto',
+        '&::-webkit-scrollbar': {
+            width: '6px'
+        },
+        '&::-webkit-scrollbar-thumb': {
+            backgroundColor: theme.palette.action.hover,
+            borderRadius: '3px'
+        }
+    };
 
     return (
-        <Box sx={styleModal}>
-            {/* Кнопка закрытия (крестик) */}
+        <Box sx={modalStyle}>
             <IconButton
-                aria-label="close"
+                aria-label="close-modal"
                 onClick={close}
                 sx={{
                     position: 'absolute',
-                    right: 8,
-                    top: 8,
-                    color: (theme) => theme.palette.grey[500], // Серый цвет для крестика
+                    right: 12,
+                    top: 12,
+                    color: theme.palette.text.secondary,
+                    '&:hover': {
+                        backgroundColor: theme.palette.action.hover
+                    }
                 }}
             >
-                <CloseIcon />
+                <CloseIcon fontSize="small" />
             </IconButton>
 
-            {/* Основное содержимое модального окна */}
-            <AccountInfo name={name} label={label} role={role}>
+            <AccountInfo
+                name={name}
+                label={label}
+                role={role}
+                sx={{ mt: 1 }}
+            >
                 {children}
             </AccountInfo>
         </Box>
     );
-}
+};
+
+export default ModalAccountInfo;

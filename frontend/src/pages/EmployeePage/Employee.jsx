@@ -1,5 +1,5 @@
-import {useState} from "react";
-import {Button, Modal, Tab} from "@mui/material";
+import { useState } from "react";
+import {Button, Modal, Tab, Typography} from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import Box from "@mui/material/Box";
 import TabList from "@mui/lab/TabList";
@@ -17,22 +17,32 @@ const stylesTabList = {
     justifyContent: 'center',
     '& .MuiTab-root': {
         backgroundColor: 'transparent',
-        transition: 'opacity 0.3s ease, transform 0.3s ease',
-        opacity: 0.7,
+        transition: 'all 0.3s ease',
+        opacity: 0.8,
         textAlign: 'center',
         minWidth: '100px',
+        margin: '0 8px',
+        color: '#2a4365',
+        fontWeight: 500,
         '&.Mui-selected': {
-            backgroundColor: '#c1c1c1',
-            color: 'black',
-            borderRadius: "25px",
+            background: 'linear-gradient(135deg, #0571ff, #05bfff)',
+            color: 'white',
+            borderRadius: "12px",
             opacity: 1,
+            boxShadow: '0 2px 8px rgba(5, 113, 255, 0.2)',
+            fontWeight: 600
         },
         '&:last-child': {
-            backgroundColor: 'black',
+            background: 'linear-gradient(135deg, #ff7105, #ff9e05)',
             color: 'white',
-            borderRadius: "25px",
+            borderRadius: "12px",
             opacity: 1,
+            boxShadow: '0 2px 8px rgba(255, 113, 5, 0.2)'
         },
+        '&:hover': {
+            opacity: 1,
+            transform: 'translateY(-2px)'
+        }
     },
     '@media (max-width: 768px)': {
         justifyContent: 'space-around',
@@ -42,28 +52,43 @@ const stylesTabList = {
 
 export default function Employee() {
     const [value, setValue] = useState("1");
-
-    function handleChange(e, newValue) {
-        setValue(newValue);
-    }
-
     const [open, setOpen] = useState(false);
 
+    const handleChange = (e, newValue) => {
+        setValue(newValue);
+    };
+
     return (
-        <Box sx={{display: 'flex', justifyContent: 'center', height: '100vh'}}>
-            <Box sx={{width: '100%', maxWidth: '1280px', display: 'flex', flexDirection: 'column', height: '100%'}}>
+        <Box sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            height: '100vh',
+            background: 'linear-gradient(to bottom, #f8faff, #ffffff)'
+        }}>
+            <Box sx={{
+                width: '100%',
+                maxWidth: '1280px',
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%'
+            }}>
+                {/* Верхняя панель навигации */}
                 <Box sx={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '10px 20px',
-                    backgroundColor: '#f1f1f1',
-                    borderRadius: '10px',
+                    padding: '12px 24px',
+                    backgroundColor: 'white',
+                    borderRadius: '12px',
+                    boxShadow: '0 2px 10px rgba(5, 113, 255, 0.1)',
+                    margin: '10px',
                     '@media (max-width: 768px)': {
                         display: 'none'
                     }
                 }}>
-                    <h3 style={{margin: 0}}>ГрафикУм</h3>
+                    <Typography variant="h6" sx={{ color: '#0571ff', fontWeight: 700 }}>
+                        ГрафикУм
+                    </Typography>
                     <TabContext value={value}>
                         <TabList
                             onChange={handleChange}
@@ -71,29 +96,39 @@ export default function Employee() {
                             indicatorColor="transparent"
                             sx={stylesTabList}
                         >
-                            <Tab label="Расписание" value="1" style={{marginRight: '15px', borderRadius: '25px'}}/>
-                            <Tab label="Моя работа" value="2" style={{marginRight: '15px', borderRadius: '25px'}}/>
-                            <Tab label="Администраторы" value="3" style={{marginRight: '15px', borderRadius: '25px'}}/>
-                            <Tab label="Личный кабинет" value="4" style={{borderRadius: '25px'}}/>
+                            <Tab label="Расписание" value="1" />
+                            <Tab label="Моя работа" value="2" />
+                            <Tab label="Администраторы" value="3" />
+                            <Tab label="Личный кабинет" value="4" />
                         </TabList>
                     </TabContext>
                 </Box>
-                <Box sx={{flex: 1, padding: '20px', paddingBottom: '60px', overflowY: 'auto', alignItems: 'center'}}>
+
+                {/* Основное содержимое */}
+                <Box sx={{
+                    flex: 1,
+                    padding: '20px',
+                    paddingBottom: '60px',
+                    overflowY: 'auto',
+                    backgroundColor: 'white',
+                    borderRadius: '12px',
+                    margin: '0 10px',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
+                }}>
                     <TabContext value={value}>
-
-                        <TabPanel value="1" style={{padding: 0}}>
-                            <ScheduleMenu admin={false}></ScheduleMenu>
+                        <TabPanel value="1" sx={{ p: 0 }}>
+                            <ScheduleMenu admin={false} />
                         </TabPanel>
 
-                        <TabPanel value="2" style={{padding: 0}}>
-                            <MyWorkMenu height='500px'></MyWorkMenu>
+                        <TabPanel value="2" sx={{ p: 0 }}>
+                            <MyWorkMenu height='500px' />
                         </TabPanel>
 
-                        <TabPanel value="3" style={{padding: 0}}>
-                            <AdminsMenu></AdminsMenu>
+                        <TabPanel value="3" sx={{ p: 0 }}>
+                            <AdminsMenu />
                         </TabPanel>
 
-                        <TabPanel value="4" style={{padding: 0}}>
+                        <TabPanel value="4" sx={{ p: 0 }}>
                             <AccountInfo name='name' label='Личный кабинет' lc={true}>
                                 <Modal
                                     open={open}
@@ -101,33 +136,39 @@ export default function Employee() {
                                     aria-labelledby="modal-modal-title"
                                     aria-describedby="modal-modal-description"
                                 >
-                                    <ModalEditAccount setOpen={setOpen}></ModalEditAccount>
+                                    <ModalEditAccount setOpen={setOpen} />
                                 </Modal>
-                                <Button variant='contained'
-                                        style={{
-                                            marginTop: '10px',
-                                            backgroundColor: 'black',
-                                            color: 'white',
-                                            borderRadius: '25px',
-                                            width: '30%'
-                                        }}
-                                        onClick={() => setOpen(true)}>
+                                <Button
+                                    variant='contained'
+                                    onClick={() => setOpen(true)}
+                                    sx={{
+                                        mt: 2,
+                                        backgroundColor: '#0571ff',
+                                        color: 'white',
+                                        borderRadius: '8px',
+                                        width: '200px',
+                                        '&:hover': {
+                                            backgroundColor: '#0460d6'
+                                        }
+                                    }}
+                                >
                                     Редактировать
                                 </Button>
-                                <LogoutButton></LogoutButton>
+                                <LogoutButton />
                             </AccountInfo>
                         </TabPanel>
                     </TabContext>
                 </Box>
-                {/* Нижняя навигация для мобильных устройств */}
+
+                {/* Мобильная навигация */}
                 <Box sx={{
                     position: 'fixed',
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    backgroundColor: '#f1f1f1',
-                    padding: '10px 0',
-                    boxShadow: '0px -2px 5px rgba(0,0,0,0.1)',
+                    backgroundColor: 'white',
+                    padding: '12px 0',
+                    boxShadow: '0px -4px 12px rgba(5, 113, 255, 0.1)',
                     display: 'none',
                     '@media (max-width: 768px)': {
                         display: 'flex',
@@ -143,15 +184,17 @@ export default function Employee() {
                             sx={{
                                 ...stylesTabList,
                                 '& .MuiTab-root': {
-                                    fontSize: '12px', // уменьшенный текст
-                                    minWidth: '70px', // компактные кнопки
+                                    fontSize: '0.7rem',
+                                    minWidth: '60px',
+                                    margin: '0 4px',
+                                    py: 1
                                 }
                             }}
                         >
-                            <Tab label="1" value="1" title="Расписание"/>
-                            <Tab label="2" value="2" title="Моя работа"/>
-                            <Tab label="3" value="3" title="Администраторы"/>
-                            <Tab label="4" value="4" title="Личный кабинет"/>
+                            <Tab icon="📅" value="1" title="Расписание" />
+                            <Tab icon="💼" value="2" title="Моя работа" />
+                            <Tab icon="👔" value="3" title="Администраторы" />
+                            <Tab icon="👤" value="4" title="Кабинет" />
                         </TabList>
                     </TabContext>
                 </Box>

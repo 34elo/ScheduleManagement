@@ -1,69 +1,108 @@
-import {Button, TextField, Typography} from "@mui/material";
-import {useEffect, useState} from "react";
-import {Box} from "@mui/system";
+import { Button, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box } from "@mui/system";
 import useAuth from "../../hooks/useAuth.js";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
-
     const [code, setCode] = useState("");
-    const {error, login, isLoggedIn, role} = useAuth();
+    const { error, login, isLoggedIn, role } = useAuth();
     const navigate = useNavigate();
 
     const handleChange = (event) => {
         setCode(event.target.value);
     };
 
-
     useEffect(() => {
-        console.log(isLoggedIn, role);
         if (isLoggedIn) {
-            console.log("logged in");
             if (role === "Администратор") {
                 navigate("/manager");
             } else if (role === 'Сотрудник') {
                 navigate('/employee');
             }
         }
-    }, [isLoggedIn, navigate, role]);   
+    }, [isLoggedIn, navigate, role]);
 
     const handleLogin = async () => {
         try {
             await login(code);
-
         } catch (e) {
-            console.log(e)
+            console.error("Login error:", e);
         }
     };
-    return (
-        <>
-            <Box // Оборачиваем весь контент в Box
-                sx={{
-                    display: 'flex', // Используем Flexbox
-                    flexDirection: 'column', // Располагаем элементы друг под другом
-                    alignItems: 'center', // Центрируем по горизонтали
-                    justifyContent: 'center', // Центрируем по вертикали
-                    minHeight: '100vh', // Занимаем всю высоту экрана
 
+    return (
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+                p: 3
+            }}
+        >
+            <Box
+                sx={{
+                    bgcolor: 'background.paper',
+                    p: 4,
+                    borderRadius: '12px',
+                    boxShadow: 3,
+                    width: '100%',
+                    maxWidth: '400px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center'
                 }}
             >
-                <Typography variant="h4" gutterBottom>
+                <Typography
+                    variant="h4"
+                    gutterBottom
+                    sx={{
+                        mb: 3,
+                        fontWeight: 600,
+                        color: 'text.primary'
+                    }}
+                >
                     Авторизация
                 </Typography>
+
                 <TextField
+                    fullWidth
                     error={!!error}
-                    id="outlined-basic"
                     label="Введите код"
                     variant="outlined"
                     value={code}
                     onChange={handleChange}
                     helperText={error}
-                    sx={{marginBottom: 2, width: '300px'}}
+                    sx={{ mb: 3 }}
+                    InputProps={{
+                        sx: {
+                            borderRadius: '8px'
+                        }
+                    }}
                 />
-                <Button variant="contained" onClick={handleLogin} sx={{backgroundColor: 'black', color: 'white', borderRadius: '25px'}}>
+
+                <Button
+                    fullWidth
+                    variant="contained"
+                    onClick={handleLogin}
+                    sx={{
+                        py: 1.5,
+                        borderRadius: '8px',
+                        backgroundColor: '#0571ff',
+                        color: 'white',
+                        fontWeight: 500,
+                        '&:hover': {
+                            backgroundColor: '#0460d6',
+                            boxShadow: '0 2px 8px rgba(5, 113, 255, 0.3)'
+                        },
+                        transition: 'all 0.2s ease'
+                    }}
+                >
                     Войти
                 </Button>
             </Box>
-        </>
+        </Box>
     );
-};
+}

@@ -49,31 +49,40 @@ export default function AdminsMenu() {
     }, [admins]);
 
 
-    return (<Box sx={{display: "flex", height: "100%", padding: 2, minHeight: "550px"}}>
-        <Modal open={open} onClose={() => setOpen(false)}>
-            {selectedCard !== null ?
-                <ModalAccountInfo role='employee'
-                                  name={cards.find(card => card.id === selectedCard)?.title || "Неизвестный"}
-                                  label='Подробная информация' close={() => setOpen(false)}/>
-                : <div></div>}
-        </Modal>
-        <Box
-            sx={{
-                minWidth: "150px",
-                width: "100%",
-                bgcolor: "#f1f1f1",
-                padding: 2,
-                marginRight: 2,
-                borderRadius: "20px",
-                overflowY: "auto",
-            }}
-        >
-            <CardsAdmins
-                selectedCard={selectedCard}
-                setSelectedCard={handleCardClick}
-                cards={cards}
-            />
+    return (
+        <Box sx={{
+            display: "flex",
+            height: "100%",
+            padding: 2,
+            minHeight: "550px",
+            backgroundColor: "#ffffff" // Белый фон
+        }}>
+            <Modal open={open} onClose={() => setOpen(false)}>
+                {selectedCard !== null ?
+                    <ModalAccountInfo role='employee'
+                                    name={cards.find(card => card.id === selectedCard)?.title || "Неизвестный"}
+                                    label='Подробная информация'
+                                    close={() => setOpen(false)}/>
+                    : <div></div>}
+            </Modal>
+            <Box
+                sx={{
+                    minWidth: "150px",
+                    width: "100%",
+                    bgcolor: "#f5f9ff", // Светло-голубой фон
+                    padding: 2,
+                    marginRight: 2,
+                    borderRadius: "20px",
+                    overflowY: "auto",
+                    border: "1px solid #05bfff" // Голубая граница
+                }}
+            >
+                <CardsAdmins
+                    selectedCard={selectedCard}
+                    setSelectedCard={handleCardClick}
+                    cards={cards}
+                />
+            </Box>
         </Box>
-
-    </Box>);
+    );
 }

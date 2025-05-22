@@ -40,7 +40,6 @@ export default function AccountInfo({children, name, label, role, lc = false}) {
                     setInfo(data)
                     console.log(data)
 
-
                 } catch (error) {
                     console.log(error)
                 }
@@ -49,7 +48,6 @@ export default function AccountInfo({children, name, label, role, lc = false}) {
         }, [])
     }
 
-
     return (<>
         <h2 style={{marginTop: 0}}>
             {label}
@@ -57,7 +55,8 @@ export default function AccountInfo({children, name, label, role, lc = false}) {
         <Box sx={{
             margin: "0 auto",
             maxWidth: '700px',
-            backgroundColor: '#f1f1f1',
+            backgroundColor: 'rgba(5, 113, 255, 0.05)', // Новый фон с легким синим оттенком
+            border: '1px solid rgba(5, 113, 255, 0.1)', // Тонкая граница
             borderRadius: '20px',
             display: 'flex',
             alignItems: 'center',
@@ -69,9 +68,9 @@ export default function AccountInfo({children, name, label, role, lc = false}) {
             <Avatar sx={{width: 180, height: 180, margin: '50px'}}/>
             <Box>
                 <NameField name={info.name}></NameField>
-                <MoreInfoField username={info.username ? '@' + info.username : 'Данные отсутсвуют'}
-                               contact={info.contact ? '' + info.contact : 'Данные отсутсвуют'}
-                               age={info.age ? '' + info.age : 'Данные отсутсвуют'} code={info.code}>
+                <MoreInfoField username={info.username ? '@' + info.username : 'Данные отсутствуют'}
+                               contact={info.contact ? '' + info.contact : 'Данные отсутствуют'}
+                               age={info.age ? '' + info.age : 'Данные отсутствуют'} code={info.code}>
                 </MoreInfoField>
             </Box>
             {children}

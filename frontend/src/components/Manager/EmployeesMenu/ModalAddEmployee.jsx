@@ -1,5 +1,5 @@
-import { Box, Button, TextField, Typography, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close"; // Импортируем иконку закрытия
+import { Box, Button, TextField, Typography, IconButton, Alert } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import React, { useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../../API_URL.js";
@@ -9,33 +9,35 @@ const styleModal = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    maxWidth: '400px',
-    minWidth: '300px',
-    backgroundColor: 'white',
-    borderRadius: "20px",
+    width: '380px',
+    bgcolor: 'background.paper',
+    borderRadius: '12px',
     boxShadow: 24,
-    p: 4,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    p: 3,
+    outline: 'none'
 };
 
 export default function ModalAddEmployee({ setOpen }) {
-    const [name, setName] = useState(null);
-    const [code, setCode] = useState(null);
-    const [age, setAge] = useState(null);
-    const [post, setPost] = useState(null);
-
-    const handleChangeText = (e) => {
-        setName(e.target.value);
-    };
+    const [name, setName] = useState('');
+    const [code, setCode] = useState('');
+    const [age, setAge] = useState('');
+    const [post, setPost] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleAddEmployee = async () => {
+        if (!name.trim()) {
+            setError('Введите ФИО сотрудника');
+            return;
+        }
+
+        setLoading(true);
+        setError('');
+
         try {
             const response = await axios.post(
                 `${API_URL}/admin/employee`,
-                { name: name, post: post, age: age },
+                { name: name.trim(), post: post.trim(), age: age.trim() },
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -43,97 +45,101 @@ export default function ModalAddEmployee({ setOpen }) {
                     },
                 }
             );
+
             if (response.status === 200) {
                 setCode(response.data.code);
             }
         } catch (error) {
-            setCode('Ошибка входа. Перепроверьте данные');
+            setError(error.response?.data?.message || 'Ошибка при добавлении сотрудника');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <Box sx={styleModal}>
-            {/* Кнопка закрытия (крестик) */}
             <IconButton
                 aria-label="close"
-                onClick={() => setOpen(false)} // Закрываем модальное окно
+                onClick={() => setOpen(false)}
                 sx={{
                     position: 'absolute',
-                    right: 8,
-                    top: 8,
-                    color: (theme) => theme.palette.grey[500], // Серый цвет для крестика
+                    right: 12,
+                    top: 12,
+                    color: 'text.secondary'
                 }}
             >
                 <CloseIcon />
             </IconButton>
 
-            {/* Заголовок модального окна */}
-            <Typography id="modal-modal-title" variant="h5" component="h2" sx={{ marginBottom: '20px' }}>
+            <Typography variant="h6" component="h2" mb={2} textAlign="center">
                 Добавить сотрудника
             </Typography>
 
-            {/* Поле для ввода ФИО */}
-            <TextField
-                sx={{
-                    maxWidth: '90%',
-                    width: '250px',
-                    marginBottom: '10px',
-                }}
-                size="small"
-                label="ФИО"
-                onChange={handleChangeText}
-            />
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <TextField
+                    fullWidth
+                    size="small"
+                    label="ФИО сотрудника"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    error={!!error && !name.trim()}
+                />
 
-            {/* Поле для ввода классификации */}
-            <TextField
-                sx={{
-                    maxWidth: '90%',
-                    width: '250px',
-                    marginBottom: '10px',
-                }}
-                size="small"
-                label="Классификация"
-                onChange={(e) => setPost(e.target.value)}
-            />
+                <TextField
+                    fullWidth
+                    size="small"
+                    label="Должность"
+                    value={post}
+                    onChange={(e) => setPost(e.target.value)}
+                />
 
-            {/* Поле для ввода возраста */}
-            <TextField
-                sx={{
-                    maxWidth: '90%',
-                    width: '250px',
-                    marginBottom: '10px',
-                }}
-                size="small"
-                label="Возраст"
-                onChange={(e) => setAge(e.target.value)}
-            />
+                <TextField
+                    fullWidth
+                    size="small"
+                    label="Возраст"
+                    type="number"
+                    value={age}
+                    onChange={(e) => setAge(e.target.value.replace(/\D/g, ''))}
+                    inputProps={{ min: 18, max: 99 }}
+                />
 
-            {/* Отображение кода сотрудника (если есть) */}
-            {code && (
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                }}>
-                    <p style={{ display: 'flex' }}>Код сотрудника для входа:</p>
-                    {code}
-                </div>
-            )}
+                {error && (
+                    <Alert severity="error" sx={{ mt: 1 }}>
+                        {error}
+                    </Alert>
+                )}
 
-            {/* Кнопка "Добавить" */}
-            <Button
-                variant="contained"
-                onClick={handleAddEmployee}
-                sx={{
-                    backgroundColor: 'black',
-                    marginTop: '10px',
-                    color: 'white',
-                    borderRadius: '25px',
-                }}
-            >
-                Добавить
-            </Button>
+                {code && (
+                    <Alert severity="success" sx={{ mt: 1 }}>
+                        <Typography fontWeight="bold">Код сотрудника:</Typography>
+                        <Typography variant="body1" sx={{ mt: 1, fontSize: '1.1rem', wordBreak: 'break-all' }}>
+                            {code}
+                        </Typography>
+                    </Alert>
+                )}
+
+                <Button
+                    fullWidth
+                    variant="contained"
+                    onClick={handleAddEmployee}
+                    disabled={loading || !!code}
+                    sx={{
+                        mt: 2,
+                        borderRadius: '8px',
+                        py: 1,
+                        backgroundColor: '#0571ff',
+                        '&:hover': {
+                            backgroundColor: '#0460d6'
+                        },
+                        '&:disabled': {
+                            backgroundColor: '#e0e0e0'
+                        }
+                    }}
+                >
+                    {loading ? 'Добавление...' : 'Добавить сотрудника'}
+                </Button>
+            </Box>
         </Box>
     );
 }

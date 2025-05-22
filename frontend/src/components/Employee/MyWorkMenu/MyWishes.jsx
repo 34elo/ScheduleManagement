@@ -71,20 +71,29 @@ export default function MyWishes(props) {
             flexDirection: 'column', // Располагаем элементы друг под другом
             alignItems: 'center', // Центрируем по горизонтали
             justifyContent: 'center', // Центрируем по вертикали
+            backgroundColor: '#ffffff', // Белый фон
         }}>
-            <h2 style={{margin: 0, marginTop: '10px'}}>Моя информация</h2>
-            <h4 style={{margin: '2px'}}>Мои желаемые адреса:</h4>
-            <p style={{margin: '2px'}}>{address.join(', ')}</p>
-            <h4 style={{margin: '2px'}}>Мои желаемые дни:</h4>
-            <p style={{margin: '2px'}}>{days.join(', ')}</p>
-            <h2 style={{margin: '10px', marginTop: '10px'}}>Хотите изменить?</h2>
+            <h2 style={{margin: 0, marginTop: '10px', color: '#0571ff'}}>Моя информация</h2>
+            <h4 style={{margin: '2px', color: '#05bfff'}}>Мои желаемые адреса:</h4>
+            <p style={{margin: '2px', color: '#0571ff'}}>{address.join(', ')}</p>
+            <h4 style={{margin: '2px', color: '#05bfff'}}>Мои желаемые дни:</h4>
+            <p style={{margin: '2px', color: '#0571ff'}}>{days.join(', ')}</p>
+            <h2 style={{margin: '10px', marginTop: '10px', color: '#0571ff'}}>Хотите изменить?</h2>
 
             <SelectAny setSelected={setSelectedAddress} MyArray={addresses} label='Адрес'
                        selectAnything={selectedAddress}></SelectAny>
             <SelectAny setSelected={setSelectedDays}
                        MyArray={['ПН', 'ВТ', "СР", "ЧТ", "ПТ", "СБ", "ВС"]}
                        selectAnything={selectedDays} label='День'></SelectAny>
-            <Button variant="contained" onClick={handleChange} sx={{marginTop: '10px', backgroundColor: 'black', color: 'white', borderRadius: '25px'}}>
+            <Button variant="contained" onClick={handleChange} sx={{
+                marginTop: '10px',
+                backgroundColor: '#ff7105', // Контрастный оранжевый
+                color: 'white',
+                borderRadius: '25px',
+                '&:hover': {
+                    backgroundColor: '#e56604', // Темнее при наведении
+                }
+            }}>
                 Изменить
             </Button>
         </Box>
