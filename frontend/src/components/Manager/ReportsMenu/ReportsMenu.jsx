@@ -9,12 +9,8 @@ export default function ReportsMenu() {
 
     return (<>
             <h1 style={{margin: 0}}>Отчёты</h1>
-            <Box sx={{display: "flex", height: "100%", padding: 2, minHeight: "550px"}}>
-                <EmployeeReport></EmployeeReport>
-
+            <Box sx={{display: "flex", height: "100%", padding: 2, minHeight: "550px", justifyContent: 'center'}}>
                 <PointReport></PointReport>
-
-                <GeneralReport></GeneralReport>
 
             </Box>
         </>)

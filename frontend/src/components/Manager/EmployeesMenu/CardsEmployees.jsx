@@ -50,6 +50,7 @@ export default function CardsEmployees({
                         key={card.id}
                         sx={{
                             borderRadius: "8px",
+                            minHeight: '50px',
                             boxShadow: "none",
                             border: selectedCard === card.id
                                 ? '2px solid #0571ff'
