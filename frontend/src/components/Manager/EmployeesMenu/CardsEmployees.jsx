@@ -1,17 +1,17 @@
 import React from "react";
-import { Box } from "@mui/system";
-import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
+import {Box} from "@mui/system";
+import {Card, CardActionArea, CardContent, Typography} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 export default function CardsEmployees({
-    cards,
-    selectedCard,
-    setSelectedCard,
-    setAddEmployeeCards,
-    setOpen
-}) {
+                                           cards,
+                                           selectedCard,
+                                           setSelectedCard,
+                                           setAddEmployeeCards,
+                                           setOpen
+                                       }) {
     // Обработка пустого списка
-    const displayCards = cards.length > 0 ? cards : [{ id: 0, title: 'Данные отсутствуют' }];
+    const displayCards = cards.length > 0 ? cards : [{id: 0, title: 'Данные отсутствуют'}];
 
     const handleInfoCard = (id) => {
         setSelectedCard(id);
@@ -25,8 +25,8 @@ export default function CardsEmployees({
     };
 
     return (
-        <Box sx={{ width: "100%", p: 1, overflow: 'hidden'}}>
-            <Typography variant="h6" component="h2" sx={{ mb: 2, fontWeight: 600 }}>
+        <Box sx={{width: "100%", p: 1, overflow: 'hidden'}}>
+            <Typography variant="h6" component="h2" sx={{mb: 2, fontWeight: 600}}>
                 Сотрудники
             </Typography>
 
@@ -63,7 +63,7 @@ export default function CardsEmployees({
                         }}
                     >
                         <CardActionArea onClick={() => handleInfoCard(card.id)}>
-                            <CardContent sx={{ p: 1.5 }}>
+                            <CardContent sx={{p: 1.5}}>
                                 <Typography
                                     variant="body1"
                                     sx={{
@@ -83,6 +83,7 @@ export default function CardsEmployees({
                     sx={{
                         borderRadius: "8px",
                         boxShadow: "none",
+                        minHeight: '50px',
                         border: '1px dashed rgba(0,0,0,0.3)',
                         '&:hover': {
                             borderColor: '#0571ff',
@@ -96,9 +97,9 @@ export default function CardsEmployees({
                             justifyContent: "center",
                             alignItems: "center",
                             p: 1.5,
-                            color: '#0571ff'
+                            color: '#0571ff',
                         }}>
-                            <AddIcon sx={{ mr: 1 }} />
+                            <AddIcon sx={{mr: 1}}/>
                             <Typography variant="body1">Добавить сотрудника</Typography>
                         </CardContent>
                     </CardActionArea>

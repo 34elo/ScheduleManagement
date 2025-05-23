@@ -4,7 +4,10 @@ from datetime import datetime, timedelta
 
 def fill_dates_for_next_year():
     # Подключаемся к базе данных
-    connection = sqlite3.connect('../data/data.sqlite')
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
     cursor = connection.cursor()
     cursor.execute('DELETE FROM schedule')
 
@@ -27,9 +30,11 @@ from datetime import datetime
 
 
 def generate_test_employees(num_employees: int = 50):
-    # Подключение к базе данных
-    conn = sqlite3.connect('../data/data.sqlite')  # или '../data/data.sqlite'
-    cursor = conn.cursor()
+    if __name__ == '__main__':
+        connection = sqlite3.connect('../data/data.sqlite')
+    else:
+        connection = sqlite3.connect('app/data/data.sqlite')
+    cursor = connection.cursor()
 
     # Очистка таблицы перед генерацией (опционально)
     cursor.execute("DELETE FROM employees_passwords")
@@ -84,8 +89,8 @@ def generate_test_employees(num_employees: int = 50):
                        (full_name, age, post, chat_id, mobile_number, username, point_wishes, day_wishes, password))
 
     # Сохранение изменений
-    conn.commit()
-    conn.close()
+    connection.commit()
+    connection.close()
     print(f"Сгенерировано {num_employees} тестовых сотрудников")
 
 

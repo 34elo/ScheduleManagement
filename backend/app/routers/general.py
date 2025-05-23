@@ -9,6 +9,8 @@ from app.routers.utils import get_current_user
 
 from app.functions.general_functions import edit_info_f
 
+from app.functions.db_update import fill_dates_for_next_year
+
 general_router = APIRouter()
 
 
@@ -72,3 +74,10 @@ def me(
 ):
     info = get_info_me(user['id'], user['role'])
     return info
+
+@general_router.delete('/schedule')
+def clear_schedule(
+        user: int = Depends(get_current_user),
+):
+    fill_dates_for_next_year()
+    return {'msg': 'Successfully cleared schedule'}

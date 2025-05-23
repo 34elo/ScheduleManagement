@@ -47,6 +47,7 @@ export default function ScheduleMenu({admin}) {
     const [error, setError] = useState(null);
     const [selected, setSelected] = useState([{date: 'Данные отсутствуют', employees: ['Данные отсутствуют']}]);
     const [selectedPoint, setSelectedPoint] = useState();
+    const [isClearing, setIsClearing] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -95,14 +96,41 @@ export default function ScheduleMenu({admin}) {
         setPeriod(newValue);
     }
 
-    function handleButton() {
-        const response = axios.put(`${API_URL}/admin/schedule/generating`, {}, {
+    async function handleGenerate() {
+        const response =  await axios.put(`${API_URL}/admin/schedule/generating`, {}, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
             }
         })
-        console.log(response)
+        if (response) {
+            window.location.reload()
+        }
+    }
+
+    async function handleClearSchedule() {
+        setIsClearing(true);
+        try {
+            const response = await axios.delete(`${API_URL}/schedule`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'accept': 'application/json'
+                }
+            });
+            console.log(response);
+            // Обновляем данные после очистки
+            const refreshResponse = await axios.get(`${API_URL}/schedule/?period=${period ? 'month' : 'week'}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setData(refreshResponse.data.data);
+        } catch (err) {
+            console.error('Ошибка при очистке расписания:', err);
+            setError('Ошибка при очистке расписания');
+        } finally {
+            setIsClearing(false);
+        }
     }
 
     if (loading) return <div>Loading...</div>;
@@ -126,25 +154,48 @@ export default function ScheduleMenu({admin}) {
                 }}>
                     Расписание
                     {admin &&
-                        <Button
-                            variant="contained"
-                            onClick={handleButton}
-                            sx={{
-                                marginLeft: '20px',
-                                borderRadius: '12px',
-                                background: 'linear-gradient(135deg, #0571ff, #05bfff)',
-                                color: 'white',
-                                fontWeight: 500,
-                                padding: '8px 20px',
-                                textTransform: 'none',
-                                boxShadow: '0 2px 8px rgba(5, 113, 255, 0.2)',
-                                '&:hover': {
-                                    background: 'linear-gradient(135deg, #0465e0, #04aae0)'
-                                }
-                            }}
-                        >
-                            Сформировать
-                        </Button>
+                        <Box sx={{ display: 'inline-flex', gap: '12px', marginLeft: '20px' }}>
+                            <Button
+                                variant="contained"
+                                onClick={handleGenerate}
+                                sx={{
+                                    borderRadius: '12px',
+                                    background: 'linear-gradient(135deg, #0571ff, #05bfff)',
+                                    color: 'white',
+                                    fontWeight: 500,
+                                    padding: '8px 20px',
+                                    textTransform: 'none',
+                                    boxShadow: '0 2px 8px rgba(5, 113, 255, 0.2)',
+                                    '&:hover': {
+                                        background: 'linear-gradient(135deg, #0465e0, #04aae0)'
+                                    }
+                                }}
+                            >
+                                Сформировать
+                            </Button>
+                            <Button
+                                variant="contained"
+                                onClick={handleClearSchedule}
+                                disabled={isClearing}
+                                sx={{
+                                    borderRadius: '12px',
+                                    background: 'linear-gradient(135deg, #ff7105, #ff9e05)',
+                                    color: 'white',
+                                    fontWeight: 500,
+                                    padding: '8px 20px',
+                                    textTransform: 'none',
+                                    boxShadow: '0 2px 8px rgba(255, 113, 5, 0.2)',
+                                    '&:hover': {
+                                        background: 'linear-gradient(135deg, #e56604, #e58d04)'
+                                    },
+                                    '&:disabled': {
+                                        opacity: 0.7
+                                    }
+                                }}
+                            >
+                                {isClearing ? 'Очистка...' : 'Очистить'}
+                            </Button>
+                        </Box>
                     }
                 </h1>
 
